@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE taglib>
+<taglib>
+	<tlib-version>1.0</tlib-version>
+	<jsp-version>2.0</jsp-version>
+	<short-name>Security Tag</short-name>
+
+	<tag>
+		<name>getPrincipal</name>
+		<tag-class>com.peachy.taglibs.GetPrincipal</tag-class>
+		<body-content>scriptless</body-content>
+	</tag>
+	<tag>
+		<name>isAuthenticated</name>
+		<tag-class>com.peachy.taglibs.IsAuthorized</tag-class>
+		<body-content>scriptless</body-content>	
+	</tag>
+	<tag>
+		<name>isNotAuthenticated</name>
+		<tag-class>com.peachy.taglibs.IsNotAuthorized</tag-class>
+		<body-content>scriptless</body-content>	
+	</tag>
+	<tag>
+		<name>hasRole</name>
+		<tag-class>com.peachy.taglibs.HasRole</tag-class>
+		<body-content>scriptless</body-content>		
+		<attribute>
+			<name>role</name>
+			<required>true</required>
+		</attribute>
+	</tag>
+</taglib>
+

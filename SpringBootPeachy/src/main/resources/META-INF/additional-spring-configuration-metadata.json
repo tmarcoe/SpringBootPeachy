@@ -1,0 +1,37 @@
+{"properties": [
+  {
+    "name": "filePath.imageLoc",
+    "type": "java.lang.String",
+    "description": "A description for 'filePath.imageLoc'"
+  },
+  {
+    "name": "filePath.quarantine-path",
+    "type": "java.lang.String",
+    "description": "A description for 'filePath.quarantine-path'"
+  },
+  {
+    "name": "chartOfAccountsTable.heading",
+    "type": "java.lang.String",
+    "description": "A description for 'chartOfAccountsTable.heading'"
+  },
+  {
+    "name": "filePath.outPath",
+    "type": "java.lang.String",
+    "description": "A description for 'filePath.outPath'"
+  },
+  {
+    "name": "filePath.config",
+    "type": "java.lang.String",
+    "description": "A description for 'filePath.config'"
+  },
+  {
+    "name": "filePath.quarantine-path",
+    "type": "java.lang.String",
+    "description": "A description for 'filePath.quarantine-path'"
+  },
+  {
+    "name": "filePath.imageLoc",
+    "type": "java.lang.String",
+    "description": "A description for 'filePath.imageLoc'"
+  }
+]}
