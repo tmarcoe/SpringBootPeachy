@@ -1,5 +1,6 @@
 package com.peachy.dao;
 
+import java.math.BigInteger;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -176,6 +177,21 @@ public class UserProfileDao implements IUserProfileDao {
 		session.merge(userProfile);
 		tx.commit();
 	}
+	@SuppressWarnings("unchecked")
+	public List<BigInteger> getGenderBreakdown() {
+		String sql = "select count(male_female) from user_profile group by male_female";
+		List<BigInteger> counts = session().createSQLQuery(sql).list();
+		session().disconnect();
+		
+		return counts;
+	}
 
+	@SuppressWarnings("unchecked")
+	public List<UserProfile> selectEmployees() {
+		Session session = session();
+		String hql = "FROM UserProfile u WHERE EXISTS (SELECT 1 FROM Employee e WHERE startDate IS NOT null AND u.user_id = e.user_id)";
+		
+		return session.createQuery(hql).list();
+	}
 
 }

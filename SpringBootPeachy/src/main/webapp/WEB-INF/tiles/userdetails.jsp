@@ -1,7 +1,9 @@
 <%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="sec" uri="/WEB-INF/tld/security.tld"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<sf:form id="details" method="post" action="${pageContext.request.contextPath}/admin/adminsaveuser" modelAttribute="userProfile">
+<sf:form id="details" method="post" action="${pageContext.request.contextPath}/vendor/adminsaveuser" modelAttribute="userProfile">
+	<input type="hidden" value="${roleIndex}" id="selectedRoles" />
 	<table class="signup">
 		<thead>
 			<tr>
@@ -178,6 +180,7 @@
 			<td><input type="hidden" value="on" name="_active" /> <sf:checkbox class="control" path="monthlyMailing" /></td>
 			<td>Daily Specials:</td>
 			<td><input type="hidden" value="on" name="_active" /> <sf:checkbox path="dailySpecials" class="control" /></td>
+			
 		</tr>
 
 
@@ -185,7 +188,7 @@
 			<td>Shipping Info:</td>
 			<td><sf:textarea rows="5" cols="50" path="shippingInfo" class="control" name="shippingInfo" /></td>
 			<td>Role(s):</td>
-			<td><sf:select path="roles" id="roles">
+			<td><sf:select path="roles" id="roles" multiselect="true">
 					<sf:options items="${roles}" itemValue="id" itemLabel="role" />
 				</sf:select></td>
 		</tr>
@@ -194,18 +197,23 @@
 			<td><div class="error">
 					<sf:errors path="shippingInfo" />
 				</div></td>
+			<td>&nbsp;</td>
+			<td><div class="error">
+				<sf:errors path="roles" />
+			</div></td>
 		</tr>
 		<tr>
 			<td><button type="button" onclick="formSubmit()" >Submit</button></td>
 			<td><button type="button" onclick="openPopup()" >Employee</button></td>
-			<td><button type="button" onclick="followLink('/admin/users')">Cancel</button></td>
+			<td><button type="button" onclick="followLink('/vendor/users')">Cancel</button></td>
 		</tr>
 		<tr>
 			<td>User Enabled:</td>
 			<td><input type="hidden" value="on" name="_active" /> <sf:checkbox path="enabled" class="control" /></td>
 		</tr>
 	</table>
-
+	
+	<sf:hidden path="roleString" id="roleString" />
 	<sf:hidden path="password" />
 	<sf:hidden path="user_id" />
 	<sf:hidden path="dateAdded" />
@@ -294,6 +302,14 @@
 </sf:form>
 
 <script type="text/javascript">
+	$( document ).ready(function() {
+		var ndx = $("#selectedRoles").val();
+		var selectedOptions = ndx.split(",");
+		for(var i in selectedOptions) {
+			 var optionVal = selectedOptions[i];
+			$("#roles").find("option[value="+optionVal+"]").prop("selected", "selected");
+		}
+	});
 	function openPopup() {
 		var modal = document.getElementById('newEmployee');
 		modal.style.display = "block"
@@ -309,14 +325,22 @@
 	}
 	
 	function formSubmit() {
-		debugger;
+
 		var opt = document.getElementById("roles");
 		var userRoles = "";
 		for (var i=0; i < opt.options.length; i++) {
 			if (opt.options[i].selected) {
-				userRoles += opt.options[i].text + ";";
+				if (userRoles == "") {
+					userRoles += opt.options[i].text;
+				}else{
+					userRoles += ";" + opt.options[i].text;
+				}
 			}
 		}
-		alert(userRoles + "Were selected")
+		var rs = document.getElementById("roleString");
+		rs.value = userRoles;
+		document.getElementById("details").submit();
 	}
+
+
 </script>

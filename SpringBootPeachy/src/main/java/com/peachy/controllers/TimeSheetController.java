@@ -206,20 +206,20 @@ public class TimeSheetController implements Serializable {
 		return "timesheetsubmitted";
 	}
 
-	@RequestMapping("/admin/employeelist")
+	@RequestMapping("/vendor/employeelist")
 	public String employeeList(Model model) {
-		List<UserProfile> employees = employeeService.employeeList();
+		List<UserProfile> userProfile = userProfileService.employeeList();
 
-		model.addAttribute("employees", employees);
+		model.addAttribute("userProfile", userProfile);
 
 		return "employeelist";
 	}
 
-	@RequestMapping("/admin/approvetime")
+	@RequestMapping("/vendor/approvetime")
 	public String approveTimeSheet(@ModelAttribute("userID") int userID, BindingResult result, Model model) {
 
 		Date startPeriod = getStartPeriod();
-		List<TimeSheet> timeSheets = timeSheetService.retrieveApproveList(userID, startPeriod);
+		List<TimeSheet> timeSheets = timeSheetService.getSubitted(userID, startPeriod);
 
 		model.addAttribute("startPeriod", startPeriod);
 
@@ -228,7 +228,7 @@ public class TimeSheetController implements Serializable {
 		return "approvetime";
 	}
 
-	@RequestMapping("/admin/submitapproval")
+	@RequestMapping("/vendor/submitapproval")
 	public String submitApproval(@ModelAttribute("userId") int userId, @ModelAttribute("startPeriod") Date startPeriod,
 			Model model) {
 
@@ -248,7 +248,7 @@ public class TimeSheetController implements Serializable {
 		return "payrollperiod";
 	}
 
-	@RequestMapping("/admin/payroll")
+	@RequestMapping("/vendor/payroll")
 	public String parollProcessing(@ModelAttribute("period") String period, Model model)
 			throws RecognitionException, IOException, RuntimeException, ParseException {
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");

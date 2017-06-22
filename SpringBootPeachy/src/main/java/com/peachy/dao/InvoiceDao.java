@@ -1,5 +1,7 @@
 package com.peachy.dao;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -114,5 +116,47 @@ public class InvoiceDao implements IInvoice {
 		return session.createCriteria(Invoice.class).add(Restrictions.isNotNull("processed")).add(Restrictions.isNull("shipped")).list();
 	}
 	
+	public double getCountByMonth(int month, int year) {
+		Object obj = null;
+		double total = 0.0;
+		String sql = "select sum(total) from Invoice  where month(modified) = :month and year(modified) = :year";
+		obj = session().createSQLQuery(sql).setInteger("month", month).setInteger("year", year).uniqueResult();
+		
+		if (obj != null) {
+			total = (double) obj;
+		}else{
+			total = 0;
+		}
+		session().disconnect();
+		
+		return total;
+	}
+	
+	public BigInteger getCustomerCounts(int month, int year) {
+		Session session = session();
+		Object obj = null;
+		BigInteger total = BigInteger.valueOf(0);
+		String sql = "SELECT count(DISTINCT user_id) FROM Invoice  WHERE month(modified) = :month and year(modified) = :year";
+		obj = session.createSQLQuery(sql).setInteger("month", month).setInteger("year", year).uniqueResult();
+		
+		if (obj != null) {
+			total = (BigInteger) obj;
+		}else{
+			total = BigInteger.valueOf(0);
+		}
+		
+		return total;
+	}
+	
+	public BigDecimal getMonthlyTotal(int month, int year) {
+		BigDecimal total;
+		String sql = "SELECT SUM(amount) FROM invoice_item i, invoice h " +
+					 "WHERE i.invoice_num = h.invoice_num AND MONTH(h.processed) = " + 
+					 ":month AND YEAR(h.processed) = :year AND sku_num NOT LIKE 'CPN%'";
+		total = (BigDecimal) session().createSQLQuery(sql).setInteger("month", month).setInteger("year", year).uniqueResult();
+		
+		return total;
+	}
+
 
 }

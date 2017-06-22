@@ -36,7 +36,7 @@ public class SchemesDao implements ISchemes {
 	@Override
 	public Schemes retrieve(int entry_id) {
 		Session session = session();
-		return (Schemes) session.createCriteria(Schemes.class).add(Restrictions.idEq(entry_id));
+		return (Schemes) session.createCriteria(Schemes.class).add(Restrictions.idEq(entry_id)).uniqueResult();
 	}
 
 	@SuppressWarnings("unchecked")

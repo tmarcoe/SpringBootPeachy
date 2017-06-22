@@ -38,13 +38,13 @@
 	function rowRemoved(key, first, last) {
 		if (confirm("Are you sure you want to remove "
 				+ first + " " + last + " from User Profiles?") == true) {
-			window.location.href = "${pageContext.request.contextPath}/admin/deleteuser?deleteKey="
+			window.location.href = "${pageContext.request.contextPath}/vendor/deleteuser?deleteKey="
 					+ key;
 		}
 	}
 
 	function getDetail(key) {
-		window.location.href = "${pageContext.request.contextPath}/admin/userdetails?detailKey="
+		window.location.href = "${pageContext.request.contextPath}/vendor/userdetails?detailKey="
 				+ key;
 	}
 	

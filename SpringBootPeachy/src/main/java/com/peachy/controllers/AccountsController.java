@@ -46,7 +46,7 @@ import com.peachy.service.ChartOfAccountsService;
 public class AccountsController implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger(AccountsController.class.getName());
-	private final String pageLink = "/admin/accountpaging";
+	private final String pageLink = "/vendor/accountpaging";
 	private final int pageSize = 10;
 	private final String ftlConfigFile = "fetal.properties";
 	private final String xmlMap = "accounts.xml";
@@ -63,7 +63,7 @@ public class AccountsController implements Serializable {
 	PagedListHolder<ChartOfAccounts> accounts;
 	
 
-	@RequestMapping("/admin/manageaccount")
+	@RequestMapping("/vendor/manageaccount")
 	public String showMangeAccounts(Model model) {
 		if (accounts != null) {
 			accounts.getSource().clear();
@@ -89,7 +89,7 @@ public class AccountsController implements Serializable {
 		return "manageaccount";
 	}
 
-	@RequestMapping("/admin/addaccount")
+	@RequestMapping("/vendor/addaccount")
 	public String addAccount(Model model) {
 		ChartOfAccounts chartOfAccounts = new ChartOfAccounts();
 		model.addAttribute("chartOfAccounts", chartOfAccounts);
@@ -97,7 +97,7 @@ public class AccountsController implements Serializable {
 		return "addaccount";
 	}
 
-	@RequestMapping("/admin/submitaddaccount")
+	@RequestMapping("/vendor/submitaddaccount")
 	public String submitAddAccount(@Valid ChartOfAccounts chartOfAccounts, BindingResult result,
 			Model model) {
 		if (result.hasErrors()) {
@@ -115,11 +115,11 @@ public class AccountsController implements Serializable {
 			System.gc();
 		}
 
-		return "redirect:/admin/manageaccount";
+		return "redirect:/vendor/manageaccount";
 	}
 
 
-	@RequestMapping("/admin/saveaccount")
+	@RequestMapping("/vendor/saveaccount")
 	public String saveAccount(@Valid ChartOfAccounts chartOfAccounts, BindingResult result, Model model) {
 		if (result.hasErrors()) {
 			return "accountdetail";
@@ -133,10 +133,10 @@ public class AccountsController implements Serializable {
 			System.gc();
 		}
 
-		return "redirect:/admin/manageaccount";
+		return "redirect:/vendor/manageaccount";
 	}
 
-	@RequestMapping("/admin/deleteaccount")
+	@RequestMapping("/vendor/deleteaccount")
 	public String deleteAccount(@ModelAttribute("deleteKey") String deleteKey,
 			Model model) {
 
@@ -158,10 +158,10 @@ public class AccountsController implements Serializable {
 		}
 
 
-		return "redirect:/admin/manageaccount";
+		return "redirect:/vendor/manageaccount";
 	}
 
-	@RequestMapping("/admin/accountdetail")
+	@RequestMapping("/vendor/accountdetail")
 	public String showAccountDetail(
 			@ModelAttribute("detailKey") String detailKey, Model model) {
 
@@ -171,7 +171,7 @@ public class AccountsController implements Serializable {
 		return "accountdetail";
 	}
 	
-	@RequestMapping("/admin/printaccounts")
+	@RequestMapping("/vendor/printaccounts")
 	public String printAccounts(Model model) throws IOException {
 		ChartOfAccountsReport report = new ChartOfAccountsReport(ts);
 		String filePath = fp.getReportPath();
@@ -181,7 +181,7 @@ public class AccountsController implements Serializable {
 		
 		return "printaccounts";
 	}
-	@RequestMapping("/admin/createmap")
+	@RequestMapping("/vendor/createmap")
 	public String createMappingFile() throws MalformedURLException, IOException, ParserConfigurationException,
 			TransformerFactoryConfigurationError, TransformerException {
 		Properties prop = new Properties();
@@ -209,9 +209,9 @@ public class AccountsController implements Serializable {
 		transformer.transform(source, result);
 
 		
-		return "redirect:/admin/accountingmenu";
+		return "redirect:/vendor/accountingmenu";
 	}
-	@RequestMapping(value="/admin/accountpaging", method=RequestMethod.GET)
+	@RequestMapping(value="/vendor/accountpaging", method=RequestMethod.GET)
 	public String handleAccountsRequest(@ModelAttribute("page") String page, Model model) throws Exception {
 		int pgNum;
 	        

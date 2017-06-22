@@ -38,9 +38,9 @@
 						<div class="dropdown-content">
 							<a href="/employee/timesheet">Time Sheets</a>
 							<sec:hasRole role="ADMIN,VENDOR">
-								<a href="/admin/activitylist" >Approved Activities</a>
-								<a href="/admin/employeelist">Approve Timesheets</a>
-								<a href="/admin/payrollperiod">Payroll</a>
+								<a href="/vendor/activitylist" >Approved Activities</a>
+								<a href="/vendor/employeelist">Approve Timesheets</a>
+								<a href="/vendor/payrollperiod">Payroll</a>
 							</sec:hasRole>
 						</div>
 					</div>
@@ -50,14 +50,14 @@
 				<li><div class="dropdown">
 					<button class="dropbtn">Admin</button>
 						<div class="dropdown-content">
-							<a href="/admin/admin" >Ship Product</a>
+							<a href="/vendor/admin" >Ship Product</a>
 							<a href="#">View Surveys</a>
-							<a href="/admin/manageinventory">Inventory...</a>
-							<a href="/admin/users">User Profiles...</a>
-							<a href="#">Manage Coupons...</a>
-							<a href="#">Business Reports...</a>
-							<a href="/admin/fetallist">Fetal Scripts...</a>
-							<a href="/admin/manageaccount">Accounting...</a>
+							<a href="/vendor/manageinventory">Inventory...</a>
+							<a href="/vendor/users">User Profiles...</a>
+							<a href="/vendor/listcoupons">Manage Coupons...</a>
+							<a href="/vendor/calendaryear?reportType=sales">Reports</a>
+							<a href="/vendor/fetallist">Fetal Scripts...</a>
+							<a href="/vendor/manageaccount">Accounting...</a>
 						</div>
 					</div>
 				</li>

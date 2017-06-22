@@ -89,4 +89,8 @@ public class TimeSheetService implements ITimeSheet {
 	public void closeTimeSheet(int userId, Date startPeriod) {
 		timeSheetDao.closeTimeSheet(userId, startPeriod);
 	}
+	
+	public List<TimeSheet> getSubitted(int user_id, Date startPeriod) {
+		return timeSheetDao.getSubmittedTimeSheet(user_id, startPeriod);
+	}
 }

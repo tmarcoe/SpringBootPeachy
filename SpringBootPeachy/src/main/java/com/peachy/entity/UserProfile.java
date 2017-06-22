@@ -18,6 +18,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -54,13 +55,23 @@ public class UserProfile implements Serializable{
 	private String password;
 	private String shippingInfo;
 	private boolean monthlyMailing;
+	@NotNull
 	@ManyToMany(cascade = CascadeType.MERGE)
 	@JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private List<Role> roles;
 	private boolean enabled;
 	private boolean dailySpecials;
 	private Date dateAdded;
+	@Transient
+	private String roleString;
 
+	public String getRoleString() {
+		return roleString;
+	}
+	public void setRoleString(String roleString) {
+		this.roleString = roleString;
+	}
+	
 	@OneToOne(fetch = FetchType.LAZY, mappedBy = "userProfile", cascade = CascadeType.ALL)
 	private Employee employee;
 	
@@ -199,8 +210,6 @@ public class UserProfile implements Serializable{
 	public void setMonthlyMailing(boolean monthlyMailing) {
 		this.monthlyMailing = monthlyMailing;
 	}
-	
-	
 	
 	public List<Role> getRoles() {
 		return roles;

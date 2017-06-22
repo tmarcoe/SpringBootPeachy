@@ -34,7 +34,7 @@
 			</tr>
 
 			<tr>
-				<td><button type="button" onclick="followLink('/admin/uploadfile')">Add
+				<td><button type="button" onclick="followLink('/vendor/uploadfile')">Add
 						Product</button>
 				<td><button type="button"
 						onclick="followLink('/public/home')">Back</button></td>
@@ -61,7 +61,7 @@
 <script type="text/javascript">
 	function rowRemoved(key, name) {	
 		    if (confirm("Are you sure you want to remove '" + name + "' from inventroy?") == true) {
-		   		window.location.href = "${pageContext.request.contextPath}/admin/deleteinventory?deleteKey=" + key;		    
+		   		window.location.href = "${pageContext.request.contextPath}/vendor/deleteinventory?deleteKey=" + key;		    
 		   	} 
 	}
 	function openPopup() {
@@ -70,10 +70,10 @@
 	}
 	function beginSearch() {
 		var srch = document.getElementById('prodSearch').value;
-		window.location.href = "${pageContext.request.contextPath}/admin/adminsearch?mySearch=" + srch;
+		window.location.href = "${pageContext.request.contextPath}/vendor/adminsearch?mySearch=" + srch;
 	}
 	function productDetail(key) {	
-		window.location.href = "${pageContext.request.contextPath}/admin/inventorydetails?InventoryKey=" + key;	
+		window.location.href = "${pageContext.request.contextPath}/vendor/inventorydetails?InventoryKey=" + key;	
 	}
 	function followLink(link) {
 		window.location.href = "${pageContext.request.contextPath}" + link;

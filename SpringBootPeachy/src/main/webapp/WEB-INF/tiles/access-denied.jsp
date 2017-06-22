@@ -1,0 +1,1 @@
+<h1>We're sorry, you do not have rights to this page.</h1>

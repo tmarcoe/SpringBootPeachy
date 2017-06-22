@@ -2,11 +2,11 @@
 <%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
-<sf:form action="${pageContext.request.contextPath}/admin/accountdetail"
+<sf:form action="${pageContext.request.contextPath}/vendor/accountdetail"
 	modelAttribute="objectList" method="get" id="accountsListForm"
 	name="manageAccounts">
 
-	<table class="tableview" id="listaccounts">
+	<table class="tableview tableshadow" id="listaccounts">
 		<thead>
 			<tr>
 				<th>Number</th>
@@ -33,10 +33,10 @@
 			</c:forEach>
 			<tr>
 				<td>
-					<button type="button" onclick="followLink('/admin/addaccount')">+New</button>
+					<button type="button" onclick="followLink('/vendor/addaccount')">+New</button>
 				</td>
-				<td colspan="4">
-					<button type="button" onclick="followLink('/admin/printaccounts')" >Print Chart Of Accounts</button>
+				<td colspan="5">
+					<button type="button" onclick="followLink('/vendor/printaccounts')" >Print Chart Of Accounts</button>
 				</td>
 			</tr>
 		</tbody>
@@ -46,12 +46,12 @@
 <script type="text/javascript">
 	function rowRemoved(key) {
 		    if (confirm("Are you sure you want to remove Account #" + key + " from Chart of Accounts?") == true) {
-		   		window.location.href = "${pageContext.request.contextPath}/admin/deleteaccount?deleteKey=" + key;		    
+		   		window.location.href = "${pageContext.request.contextPath}/vendor/deleteaccount?deleteKey=" + key;		    
 		   	} 
 	}
 	
 	function getDetail(key) {
-		window.location.href = "${pageContext.request.contextPath}/admin/accountdetail?detailKey=" + key;	
+		window.location.href = "${pageContext.request.contextPath}/vendor/accountdetail?detailKey=" + key;	
 	}
 	
 	function followLink(link) {

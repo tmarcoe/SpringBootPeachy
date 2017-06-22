@@ -1,5 +1,7 @@
 package com.peachy.dao;
 
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import org.hibernate.Session;
@@ -36,6 +38,19 @@ public class CouponsDao implements ICoupons {
 		Session session = session();
 		
 		return (Coupons) session.createCriteria(Coupons.class).add(Restrictions.idEq(coupon_id)).uniqueResult();
+	}
+	
+	public Coupons retrieveByName(String name) {
+		Session session = session();
+		
+		return (Coupons) session.createCriteria(Coupons.class).add(Restrictions.eq("name", name)).uniqueResult();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Coupons> retrieveList() {
+		Session session = session();
+		
+		return session.createCriteria(Coupons.class).list();
 	}
 
 	@Override

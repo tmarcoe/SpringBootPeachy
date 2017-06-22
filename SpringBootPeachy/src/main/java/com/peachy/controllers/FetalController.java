@@ -41,7 +41,7 @@ public class FetalController {
 	private FetalScriptsService fetalScriptsService;
 	
 	PagedListHolder<FetalScripts> fetalScripts;
-	private final String pageLink = "/admin/fetalpaging";
+	private final String pageLink = "/vendor/fetalpaging";
 
 	private SimpleDateFormat dateFormat;
 	@InitBinder
@@ -56,7 +56,7 @@ public class FetalController {
 		
 		return "fetaladmin";
 	}
-	@RequestMapping("/admin/fetallist") 
+	@RequestMapping("/vendor/fetallist") 
 	public String fetalList(Model model) {
 		
 		fetalScripts = fetalScriptsService.retrieveList();
@@ -100,10 +100,10 @@ public class FetalController {
 		fetalScriptsService.update(fetal);
 		
 		
-		return "redirect:/admin/fetallist";
+		return "redirect:/vendor/fetallist";
 	}
 	
-	@RequestMapping("/admin/edittransaction")
+	@RequestMapping("/vendor/edittransaction")
 	public String editTransaction(@ModelAttribute("id")int id, Model model) throws IOException {
 		URL url = new URL(fc.getProperiesFile());
 		InputStream in = url.openStream();
@@ -135,7 +135,7 @@ public class FetalController {
 		return "edittransaction";
 	}
 	
-	@RequestMapping(value = "/admin/fetalpaging", method = RequestMethod.GET)
+	@RequestMapping(value = "/vendor/fetalpaging", method = RequestMethod.GET)
 	public String fetalPager(@ModelAttribute("page") String page, Model model) throws Exception {
 		
 		int pgNum;

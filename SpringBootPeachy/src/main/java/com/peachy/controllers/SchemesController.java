@@ -16,7 +16,7 @@ import com.peachy.service.SchemesService;
 
 
 @Controller
-@RequestMapping("/admin")
+@RequestMapping("/vendor")
 public class SchemesController {
 	private final String pageLink = "/schemepaging";
 	
@@ -49,7 +49,7 @@ public class SchemesController {
 		
 		if (schemesList.size() > 0 ) {
 
-			return "redirect:/admin/schemes";
+			return "redirect:/vendor/schemes";
 		}else{
 			model.addAttribute("schemes", new Schemes());
 			
@@ -66,7 +66,7 @@ public class SchemesController {
 		
 		if (schemesList.size() > 0 ) {
 
-			return "return:/admin/schemes";
+			return "return:/vendor/schemes";
 		}else{
 			model.addAttribute("schemes", new Schemes());
 			
@@ -125,7 +125,7 @@ public class SchemesController {
 		
 		schemesService.create(schemes);
 
-		return "redirect:/admin/schemes";
+		return "redirect:/vendor/schemes";
 
 	}
 	

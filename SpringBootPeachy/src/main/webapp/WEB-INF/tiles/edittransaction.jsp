@@ -20,8 +20,8 @@
 
 <script type="text/javascript" >
 	var ta = document.getElementById("myTextArea");
-	var url = "${pageContext.request.contextPath}/admin/fetal-data/trans-file?transFile=${transFile}&fetalUrl=${fetalUrl}";
-	var outUrl = "${pageContext.request.contextPath}/admin/fetal-data/save-file?transFile=${transFile}";
+	var url = "${pageContext.request.contextPath}/vendor/fetal-data/trans-file?transFile=${transFile}&fetalUrl=${fetalUrl}";
+	var outUrl = "${pageContext.request.contextPath}/vendor/fetal-data/save-file?transFile=${transFile}";
 	var fn = "${transFile}";
 
 	var  myCodeMirror;

@@ -26,17 +26,14 @@
 				<td>${item.type}</td>
 				<td>${item.version}</td>
 				<td>${item.comments}</td>
-				<td><button type="button"
-						onclick="window.location.href = '/admin/edittransaction?id=${item.id}'">Edit</button></td>
+				<td><button type="button" onclick="window.location.href = '/vendor/edittransaction?id=${item.id}'">Edit</button></td>
 				<td>&nbsp; <sec:hasRole role="ADMIN">
 						<c:choose>
 							<c:when test="${item.status == 'PRODUCTION'}">
 							&nbsp;
 						</c:when>
 							<c:otherwise>
-								<button type="button"
-									onclick="window.location.href = '/admin/postToProd?id=${item.id}'">Post
-									To Production</button>
+								<button type="button" onclick="window.location.href = '/admin/postToProd?id=${item.id}'">Post To Production</button>
 							</c:otherwise>
 						</c:choose>
 					</sec:hasRole>

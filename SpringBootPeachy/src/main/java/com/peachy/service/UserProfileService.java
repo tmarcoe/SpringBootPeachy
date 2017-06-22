@@ -1,7 +1,9 @@
 package com.peachy.service;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.support.PagedListHolder;
@@ -78,4 +80,28 @@ public class UserProfileService implements IUserProfileService {
 	public void merge(UserProfile userProfile) {
 		userProfileDao.merge(userProfile);
 	}
+	
+	public List<Double> getGenderReport() {
+		double total = 0.0;
+		double female;
+		double percent;
+		List<Double> percentages = new ArrayList<Double>();
+		List<BigInteger> genderCount = userProfileDao.getGenderBreakdown();
+		for (BigInteger count : genderCount) {
+			total += Double.valueOf(String.valueOf((BigInteger)count));
+		}
+		Iterator<BigInteger> it = genderCount.iterator();
+		
+		female = Double.valueOf(String.valueOf((BigInteger) it.next()));
+		percent = (female/total) * 100;
+		percentages.add(percent);
+		percentages.add(100 - percent);
+		
+		return percentages;
+	}
+	
+	public List<UserProfile> employeeList() {
+		return userProfileDao.selectEmployees();
+	}
+
 }

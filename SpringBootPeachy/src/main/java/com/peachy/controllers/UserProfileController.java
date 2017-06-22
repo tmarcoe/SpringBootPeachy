@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.net.URISyntaxException;
 import java.security.Principal;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -22,6 +23,8 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
+import com.peachy.entity.Role;
 import com.peachy.entity.UserProfile;
 import com.peachy.exceptions.SessionTimedOutException;
 import com.peachy.service.RoleService;
@@ -55,7 +58,7 @@ public class UserProfileController implements Serializable {
 				dateFormat, false));
 	}
 
-	@RequestMapping("/admin/users")
+	@RequestMapping("/vendor/users")
 	public String showUsers(@ModelAttribute("page") String page, Model model) {
 		if (userList != null) {
 			userList.getSource().clear();
@@ -73,7 +76,7 @@ public class UserProfileController implements Serializable {
 
 	}
 
-	@RequestMapping("/admin/deleteuser")
+	@RequestMapping("/vendor/deleteuser")
 	public String deleteUser(@ModelAttribute("deleteKey") String deleteKey,
 			Model model) {
 
@@ -85,15 +88,24 @@ public class UserProfileController implements Serializable {
 			System.gc();
 		}
 
-		return "redirect:/admin/users";
+		return "redirect:/vendor/users";
 	}
 
-	@RequestMapping("/admin/userdetails")
+	@RequestMapping("/vendor/userdetails")
 	public String showUserDetails(
 			@ModelAttribute("detailKey") String detailKey, Model model) {
-		
-		
+		String roleIndex = "";
+
 		UserProfile userProfile = userProfileService.retrieve(detailKey);
+		for (Role r: userProfile.getRoles()) {
+			if (roleIndex.length() > 0) {
+				roleIndex += ("," + String.valueOf(r.getId()));
+			}else{
+				roleIndex += String.valueOf(r.getId());
+			}
+		}
+		
+		model.addAttribute("roleIndex", roleIndex);
 		model.addAttribute("roles", roleService.retrieveList());
 		model.addAttribute("userProfile", userProfile);
 		
@@ -136,7 +148,7 @@ public class UserProfileController implements Serializable {
 		return "redirect:/home";
 	}
 
-	@RequestMapping("/admin/adminsaveuser")
+	@RequestMapping("/vendor/adminsaveuser")
 	public String adminPartialUpdate(
 			@Valid @ModelAttribute("userProfile") UserProfile user, BindingResult result, Model model)
 			throws IOException, URISyntaxException {
@@ -157,8 +169,15 @@ public class UserProfileController implements Serializable {
 		if (user.getEmployee() != null) {
 			user.getEmployee().setUser_id(user.getUser_id());
 		}
+		if (user.getRoles() == null) {
+			user.setRoles(new ArrayList<Role>());
+		}
+		String[] roleNames = user.getRoleString().split(";");
+		for (int i = 0 ; i < roleNames.length; i++) {
+			user.getRoles().add(roleService.retrieve(roleNames[i]));
+		}
 		
-		//userProfileService.merge(user);
+		userProfileService.merge(user);
 
 		if (userList != null) {
 			userList.getSource().clear();
@@ -166,7 +185,7 @@ public class UserProfileController implements Serializable {
 			System.gc();
 		}
 
-		return "redirect:/admin/users";
+		return "redirect:/vendor/users";
 	}
 	
 	@RequestMapping("/public/createprofile")
@@ -252,7 +271,7 @@ public class UserProfileController implements Serializable {
 		return ("myprofile");
 	}
 
-	@RequestMapping(value = "/admin/userpaging", method = RequestMethod.GET)
+	@RequestMapping(value = "/vendor/userpaging", method = RequestMethod.GET)
 	public String handleUserRequest(@ModelAttribute("page") String page, Model model) throws Exception {
 		int pgNum;
 

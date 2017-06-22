@@ -1,6 +1,6 @@
 <%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form"%>
 
-<sf:form id="account" action="${pageContext.request.contextPath}/admin/submitaddaccount"
+<sf:form id="account" action="${pageContext.request.contextPath}/vendor/submitaddaccount"
 method="post" commandName="chartOfAccounts">
 	<div class="addaccount">
 		<p></p>
@@ -40,7 +40,7 @@ method="post" commandName="chartOfAccounts">
 			</tr>
 			<tr>
 				<td><input type="submit" value="Add Account" /></td>
-				<td><button type="button" onclick="followLink('/admin/manageaccount')">Cancel</button>
+				<td><button type="button" onclick="followLink('/vendor/manageaccount')">Cancel</button>
 			</tr>
 		</table>
 	</div>

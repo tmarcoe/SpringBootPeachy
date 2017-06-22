@@ -119,6 +119,18 @@ public class TimeSheetDao implements ITimeSheet {
 		return timeSheets;
 	}
 
+	public List<TimeSheet> getSubmittedTimeSheet(int userId, Date startPeriod) {
+		Session session = session();
+		String hql = "FROM TimeSheet WHERE user_id = :userId AND startPeriod = :startPeriod AND submitted != null AND approved = null";
+		
+
+		@SuppressWarnings("unchecked")
+		List<TimeSheet> timeSheets = session.createQuery(hql).setInteger("userId", userId)
+				.setDate("startPeriod", startPeriod).list();
+
+		return timeSheets;
+	}
+	
 	public void closeTimeSheet(int userId, Date startPeriod) {
 		Session session = session();
 		String hql = "UPDATE TimeSheet SET closed = CURRENT_DATE() WHERE user_id = :userId AND startPeriod = :startPeriod";

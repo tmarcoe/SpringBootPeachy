@@ -43,18 +43,16 @@ import com.peachy.service.InvoiceItemService;
 import com.peachy.service.InvoiceService;
 import com.peachy.service.UserProfileService;
 
-
 @Controller
 @Scope(value = "session")
 public class ShoppingCartController implements Serializable {
 	private static final long serialVersionUID = 4725326820861092920L;
-	private static Logger logger = Logger
-			.getLogger(ShoppingCartController.class.getName());
+	private static Logger logger = Logger.getLogger(ShoppingCartController.class.getName());
 	private final String pageLink = "/historypaging";
 
 	@Autowired
 	private InvoiceService invoiceService;
-	
+
 	@Autowired
 	private InvoiceItemService invoiceItemService;
 
@@ -78,23 +76,21 @@ public class ShoppingCartController implements Serializable {
 	public void initBinder(WebDataBinder binder) {
 		dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		dateFormat.setLenient(false);
-		binder.registerCustomEditor(Date.class, new CustomDateEditor(
-				dateFormat, false));
+		binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, false));
 	}
 
 	@RequestMapping("/user/saveitem")
-	public String saveInvoiceItem(
-			@Valid @ModelAttribute("item") InvoiceItem item,
-			BindingResult result, Model model) throws IOException, URISyntaxException, SOAPException {
+	public String saveInvoiceItem(@Valid @ModelAttribute("item") InvoiceItem item, BindingResult result, Model model)
+			throws IOException, URISyntaxException, SOAPException {
 
-		if (result.hasErrors()) {		
+		if (result.hasErrors()) {
 			return "redirect:/user/editcart";
 		}
 		int invoiceNum = item.getInvoice_num();
 		invoiceItemService.update(item);
 		Invoice header = invoiceService.retrieve(invoiceNum);
-		
-		if (header.getProcessed() == null){
+
+		if (header.getProcessed() == null) {
 			invoiceService.purgeCoupons(invoiceNum);
 		}
 		header.setShipping_cost(transactionService.calculateShippingCharges());
@@ -106,24 +102,24 @@ public class ShoppingCartController implements Serializable {
 
 	@RequestMapping("/user/cancelsale")
 	public String cancelSale(Principal principal, Model model) throws IOException, URISyntaxException {
-		
+
 		UserProfile user = userProfileService.retrieve(principal.getName());
 		Invoice header = invoiceService.getOpenOrder(user.getUser_id());
-		
+
 		if (header == null) {
 			return "redirect:/user/nocart";
 		}
 
 		invoiceService.deleteInvoice(header.getInvoice_num());
-		
+
 		return "redirect:/public/home";
 	}
 
 	@RequestMapping("/user/deleteinvoiceitem")
-	public String deleteInvoiceItem(@ModelAttribute("invoiceNum") int invoiceNum, 
-									@ModelAttribute("skuNum") String skuNum, Principal principal, Model model) 
-											throws IOException, URISyntaxException, SOAPException {
-		
+	public String deleteInvoiceItem(@ModelAttribute("invoiceNum") int invoiceNum,
+			@ModelAttribute("skuNum") String skuNum, Principal principal, Model model)
+			throws IOException, URISyntaxException, SOAPException {
+
 		invoiceService.removeItem(invoiceNum, skuNum);
 		logger.info(String.format("'%s' has been removed from invoice # '%08d'.", skuNum, invoiceNum));
 		Invoice header = invoiceService.retrieve(invoiceNum);
@@ -142,15 +138,15 @@ public class ShoppingCartController implements Serializable {
 		if (header == null) {
 			return "nocart";
 		}
-		
+
 		if (header.getProcessed() == null) {
 			invoiceService.purgeCoupons(header.getInvoice_num());
 		}
-		
+
 		String errorMsg = "";
 		String couponNum = "";
 		Currency currency = new Currency(cc);
-		
+
 		model.addAttribute("rate", currency.getRate(user.getCurrency()));
 		model.addAttribute("currencySymbol", currency.getSymbol(user.getCurrency()));
 		model.addAttribute("errorMsg", errorMsg);
@@ -162,29 +158,27 @@ public class ShoppingCartController implements Serializable {
 	}
 
 	@RequestMapping("/user/vieworder")
-	public String viewOrder(@ModelAttribute("errorMsg") String errorMsg,
-			@ModelAttribute("couponNum") String couponNum, Principal principal,
-			Model model) throws RecognitionException, NestedServletException,
-			IOException, URISyntaxException, SOAPException {
+	public String viewOrder(@ModelAttribute("errorMsg") String errorMsg, @ModelAttribute("couponName") String couponName,
+			Principal principal, Model model)
+			throws RecognitionException, NestedServletException, IOException, URISyntaxException, SOAPException {
 		Currency currency = new Currency(cc);
 		UserProfile user = userProfileService.retrieve(principal.getName());
 		Invoice header = invoiceService.getOpenOrder(user.getUser_id());
 		if (header == null) {
 			return "redirect:/user/nocart";
 		}
-		
-		if (header.getProcessed() == null){
+
+		if (header.getProcessed() == null) {
 			invoiceService.purgeCoupons(header.getInvoice_num());
 		}
 		header = invoiceService.totalInvoice(header);
 
+		if (couponName.length() > 3) {
 
-		if (couponNum.length() > 3) {
-
-			Coupons coupon = couponsService.retrieve(couponNum);
+			Coupons coupon = couponsService.retrieveByName(couponName);
 			if (coupon == null) {
 				errorMsg = "That coupon does not exist";
-				
+
 				return "redirect:/user/cart";
 			}
 			if (new Date().after(coupon.getExpires())) {
@@ -193,15 +187,14 @@ public class ShoppingCartController implements Serializable {
 				return "redirect:/user/cart";
 
 			}
-			
-			if (invoiceItemService.countCoupons(user.getUser_id(), couponNum) <= coupon.getUseage()) {
+
+			if (invoiceItemService.countCoupons(user.getUser_id(), couponName) <= coupon.getUseage()) {
 				errorMsg = "That coupon is used up.";
 
 				return "redirect:/user/cart";
 			}
 
-			if (coupon.isExclusive()
-					&& invoiceItemService.hasCoupons(header.getInvoice_num())) {
+			if (invoiceItemService.hasCoupons(header.getInvoice_num())) {
 				errorMsg = "Only one coupon per order";
 
 				return "redirect:/user/cart";
@@ -214,38 +207,37 @@ public class ShoppingCartController implements Serializable {
 		model.addAttribute("rate", currency.getRate(user.getCurrency()));
 		model.addAttribute("currencySymbol", currency.getSymbol(user.getCurrency()));
 
-
 		return "vieworder";
 	}
 
 	@RequestMapping("/user/viewcart")
-	public String viewCart(@ModelAttribute("invoiceNum") int invoiceNum, 
-						   Model model) throws IOException, URISyntaxException, SOAPException {
-		
+	public String viewCart(@ModelAttribute("invoiceNum") int invoiceNum, Model model)
+			throws IOException, URISyntaxException, SOAPException {
+
 		Invoice header = invoiceService.retrieve(invoiceNum);
 		UserProfile user = userProfileService.retrieve(header.getUser_id());
-		
-		if (header.getProcessed() == null){
+
+		if (header.getProcessed() == null) {
 			invoiceService.purgeCoupons(invoiceNum);
 		}
 		header = invoiceService.totalInvoice(header);
 		String errorMsg = "";
 		String couponNum = "";
 		Currency currency = new Currency(cc);
-		
+
 		model.addAttribute("rate", currency.getRate(user.getCurrency()));
 		model.addAttribute("currencySymbol", currency.getSymbol(user.getCurrency()));
 		model.addAttribute("errorMsg", errorMsg);
 		model.addAttribute("couponNum", couponNum);
 		model.addAttribute("invoice", header);
 		model.addAttribute("invoiceList", listItems(header));
-		
+
 		return "cart";
 	}
 
 	@RequestMapping("/user/editcart")
-	public String editCart(@ModelAttribute("invoiceNum") int invoiceNum, 
-						   @ModelAttribute("skuNum") String skuNum, Model model, Principal principal) throws IOException, URISyntaxException {
+	public String editCart(@ModelAttribute("invoiceNum") int invoiceNum, @ModelAttribute("skuNum") String skuNum,
+			Model model, Principal principal) throws IOException, URISyntaxException {
 
 		UserProfile user = userProfileService.retrieve(principal.getName());
 		InvoiceItem item = invoiceItemService.retrieve(invoiceNum, skuNum);
@@ -279,7 +271,7 @@ public class ShoppingCartController implements Serializable {
 		historyList.setPageSize(15);
 		historyList.setPage(0);
 		Currency currency = new Currency(cc);
-		
+
 		model.addAttribute("rate", currency.getRate(user.getCurrency()));
 		model.addAttribute("currencySymbol", currency.getSymbol(user.getCurrency()));
 		model.addAttribute("objectList", historyList);
@@ -288,38 +280,37 @@ public class ShoppingCartController implements Serializable {
 		return "shoppinghistory";
 	}
 
-
 	/********************************************************************************************************
 	 * Pagination Handlers
 	 ********************************************************************************************************/
 	@RequestMapping(value = "/historypaging", method = RequestMethod.GET)
-	public String handleHostoryRequest(@ModelAttribute("page") String page, Model model, Principal principal ) throws Exception {
+	public String handleHostoryRequest(@ModelAttribute("page") String page, Model model, Principal principal)
+			throws Exception {
 		UserProfile user = userProfileService.retrieve(principal.getName());
 		Currency currency = new Currency(cc);
-		
+
 		int pgNum;
 
-			if (historyList == null) {
-				throw new SessionTimedOutException("Your session has timed out. Please login again.");
-			}
+		if (historyList == null) {
+			throw new SessionTimedOutException("Your session has timed out. Please login again.");
+		}
 
-			pgNum = isInteger(page);
+		pgNum = isInteger(page);
 
-			if ("next".equals(page)) {
-				historyList.nextPage();
-			} else if ("prev".equals(page)) {
-				historyList.previousPage();
-			} else if (pgNum != -1) {
-				historyList.setPage(pgNum);
-			}
+		if ("next".equals(page)) {
+			historyList.nextPage();
+		} else if ("prev".equals(page)) {
+			historyList.previousPage();
+		} else if (pgNum != -1) {
+			historyList.setPage(pgNum);
+		}
 
-			
-			model.addAttribute("rate", currency.getRate(user.getCurrency()));
-			model.addAttribute("currencySymbol", currency.getSymbol(user.getCurrency()));
-			model.addAttribute("objectList", historyList);
-	        model.addAttribute("pagelink", pageLink);
+		model.addAttribute("rate", currency.getRate(user.getCurrency()));
+		model.addAttribute("currencySymbol", currency.getSymbol(user.getCurrency()));
+		model.addAttribute("objectList", historyList);
+		model.addAttribute("pagelink", pageLink);
 
-			return "shoppinghistory";
+		return "shoppinghistory";
 	}
 
 	private int isInteger(String s) {

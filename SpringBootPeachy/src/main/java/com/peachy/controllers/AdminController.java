@@ -94,7 +94,7 @@ public class AdminController implements Serializable {
 	 * @throws IOException 
 	 * @throws URISyntaxException 
 	 ******************************************************************************/
-	@RequestMapping("/admin/admin")
+	@RequestMapping("/vendor/admin")
 	public String showAdmin(Model model, Principal principal) throws IOException, URISyntaxException {
 		UserProfile user = userProfileService.retrieve(principal.getName());
 		if (headerList != null) {
@@ -115,7 +115,7 @@ public class AdminController implements Serializable {
 		return "admin";
 	}
 
-	@RequestMapping("/admin/processorders")
+	@RequestMapping("/vendor/processorders")
 	public String processOrders() throws Exception {
 		List<String> fileNames = new ArrayList<String>();
 		AddressLabel lbl = new AddressLabel();
@@ -172,7 +172,7 @@ public class AdminController implements Serializable {
 		return "admin";
 	}
 
-	@RequestMapping("/admin/senddailyspecials")
+	@RequestMapping("/vendor/senddailyspecials")
 	public String sendDailySpecial(Model model, Principal principal) throws Exception {
 		ProcessEmail pe = new ProcessEmail(fp);
 		List <UserProfile> userList = userProfileService.getDailySpecialUsers();
@@ -219,7 +219,7 @@ public class AdminController implements Serializable {
 	 * 
 	 ********************************************************************************************************************/
 
-	@RequestMapping(value = "/admin/headerpaging", method = RequestMethod.GET)
+	@RequestMapping(value = "/vendor/headerpaging", method = RequestMethod.GET)
 	public String handleHeaderRequest(@ModelAttribute("page") String page,
 			Model model) throws Exception {
 		int pgNum;

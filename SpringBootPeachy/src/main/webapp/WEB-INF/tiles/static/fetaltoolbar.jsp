@@ -11,7 +11,6 @@
 	<div class="container">
 		<ul class="nav">
 			<li><a href="/public/home">Home</a></li>
-			<li><a href="/admin/posttoProd">Post to Production</a></li>
 		</ul>
 	</div>
 </div>

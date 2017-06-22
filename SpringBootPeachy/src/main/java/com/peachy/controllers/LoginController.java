@@ -40,10 +40,10 @@ public class LoginController implements Serializable {
 				dateFormat, false));
 	}
 
-	@RequestMapping("/blocked")
+	@RequestMapping("/access-denied")
 	public String showBlocked() {
 		logger.error("User was blocked.");
-		return "blocked";
+		return "access-denied";
 	}
 	@RequestMapping("/login")
 	public String showLogin() {

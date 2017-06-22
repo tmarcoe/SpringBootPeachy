@@ -49,8 +49,8 @@
 			<tr>
 				<td><sf:hidden path="${start}"/></td>
 				<td><sf:hidden path="${end}"/></td>
-				<td><button type="button" onclick="followLink('/admin/exportledger?startDt=${startDt}&endDt=${endDt}')">Export</button></td>
-				<td>&nbsp;</td>
+				<td><button type="button" onclick="followLink('/vendor/exportledger?startDt=${startDt}&endDt=${endDt}')">Export</button></td>
+				<td colspan="2">&nbsp;</td>
 			</tr>
 		</tfoot>
 	</table>

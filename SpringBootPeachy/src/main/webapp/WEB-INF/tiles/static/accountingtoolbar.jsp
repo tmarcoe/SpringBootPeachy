@@ -11,9 +11,9 @@
 	<div class="container">
 		<ul class="nav">
 			<li><a href="/public/home">Home</a></li>
-			<li><a href="/admin/datepicker" >General Ledger</a></li>
+			<li><a href="/vendor/datepicker" >General Ledger</a></li>
 			<li><a href="#" >Internal Audit</a></li>
-			<li><a href="/admin/pettycashlist" >Petty Cash</a></li>
+			<li><a href="/vendor/pettycashlist" >Petty Cash</a></li>
 		</ul>
 	</div>
 </div>

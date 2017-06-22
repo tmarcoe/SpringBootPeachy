@@ -67,7 +67,7 @@
 					</tr>
 					<tr>
 						<td><button type="button"
-								onclick="followLink('/submitapproval?userId=${userId}&startPeriod=${strDate}')">Approve
+								onclick="followLink('/vendor/submitapproval?userId=${userId}&startPeriod=${strDate}')">Approve
 								Timesheet</button>
 					</tr>
 				</tfoot>
@@ -117,7 +117,7 @@
 		if (dt.getDay() != 0) {
 			document.getElementById("errMsg").textContent="Starting period must be on a Sunday";
 		}else{
-			window.location.href = "${pageContext.request.contextPath}/previousperiod?startPeriod=" + period + "&userID=" + userId;
+			window.location.href = "${pageContext.request.contextPath}/vendor/previousperiod?startPeriod=" + period + "&userID=" + userId;
 		}
 
 	}

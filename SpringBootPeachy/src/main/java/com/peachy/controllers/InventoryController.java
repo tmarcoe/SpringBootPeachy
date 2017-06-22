@@ -33,7 +33,7 @@ import com.peachy.service.SchemesService;
 @Controller
 public class InventoryController implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private final String pageLink = "/productpaging";
+	private final String pageLink = "/vendor/productpaging";
 
 	private static Logger logger = Logger.getLogger(InventoryController.class.getName());
 
@@ -52,7 +52,7 @@ public class InventoryController implements Serializable {
 	@Autowired
 	private FetalTransactionService transactionService;
 
-	@RequestMapping("/admin/productadded")
+	@RequestMapping("/vendor/productadded")
 	public String productAdded(@Valid @ModelAttribute("inventory") Inventory inventory, BindingResult result,
 			Model model) throws IOException, URISyntaxException {
 		if (result.hasErrors()) {
@@ -84,7 +84,7 @@ public class InventoryController implements Serializable {
 		return "manageinventory";
 	}
 
-	@RequestMapping("/admin/adminsearch")
+	@RequestMapping("/vendor/adminsearch")
 	public String adminSearch(@ModelAttribute("mySearch") String mySearch, BindingResult result, Model model) {
 		if (adminInventoryList != null) {
 			adminInventoryList.getSource().clear();
@@ -98,7 +98,7 @@ public class InventoryController implements Serializable {
 		return "manageinventory";
 	}
 
-	@RequestMapping("/admin/managesales")
+	@RequestMapping("/vendor/managesales")
 	public String manageSaleItems(Model model) {
 
 		if (adminInventoryList != null) {
@@ -110,10 +110,10 @@ public class InventoryController implements Serializable {
 			return "nosaleitems";
 		}
 
-		return "redirect:/admin/manageinventory";
+		return "redirect:/vendor/manageinventory";
 	}
 
-	@RequestMapping("/admin/manageinventory")
+	@RequestMapping("/vendor/manageinventory")
 	public String showManageInventory(Model model) throws IOException, URISyntaxException {
 
 		if (adminInventoryList != null) {
@@ -130,7 +130,7 @@ public class InventoryController implements Serializable {
 		return "manageinventory";
 	}
 
-	@RequestMapping("/admin/inventorysaved")
+	@RequestMapping("/vendor/inventorysaved")
 	public String inventorySaved(@ModelAttribute("inventory") Inventory inventory, Model model)
 			throws IOException, URISyntaxException {
 
@@ -142,10 +142,10 @@ public class InventoryController implements Serializable {
 			adminInventoryList = null;
 		}
 
-		return "redirect:/admin/manageinventory";
+		return "redirect:/vendor/manageinventory";
 	}
 
-	@RequestMapping("/admin/deleteinventory")
+	@RequestMapping("/vendor/deleteinventory")
 	public String deleteInventory(@ModelAttribute("deleteKey") String deleteKey, Model model)
 			throws URISyntaxException, IOException {
 		Inventory inventory = inventoryService.retrieve(deleteKey);
@@ -162,10 +162,10 @@ public class InventoryController implements Serializable {
 			adminInventoryList = null;
 			System.gc();
 		}
-		return "redirect:/admin/manageinventory";
+		return "redirect:/vendor/manageinventory";
 	}
 
-	@RequestMapping("/admin/uploadfile")
+	@RequestMapping("/vendor/uploadfile")
 	public String showUploadFile(Model model) {
 
 		FileUpload fileUpload = new FileUpload();
@@ -175,7 +175,7 @@ public class InventoryController implements Serializable {
 	}
 
 
-	@RequestMapping("/admin/singleitem")
+	@RequestMapping("/vendor/singleitem")
 	public String restockSingleItem(Model model) {
 		String inventoryKey = "";
 
@@ -184,7 +184,7 @@ public class InventoryController implements Serializable {
 		return "singleitem";
 	}
 
-	@RequestMapping("/admin/addinventory")
+	@RequestMapping("/vendor/addinventory")
 	public String addInventory(@ModelAttribute("fileUpload") FileUpload fileUpload, BindingResult result, Model model)
 			throws URISyntaxException {
 		File file = null;
@@ -229,7 +229,7 @@ public class InventoryController implements Serializable {
 		return "addinventory";
 	}
 
-	@RequestMapping("/admin/inventorydetails")
+	@RequestMapping("/vendor/inventorydetails")
 	public String showInventoryDetails(@ModelAttribute("InventoryKey") String inventoryKey, Model model)
 			throws IOException, URISyntaxException {
 		List<String> schemeList = schemesService.retrieveAllSchemes();
@@ -241,7 +241,7 @@ public class InventoryController implements Serializable {
 		return "inventorydetails";
 	}
 
-	@RequestMapping("/admin/orderinventory")
+	@RequestMapping("/vendor/orderinventory")
 	public String orderInventory(Model model) {
 		if (orderList != null) {
 			orderList.getSource().clear();
@@ -256,7 +256,7 @@ public class InventoryController implements Serializable {
 		return "orderinventory";
 	}
 
-	@RequestMapping("/admin/stockshelves")
+	@RequestMapping("/vendor/stockshelves")
 	public String stockShelves(@ModelAttribute("order") Order order, Model model)
 			throws IOException, URISyntaxException {
 
@@ -277,7 +277,7 @@ public class InventoryController implements Serializable {
 		return "orderinventory";
 	}
 
-	@RequestMapping("/admin/replenish")
+	@RequestMapping("/vendor/replenish")
 	public String replenishStock(@ModelAttribute("sku") String skuNum, Model model)
 			throws IOException, URISyntaxException {
 		Inventory inventory = inventoryService.retrieve(skuNum);
@@ -297,7 +297,7 @@ public class InventoryController implements Serializable {
 		return "replenish";
 	}
 
-	@RequestMapping(value = "/admin/orderpaging", method = RequestMethod.GET)
+	@RequestMapping(value = "/vendor/orderpaging", method = RequestMethod.GET)
 	public String handleOrderRequest(@ModelAttribute("page") String page, Model model) throws Exception {
 		int pgNum;
 
@@ -319,7 +319,7 @@ public class InventoryController implements Serializable {
 		return "orderinventory";
 	}
 
-	@RequestMapping(value = "/admin/productpaging", method = RequestMethod.GET)
+	@RequestMapping(value = "/vendor/productpaging", method = RequestMethod.GET)
 	public String handleProductRequest(@ModelAttribute("page") String page, Model model) throws Exception {
 		int pgNum;
 

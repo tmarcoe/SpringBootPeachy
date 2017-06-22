@@ -17,7 +17,7 @@ public class Coupons implements Serializable{
 	@NotBlank
 	@Size(min = 1, max = 8)
 	@NotNull
-	private String couponID;
+	private String coupon_id;
 	private String name;
 	private String description;
 	@NotNull
@@ -29,11 +29,11 @@ public class Coupons implements Serializable{
 	private int useage;
 	
 	
-	public String getCouponID() {
-		return couponID;
+	public String getCoupon_id() {
+		return coupon_id;
 	}
-	public void setCouponID(String couponNumber) {
-		this.couponID = couponNumber;
+	public void setCoupon_id(String coupon_id) {
+		this.coupon_id = coupon_id;
 	}
 	public String getName() {
 		return name;

@@ -59,10 +59,10 @@
 		<put-attribute name="title" value="Error"></put-attribute>
 		<put-attribute name="content" value="/WEB-INF/tiles/error.jsp"></put-attribute>
 	</definition>
-	<definition name="blocked" extends="peachy.base">
+	<definition name="access-denied" extends="peachy.base">
 		<put-attribute name="heading_title" value="Access Denied"></put-attribute>
 		<put-attribute name="title" value="Blocked"></put-attribute>
-		<put-attribute name="content" value="/WEB-INF/tiles/blocked.jsp"></put-attribute>
+		<put-attribute name="content" value="/WEB-INF/tiles/access-denied.jsp"></put-attribute>
 	</definition>
 	<definition name="products" extends="peachy.base">
 		<put-attribute name="heading_title" value="Shop"></put-attribute>
@@ -228,38 +228,6 @@
 		<put-attribute name="heading_title" value="Pick a Subcategory"></put-attribute>
 		<put-attribute name="title" value="Subcategory"></put-attribute>
 		<put-attribute name="content" value="/WEB-INF/tiles/picksubcategory.jsp"></put-attribute>
-	</definition>
-	<definition name="returns-getlookup" extends="peachy.base">
-		<put-attribute name="heading_title" value="Invoice Number and product number"></put-attribute>
-		<put-attribute name="title" value="Returns"></put-attribute>
-		<put-attribute name="content" value="/WEB-INF/tiles/returns-getlookup.jsp"></put-attribute>
-	</definition>
-	<definition name="returns-submit" extends="peachy.base">
-		<put-attribute name="heading_title" value="Submit Returns"></put-attribute>
-		<put-attribute name="title" value="Returns Submit"></put-attribute>
-		<put-attribute name="content" value="/WEB-INF/tiles/returns-submit.jsp"></put-attribute>
-	</definition>
-	<definition name="returns-list" extends="peachy.base">
-		<put-attribute name="heading_title" value="Returns for Approval"></put-attribute>
-		<put-attribute name="title" value="Returns List"></put-attribute>
-		<put-attribute name="content" value="/WEB-INF/tiles/returns-list.jsp"></put-attribute>
-		<put-attribute name="footer" value="/WEB-INF/tiles/static/pageinator.jsp"></put-attribute>
-	</definition>
-	<definition name="returns-approve" extends="peachy.base">
-		<put-attribute name="heading_title" value="Approve RMA"></put-attribute>
-		<put-attribute name="title" value="RMA"></put-attribute>
-		<put-attribute name="content" value="/WEB-INF/tiles/returns-approve.jsp"></put-attribute>
-	</definition>
-	<definition name="returns-getrma" extends="peachy.base">
-		<put-attribute name="heading_title" value="For Your Records"></put-attribute>
-		<put-attribute name="title" value="For Your Records"></put-attribute>
-		<put-attribute name="content" value="/WEB-INF/tiles/returns-getrma.jsp"></put-attribute>
-	</definition>
-	<definition name="returns-status" extends="peachy.base">
-		<put-attribute name="heading_title" value="Returns Status"></put-attribute>
-		<put-attribute name="title" value="Returns Status"></put-attribute>
-		<put-attribute name="content" value="/WEB-INF/tiles/returns-status.jsp"></put-attribute>
-		<put-attribute name="footer" value="/WEB-INF/tiles/static/pageinator.jsp"></put-attribute>
 	</definition>
 	<definition name="pcinfo" extends="peachy.base">
 		<put-attribute name="heading_title" value="Please Enter Your Payment Information"></put-attribute>
@@ -443,25 +411,23 @@
 		<put-attribute name="title" value="Time Reporting"></put-attribute>
 		<put-attribute name="content" value="/WEB-INF/tiles/timereporting.jsp"></put-attribute>
 	</definition>
-	<definition name="businessreports" extends="peachy.base">
-		<put-attribute name="heading_title" value="Business Reports"></put-attribute>
-		<put-attribute name="title" value="Business Reports"></put-attribute>
-		<put-attribute name="content" value="/WEB-INF/tiles/businessreports.jsp"></put-attribute>
-	</definition>
 	<definition name="salesreport" extends="peachy.base">
 		<put-attribute name="heading_title" value="Sales Report"></put-attribute>
 		<put-attribute name="title" value="Sales Report"></put-attribute>
 		<put-attribute name="content" value="/WEB-INF/tiles/linechart.jsp"></put-attribute>
+		<put-attribute name="toolbar" value="/WEB-INF/tiles/static/reporttoolbar.jsp"></put-attribute>
 	</definition>
 	<definition name="gender" extends="peachy.base">
 		<put-attribute name="heading_title" value="Breakdown by Gender"></put-attribute>
 		<put-attribute name="title" value="Breakdown by Gender"></put-attribute>
 		<put-attribute name="content" value="/WEB-INF/tiles/piechart.jsp"></put-attribute>
+		<put-attribute name="toolbar" value="/WEB-INF/tiles/static/reporttoolbar.jsp"></put-attribute>
 	</definition>
 	<definition name="viewsurveyreport" extends="peachy.base">
 		<put-attribute name="heading_title" value="Satisfaction Surveys"></put-attribute>
 		<put-attribute name="title" value="Satisfaction Surveys"></put-attribute>
 		<put-attribute name="content" value="/WEB-INF/tiles/barchart.jsp"></put-attribute>
+		<put-attribute name="toolbar" value="/WEB-INF/tiles/static/reporttoolbar.jsp"></put-attribute>
 	</definition>
 	<definition name="searchproducts" extends="peachy.base">
 		<put-attribute name="heading_title" value="Enter Search"></put-attribute>
@@ -534,7 +500,6 @@
 		<put-attribute name="title" value="Schemes"></put-attribute>
 		<put-attribute name="content" value="/WEB-INF/tiles/schemes.jsp"></put-attribute>
 	</definition>
-	
 	<definition name="newscheme" extends="peachy.base">
 		<put-attribute name="heading_title" value="Add Scheme"></put-attribute>
 		<put-attribute name="title" value="Add Scheme"></put-attribute>

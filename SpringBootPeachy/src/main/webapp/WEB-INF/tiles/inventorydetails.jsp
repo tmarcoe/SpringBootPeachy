@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <sf:form id="details" method="post"
-	action="${pageContext.request.contextPath}/admin/inventorysaved"
+	action="${pageContext.request.contextPath}/vendor/inventorysaved"
 	commandName="inventory">
 	<table class="inventorydetails">
 		<tr>
@@ -143,7 +143,7 @@
 		<tr>
 			<td><input type="submit" value="Save" /></td>
 			<td><button type="button"
-					onclick="followLink('/admin/manageinventory')">Cancel</button>
+					onclick="followLink('/vendor/manageinventory')">Cancel</button>
 		</tr>
 	</table>
 </sf:form>

@@ -1,5 +1,8 @@
 package com.peachy.service;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,5 +94,29 @@ public class InvoiceService implements IInvoice {
 	}
 	public List<Invoice> getProcessedInvoicesRawList() {
 		return invoiceDao.getProcessedInvoices();
+	}
+	public List<Double> getSalesData(int year) {
+		List<Double> totals = new ArrayList<Double>();
+		for (int i=1;  i <= 12; i++) {
+			totals.add(invoiceDao.getCountByMonth(i, year));
+		}
+		
+		return totals;
+	}
+	public List<BigInteger> getCustomerCounts(int year) {
+		List<BigInteger> totals = new ArrayList<BigInteger>();
+		for (int i=1; i <= 12; i++) {
+			totals.add(invoiceDao.getCustomerCounts(i, year));
+		}
+		
+		return totals;
+	}
+
+	public BigDecimal getMonthlyTotal(int month, int year) {
+		return invoiceDao.getMonthlyTotal(month, year);
+	}
+	
+	public double getCountByMonth(int month, int year) {
+		return invoiceDao.getCountByMonth(month, year);
 	}
 }

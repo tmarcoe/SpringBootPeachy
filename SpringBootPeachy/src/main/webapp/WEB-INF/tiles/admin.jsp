@@ -8,7 +8,7 @@
 	<c:choose>
 		<c:when test="${objectList.pageList.size() > 0}">
 			<form:form id="pgform" method="post" modelAttribute="objectList"
-				action="${pageContext.request.contextPath}/admin/processorders">
+				action="${pageContext.request.contextPath}/vendor/processorders">
 				<h2>Orders Ready For Processing</h2>
 				<table class="tableview" id="viewheader">
 					<thead>

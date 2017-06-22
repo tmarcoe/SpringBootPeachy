@@ -20,7 +20,7 @@ public class TimeSheetAccountsController {
 	
 	private PagedListHolder<TimeSheetAccounts> activityList;
 	
-	@RequestMapping("/admin/createactivity")
+	@RequestMapping("/vendor/createactivity")
 	public String createActivity(Model model) {
 		TimeSheetAccounts timeSheetAccounts = new TimeSheetAccounts();
 		
@@ -28,7 +28,7 @@ public class TimeSheetAccountsController {
 		
 		return "createactivity";
 	}
-	@RequestMapping("/admin/activitylist")
+	@RequestMapping("/vendor/activitylist")
 	public String activityList(Model model) {
 		
 		activityList = timeSheetAccountsService.retrieveList();
@@ -49,7 +49,7 @@ public class TimeSheetAccountsController {
 	}
 	
 	
-	@RequestMapping("/admin/saveactivity")
+	@RequestMapping("/vendor/saveactivity")
 	public String saveActivity(@ModelAttribute("timeSheetAccounts") TimeSheetAccounts timeSheetAccounts, BindingResult result, Model model) {
 		
 		timeSheetAccountsService.create(timeSheetAccounts);
@@ -65,10 +65,10 @@ public class TimeSheetAccountsController {
 			return "createactivity";
 		}
 		
-		return "redirect:/admin/activitylist";
+		return "redirect:/vendor/activitylist";
 	}
 	
-	@RequestMapping("/admin/editactivity")
+	@RequestMapping("/vendor/editactivity")
 	public String editActivity(@ModelAttribute("accountNum") String AccountNum, BindingResult result, Model model) {
 		
 		TimeSheetAccounts timeSheetAccounts = timeSheetAccountsService.retrieve(AccountNum);
@@ -77,7 +77,7 @@ public class TimeSheetAccountsController {
 		
 		return "editactivity";
 	}
-	@RequestMapping("/admin/deleteactivity")
+	@RequestMapping("/vendor/deleteactivity")
 	public String deleteActivity(@ModelAttribute("accountNum") String AccountNum, BindingResult result, Model model) {
 		TimeSheetAccounts tsa = timeSheetAccountsService.retrieve(AccountNum);
 		timeSheetAccountsService.delete(tsa);
@@ -92,18 +92,18 @@ public class TimeSheetAccountsController {
 			return "createactivity";
 		}
 		
-		return "redirect:/admin/activitylist";
+		return "redirect:/vendor/activitylist";
 	}
 	
-	@RequestMapping("/admin/updateactivity")
+	@RequestMapping("/vendor/updateactivity")
 	public String updaateActivity(@ModelAttribute("timeSheetAccounts") TimeSheetAccounts timeSheeAccounts, BindingResult result, Model model) {
 		
 		timeSheetAccountsService.update(timeSheeAccounts);
 		
-		return "redirect:/admin/activitylist";
+		return "redirect:/vendor/activitylist";
 	}
 
-	@RequestMapping("/admin/activitypaging")
+	@RequestMapping("/vendor/activitypaging")
 	public String activityPaging(@ModelAttribute("page") String page, Model model) {
 		
 		int pgNum;

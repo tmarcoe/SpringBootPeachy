@@ -29,7 +29,7 @@ import com.peachy.service.GeneralLedgerService;
 @Controller
 public class LedgerController implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private final String pageLink = "/admin/ledgerpaging";
+	private final String pageLink = "/vendor/ledgerpaging";
 
 	@Autowired
 	private GeneralLedgerService generalLedgerService;
@@ -51,7 +51,7 @@ public class LedgerController implements Serializable {
 				dateFormat, false));
 	}
 
-	@RequestMapping("/admin/datepicker")
+	@RequestMapping("/vendor/datepicker")
 	public String pickDate(Model model) {
 		DatePicker datePicker = new DatePicker();
 
@@ -60,7 +60,7 @@ public class LedgerController implements Serializable {
 		return "datepicker";
 	}
 
-	@RequestMapping(value = "/admin/generalledger", method = RequestMethod.POST)
+	@RequestMapping(value = "/vendor/generalledger", method = RequestMethod.POST)
 	public String viewGeneralLedger(
 			@Valid @ModelAttribute(value = "datePicker") DatePicker picker,
 			BindingResult result, Model model) {
@@ -84,7 +84,7 @@ public class LedgerController implements Serializable {
 
 		return "generalledger";
 	}
-	@RequestMapping("/admin/exportledger")
+	@RequestMapping("/vendor/exportledger")
 	public String exportLedger(@ModelAttribute("startDt") Date startDt, 
 								@ModelAttribute("endDt") Date endDt, Model model) throws IOException {
 		SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
@@ -104,7 +104,7 @@ public class LedgerController implements Serializable {
 		return "exportledger";
 	}
 
-	@RequestMapping(value = "/admin/ledgerpaging", method = RequestMethod.GET)
+	@RequestMapping(value = "/vendor/ledgerpaging", method = RequestMethod.GET)
 	public String handleLedgerRequest(@ModelAttribute("page") String page,
 			Model model) throws Exception {
 		int pgNum;

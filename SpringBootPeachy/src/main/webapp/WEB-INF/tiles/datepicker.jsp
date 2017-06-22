@@ -1,7 +1,7 @@
 <%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form"%>
 
 <sf:form method="post"
-	action="${pageContext.request.contextPath}/admin/generalledger"
+	action="${pageContext.request.contextPath}/vendor/generalledger"
 	commandName="datePicker" >
 	<table>
 		<thead>

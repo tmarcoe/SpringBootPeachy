@@ -20,7 +20,7 @@ import com.peachy.service.FetalScriptsService;
 
 
 @RestController
-@RequestMapping(value = "/admin/fetal-data", method = RequestMethod.GET)
+@RequestMapping(value = "/vendor/fetal-data", method = RequestMethod.GET)
 public class FetalDataController {
 
 	@Autowired
