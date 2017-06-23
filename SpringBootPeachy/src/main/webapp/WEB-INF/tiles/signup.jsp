@@ -189,6 +189,13 @@
 				</div></td>
 		</tr>
 		<tr>
+			<td></td>
+			<td><div id="pbar" >
+				<label id="pLabel" ></label>
+				<div id="pStrength"></div>
+			</div></td>
+		</tr>
+		<tr>
 			<td>Password:</td>
 			<td><sf:input id="password" class="control" path="password"
 					name="password" type="password" /></td>

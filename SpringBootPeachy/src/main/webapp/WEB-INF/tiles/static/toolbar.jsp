@@ -21,9 +21,9 @@
 				<li><div class="dropdown">
 						<button class="dropbtn">My Peachy's Coffee</button>
 						<div class="dropdown-content" >
-							<a href="/user/myprofile">Edit My Profile</a> 
-							<a href="/user/shoppinghistory">Purchase History</a> 
+							<a href="/user/myprofile">Edit My Profile</a>
 							<a href="/user/changepassword">Change password</a>
+							<a href="/user/shoppinghistory">Purchase History</a> 
 							<a href="/user/surveyinput">Take the survey</a>
 						</div>
 					</div>
@@ -32,12 +32,12 @@
 			</sec:isAuthenticated>
 			<li><button class="dropbtn" onclick="window.location.href = '/public/contactus'">Contact Us</button></li>
 			<li><button class="dropbtn" onclick="window.location.href = '/public/aboutus'">About Us</button></li>
-			<sec:hasRole role="EMPLOYEE,ADMIN,VENDOR">
+			<sec:hasRole role="EMPLOYEE,VENDOR">
 				<li><div class="dropdown">
 					<button class="dropbtn">Employees</button>
 						<div class="dropdown-content">
 							<a href="/employee/timesheet">Time Sheets</a>
-							<sec:hasRole role="ADMIN,VENDOR">
+							<sec:hasRole role="VENDOR">
 								<a href="/vendor/activitylist" >Approved Activities</a>
 								<a href="/vendor/employeelist">Approve Timesheets</a>
 								<a href="/vendor/payrollperiod">Payroll</a>
@@ -46,18 +46,19 @@
 					</div>
 				</li>
 			</sec:hasRole>
-			<sec:hasRole role="VENDOR,ADMIN">
+			<sec:hasRole role="VENDOR">
 				<li><div class="dropdown">
 					<button class="dropbtn">Admin</button>
 						<div class="dropdown-content">
 							<a href="/vendor/admin" >Ship Product</a>
-							<a href="#">View Surveys</a>
+							<a href="/vendor/surveylist">View Surveys</a>
 							<a href="/vendor/manageinventory">Inventory...</a>
 							<a href="/vendor/users">User Profiles...</a>
 							<a href="/vendor/listcoupons">Manage Coupons...</a>
 							<a href="/vendor/calendaryear?reportType=sales">Reports</a>
 							<a href="/vendor/fetallist">Fetal Scripts...</a>
 							<a href="/vendor/manageaccount">Accounting...</a>
+							<a href="/vendor/checkemail">E-mail</a>
 						</div>
 					</div>
 				</li>

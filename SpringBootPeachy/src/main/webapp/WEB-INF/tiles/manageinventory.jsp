@@ -3,7 +3,7 @@
 
 <sf:form modelAttribute="objectList" method="get">
 
-	<table class="tableview" id="listinventory">
+	<table class="tableview tableshadow" id="listinventory">
 		<thead>
 			<tr>
 				<th>SKU Number</th>

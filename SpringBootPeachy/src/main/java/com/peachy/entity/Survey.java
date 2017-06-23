@@ -14,7 +14,7 @@ public class Survey implements Serializable{
 	
 	@Id @GeneratedValue(strategy = GenerationType.AUTO)
 	int key;
-	int userID;
+	int user_id;
 	
 	//Did you find the item you wanted?
 	private String question1;
@@ -41,11 +41,11 @@ public class Survey implements Serializable{
 	public void setKey(int key) {
 		this.key = key;
 	}
-	public int getUserID() {
-		return userID;
+	public int getUser_id() {
+		return user_id;
 	}
-	public void setUserID(int userID) {
-		this.userID = userID;
+	public void setUser_id(int user_id) {
+		this.user_id = user_id;
 	}
 	public String getQuestion1() {
 		return question1;

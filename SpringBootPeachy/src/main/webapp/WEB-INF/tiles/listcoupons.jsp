@@ -1,6 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<table class="tableview" id="viewcoupons">
+<table class="tableview tableshadow" id="viewcoupons">
 	<tr>
 		<th>Coupon Name</th>
 		<th>Coupon Description</th>

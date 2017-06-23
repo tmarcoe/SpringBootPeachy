@@ -59,7 +59,7 @@ public class LoginController implements Serializable {
 		return "loggedout";
 	}
 
-	@RequestMapping("/verify")
+	@RequestMapping("/public/verify")
 	public String verifyEmail(@ModelAttribute("userID") int userID, @ModelAttribute("h") String h, Model model) {
 		
 		UserProfile user = userProfileService.retrieve(userID);
@@ -73,7 +73,7 @@ public class LoginController implements Serializable {
 			logger.error("User ID " + userID + " had a wrong password.");
 			return "blocked";
 		}
-		userProfileService.update(user);
+		userProfileService.merge(user);
 		String name = user.getFirstname() + " " + user.getLastname();
 		model.addAttribute("name", name);
 

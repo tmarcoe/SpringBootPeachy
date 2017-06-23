@@ -154,7 +154,7 @@ public class UserProfileDao implements IUserProfileDao {
 
 	public void updatePassword(UserProfile user) {
 		Session session = session();
-		String hqlUpdate = "update UserProfile as u set password = :password where user_id=:user_id";
+		String hqlUpdate = "update UserProfile as u set password = :password where user_id = :user_id";
 		Transaction tx = session.beginTransaction();
 		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 		session.createQuery(hqlUpdate)
@@ -192,6 +192,14 @@ public class UserProfileDao implements IUserProfileDao {
 		String hql = "FROM UserProfile u WHERE EXISTS (SELECT 1 FROM Employee e WHERE startDate IS NOT null AND u.user_id = e.user_id)";
 		
 		return session.createQuery(hql).list();
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<UserProfile> getMonthlyNewsLetterUsers() {
+		String hql = "from UserProfile where monthlyMailing = true";
+		List<UserProfile> userList = session().createQuery(hql).list();
+
+		return userList;
 	}
 
 }

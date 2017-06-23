@@ -27,11 +27,13 @@
 			<td>Password:</td>
 			<td><input type='password' name='password' /></td>
 		</tr>
+		<!-- 
 		<tr>
 			<td>Remember me:</td>
 			<td><input type='checkbox' name='_spring_security_remember_me' 
 				id='remember_me' onchange='alertUser()' /></td>
 		</tr>
+		 -->
 		<tr>
 			<td colspan='2'><input name="submit" type="submit" value="Login" /></td>
 			<td><button type="button" onclick="followLink('/signup')" >New User</button></td>

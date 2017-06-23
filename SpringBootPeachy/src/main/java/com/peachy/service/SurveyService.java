@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.support.PagedListHolder;
 import org.springframework.stereotype.Service;
 
 import com.peachy.dao.SurveyDao;
@@ -28,6 +29,10 @@ public class SurveyService implements ISurvey {
 		return surveyDao.retrieve(key);
 	}
 
+	public PagedListHolder<Survey> retrieveList() {
+		return new PagedListHolder<Survey>(surveyDao.retrieveList());
+	}
+	
 	@Override
 	public void update(Survey survey) {
 		surveyDao.update(survey);

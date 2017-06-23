@@ -1,12 +1,18 @@
 <%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form"%>
 
 <sf:form id="details" method="post"
-	action="${pageContext.request.contextPath}/passwordchanged"
+	action="${pageContext.request.contextPath}/user/passwordchanged"
 	commandName="userProfile">
 	<div class="billing">
 		<table>
 			<caption>Enter the New Password for :
 				${userProfile.username}</caption>
+			<tr>
+			<td><div id="pbar" >
+				<label id="pLabel" ></label>
+				<div id="pStrength"></div>
+			</div></td>
+		</tr>
 			<tr>
 				<td>Password: <sf:input id="password" class="control" path="password"
 						name="password" type="password" value="" /></td>
@@ -24,5 +30,5 @@
 			</tr>
 		</table>
 	</div>
-	<sf:hidden path="userID" />
+	<sf:hidden path="user_id" />
 </sf:form>

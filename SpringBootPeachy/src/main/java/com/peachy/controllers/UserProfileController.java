@@ -24,6 +24,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.peachy.component.FilePath;
+import com.peachy.email.ProcessEmail;
 import com.peachy.entity.Role;
 import com.peachy.entity.UserProfile;
 import com.peachy.exceptions.SessionTimedOutException;
@@ -34,7 +36,7 @@ import com.peachy.service.UserProfileService;
 public class UserProfileController implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private final String pageLink = "/userpaging";
+	private final String pageLink = "/vendor/userpaging";
 
 	private static Logger logger = Logger.getLogger(UserProfileController.class
 			.getName());
@@ -49,6 +51,8 @@ public class UserProfileController implements Serializable {
 
 	private SimpleDateFormat dateFormat;
 
+	@Autowired
+	FilePath fp;
 
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
@@ -218,16 +222,16 @@ public class UserProfileController implements Serializable {
 		logger.info("'" + user.getUsername() + "' has just signed up.");
 		
 		
-		//String baseUrl = String.format("%s://%s:%d/verify?userID=",request.getScheme(), request.getServerName(), request.getServerPort());
-		//ProcessEmail pe = new ProcessEmail();
-		//pe.sendLoginLink(user, baseUrl);
+		String baseUrl = String.format("%s://%s:%d/public/verify?userID=",request.getScheme(), request.getServerName(), request.getServerPort());
+		ProcessEmail pe = new ProcessEmail(fp);
+		pe.sendLoginLink(user, baseUrl);
 
 		String name = user.getFirstname() + " " + user.getLastname();
 
 		model.addAttribute("name", name);
 		model.addAttribute("email", user.getUsername());
 
-		return "redirect:/public/home";
+		return "createprofile";
 	}
 
 	@RequestMapping("/user/changepassword")
@@ -250,7 +254,7 @@ public class UserProfileController implements Serializable {
 			return "changepassword";
 		}
 
-		userProfileService.update(user);;
+		userProfileService.updatePassword(user);
 
 		user = userProfileService.retrieve(principal.getName());
 

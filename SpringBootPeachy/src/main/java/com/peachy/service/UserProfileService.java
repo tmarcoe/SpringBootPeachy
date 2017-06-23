@@ -29,7 +29,7 @@ public class UserProfileService implements IUserProfileService {
 	public void create(UserProfile user) {
 		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 		List<Role> role = new ArrayList<Role>();
-		user.setEnabled(true);
+		user.setEnabled(false);
 		user.setDateAdded(new Date());
 		role.add(roleService.retrieve("USER"));
 		user.setRoles(role);
@@ -102,6 +102,13 @@ public class UserProfileService implements IUserProfileService {
 	
 	public List<UserProfile> employeeList() {
 		return userProfileDao.selectEmployees();
+	}
+	
+	public List<UserProfile> getMonthlyNewsLetterUsers() {
+		return userProfileDao.getMonthlyNewsLetterUsers();
+	}
+	public void updatePassword(UserProfile user) {
+		userProfileDao.updatePassword(user);
 	}
 
 }

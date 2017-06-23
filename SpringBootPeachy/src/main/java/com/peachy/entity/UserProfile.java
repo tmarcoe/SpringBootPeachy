@@ -55,7 +55,7 @@ public class UserProfile implements Serializable{
 	private String password;
 	private String shippingInfo;
 	private boolean monthlyMailing;
-	@NotNull
+
 	@ManyToMany(cascade = CascadeType.MERGE)
 	@JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private List<Role> roles;

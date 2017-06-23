@@ -41,6 +41,13 @@ public class SurveyDao implements ISurvey {
 		Session session = session();
 		return (Survey) session.createCriteria(Survey.class).add(Restrictions.idEq(key)).uniqueResult();
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Survey> retrieveList() {
+		
+		Session session = session();
+		return session.createCriteria(Survey.class).list();
+	}
 
 	@Override
 	public void update(Survey survey) {

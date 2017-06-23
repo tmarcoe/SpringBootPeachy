@@ -22,10 +22,12 @@ import com.peachy.entity.Inventory;
 import com.peachy.entity.Invoice;
 import com.peachy.entity.InvoiceItem;
 import com.peachy.entity.PaymentRegister;
+import com.peachy.entity.PettyCashRegister;
 import com.peachy.entity.PurchaseOrder;
 import com.peachy.entity.UserProfile;
 import com.peachy.helper.Order;
 import com.peachy.reports.CreatePayStub;
+
 
 @Service
 public class FetalTransactionService extends FetalTransaction{
@@ -62,6 +64,22 @@ public class FetalTransactionService extends FetalTransaction{
 	@Autowired
 	FilePath fp;
 	
+	public void processPettyCash(PettyCashRegister pettyCash) throws IOException {
+		initTransaction(fp.getConfig() + "fetal.properties");
+		
+		addVariable("transactionAmount", VariableType.DOUBLE , pettyCash.getAmount());
+		setDescription("Petty Cash: " + pettyCash.getReason());
+		loadRule("pettycash.trans");
+	}
+
+	public void processAdjustment(double adjAmount) throws IOException {
+		initTransaction(fp.getConfig() + "fetal.properties");
+		addVariable("adjustment", VariableType.DOUBLE, adjAmount);
+		setDescription("Petty Cash Adjustment");
+		loadRule("adjustment.trans");
+	}
+
+
 	public void purchaseInventory(Order order) throws RecognitionException, IOException, RuntimeException {
 		initTransaction(fc.getProperiesFile());
 

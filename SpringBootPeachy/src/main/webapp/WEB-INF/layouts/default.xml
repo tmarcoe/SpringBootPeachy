@@ -239,21 +239,12 @@
 		<put-attribute name="title" value="Denied"></put-attribute>
 		<put-attribute name="content" value="/WEB-INF/tiles/pcdenied.jsp"></put-attribute>
 	</definition>
-	<definition name="podnotify" extends="peachy.base">
-		<put-attribute name="heading_title" value="Enter the invoice number"></put-attribute>
-		<put-attribute name="title" value="POD Invoice"></put-attribute>
-		<put-attribute name="content" value="/WEB-INF/tiles/podnotify.jsp"></put-attribute>
-	</definition>
-	<definition name="podconfirm" extends="peachy.base">
-		<put-attribute name="heading_title" value="Confirm notification"></put-attribute>
-		<put-attribute name="title" value="POD confirm"></put-attribute>
-		<put-attribute name="content" value="/WEB-INF/tiles/podconfirm.jsp"></put-attribute>
-	</definition>
 	<definition name="checkemail" extends="peachy.base">
 		<put-attribute name="heading_title" value="Get Email"></put-attribute>
 		<put-attribute name="title" value="Email"></put-attribute>
 		<put-attribute name="content" value="/WEB-INF/tiles/checkemail.jsp"></put-attribute>
 		<put-attribute name="footer" value="/WEB-INF/tiles/static/pageinator.jsp"></put-attribute>
+		<put-attribute name="toolbar" value="/WEB-INF/tiles/static/emailtoolbar.jsp"></put-attribute>
 	</definition>
 	<definition name="nointernet" extends="peachy.base">
 		<put-attribute name="heading_title" value="No Internet"></put-attribute>
