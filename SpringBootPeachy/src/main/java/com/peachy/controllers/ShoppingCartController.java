@@ -79,6 +79,9 @@ public class ShoppingCartController implements Serializable {
 		binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, false));
 	}
 
+	@RequestMapping("/user/nocart") 
+	public String showNoCart() {return "nocart";}
+	
 	@RequestMapping("/user/saveitem")
 	public String saveInvoiceItem(@Valid @ModelAttribute("item") InvoiceItem item, BindingResult result, Model model)
 			throws IOException, URISyntaxException, SOAPException {
@@ -143,6 +146,10 @@ public class ShoppingCartController implements Serializable {
 			invoiceService.purgeCoupons(header.getInvoice_num());
 		}
 
+		header.setShipping_cost(transactionService.calculateShippingCharges());
+		header = invoiceService.totalInvoice(header);
+		invoiceService.merge(header);
+		
 		String errorMsg = "";
 		String couponNum = "";
 		Currency currency = new Currency(cc);
@@ -164,6 +171,7 @@ public class ShoppingCartController implements Serializable {
 		Currency currency = new Currency(cc);
 		UserProfile user = userProfileService.retrieve(principal.getName());
 		Invoice header = invoiceService.getOpenOrder(user.getUser_id());
+
 		if (header == null) {
 			return "redirect:/user/nocart";
 		}
@@ -179,31 +187,71 @@ public class ShoppingCartController implements Serializable {
 			if (coupon == null) {
 				errorMsg = "That coupon does not exist";
 
-				return "redirect:/user/cart";
+				String couponNum = "";
+
+
+				model.addAttribute("rate", currency.getRate(user.getCurrency()));
+				model.addAttribute("currencySymbol", currency.getSymbol(user.getCurrency()));
+				model.addAttribute("errorMsg", errorMsg);
+				model.addAttribute("couponNum", couponNum);
+				model.addAttribute("invoice", header);
+				model.addAttribute("invoiceList", listItems(header));
+
+				return "cart";
 			}
+			
 			if (new Date().after(coupon.getExpires())) {
 				errorMsg = "That coupon has expired";
 
-				return "redirect:/user/cart";
+				String couponNum = coupon.getCoupon_id();
+				
+				model.addAttribute("rate", currency.getRate(user.getCurrency()));
+				model.addAttribute("currencySymbol", currency.getSymbol(user.getCurrency()));
+				model.addAttribute("errorMsg", errorMsg);
+				model.addAttribute("couponNum", couponNum);
+				model.addAttribute("invoice", header);
+				model.addAttribute("invoiceList", listItems(header));
 
+				return "cart";
 			}
 
-			if (invoiceItemService.countCoupons(user.getUser_id(), couponName) <= coupon.getUseage()) {
+			if (invoiceItemService.countCoupons(user.getUser_id(), coupon.getCoupon_id()) >= coupon.getUseage()) {
 				errorMsg = "That coupon is used up.";
+				
+				String couponNum = coupon.getCoupon_id();
+				
+				model.addAttribute("rate", currency.getRate(user.getCurrency()));
+				model.addAttribute("currencySymbol", currency.getSymbol(user.getCurrency()));
+				model.addAttribute("errorMsg", errorMsg);
+				model.addAttribute("couponNum", couponNum);
+				model.addAttribute("invoice", header);
+				model.addAttribute("invoiceList", listItems(header));
 
-				return "redirect:/user/cart";
+				return "cart";
 			}
 
 			if (invoiceItemService.hasCoupons(header.getInvoice_num())) {
 				errorMsg = "Only one coupon per order";
 
-				return "redirect:/user/cart";
+				String couponNum = coupon.getCoupon_id();
+				
+				model.addAttribute("rate", currency.getRate(user.getCurrency()));
+				model.addAttribute("currencySymbol", currency.getSymbol(user.getCurrency()));
+				model.addAttribute("errorMsg", errorMsg);
+				model.addAttribute("couponNum", couponNum);
+				model.addAttribute("invoice", header);
+				model.addAttribute("invoiceList", listItems(header));
+
+				return "cart";
 			}
 
 			transactionService.useCoupon(header, coupon);
+			
 		}
+		
+		List<InvoiceItem> items = invoiceItemService.getLineItems(header.getInvoice_num());
 		model.addAttribute("invoice", header);
-		model.addAttribute("invoiceList", new ArrayList<InvoiceItem>(header.getItems()));
+		model.addAttribute("invoiceList", items);
 		model.addAttribute("rate", currency.getRate(user.getCurrency()));
 		model.addAttribute("currencySymbol", currency.getSymbol(user.getCurrency()));
 
@@ -220,7 +268,9 @@ public class ShoppingCartController implements Serializable {
 		if (header.getProcessed() == null) {
 			invoiceService.purgeCoupons(invoiceNum);
 		}
+		header.setShipping_cost(transactionService.calculateShippingCharges());
 		header = invoiceService.totalInvoice(header);
+		
 		String errorMsg = "";
 		String couponNum = "";
 		Currency currency = new Currency(cc);

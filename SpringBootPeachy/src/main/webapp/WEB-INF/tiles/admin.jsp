@@ -10,7 +10,7 @@
 			<form:form id="pgform" method="post" modelAttribute="objectList"
 				action="${pageContext.request.contextPath}/vendor/processorders">
 				<h2>Orders Ready For Processing</h2>
-				<table class="tableview" id="viewheader">
+				<table class="tableview tableshadow" id="viewheader">
 					<thead>
 						<tr>
 							<th>Invoice #</th>

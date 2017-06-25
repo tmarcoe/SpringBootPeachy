@@ -3,8 +3,11 @@ package com.peachy.service;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.support.PagedListHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -28,7 +31,7 @@ public class UserProfileService implements IUserProfileService {
 	@Override
 	public void create(UserProfile user) {
 		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-		List<Role> role = new ArrayList<Role>();
+		Set<Role> role = new HashSet<Role>();
 		user.setEnabled(false);
 		user.setDateAdded(new Date());
 		role.add(roleService.retrieve("USER"));

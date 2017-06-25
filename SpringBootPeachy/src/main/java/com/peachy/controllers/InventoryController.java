@@ -110,7 +110,9 @@ public class InventoryController implements Serializable {
 			return "nosaleitems";
 		}
 
-		return "redirect:/vendor/manageinventory";
+		model.addAttribute("objectList", adminInventoryList);
+		model.addAttribute("pagelink", pageLink);
+		return "manageinventory";
 	}
 
 	@RequestMapping("/vendor/manageinventory")

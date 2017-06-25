@@ -15,13 +15,12 @@ public class Coupons implements Serializable{
 	private static final long serialVersionUID = 1L;
 	@Id
 	@NotBlank
-	@Size(min = 1, max = 8)
+	@Size(min = 1, max = 16)
 	@NotNull
 	private String coupon_id;
 	private String name;
 	private String description;
 	@NotNull
-	@NotBlank
 	private Date expires;
 	private boolean active;
 	private boolean exclusive;

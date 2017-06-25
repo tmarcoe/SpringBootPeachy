@@ -5,8 +5,9 @@ import java.io.Serializable;
 import java.net.URISyntaxException;
 import java.security.Principal;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
@@ -156,6 +157,7 @@ public class UserProfileController implements Serializable {
 	public String adminPartialUpdate(
 			@Valid @ModelAttribute("userProfile") UserProfile user, BindingResult result, Model model)
 			throws IOException, URISyntaxException {
+		String roleIndex = "";
 		
 		if (result.hasFieldErrors("firstname") || 
 			result.hasFieldErrors("lastname") || 
@@ -166,7 +168,17 @@ public class UserProfileController implements Serializable {
 			result.hasFieldErrors("currency") || 
 			result.hasFieldErrors("username")) {
 			
+			for (Role r: user.getRoles()) {
+				if (roleIndex.length() > 0) {
+					roleIndex += ("," + String.valueOf(r.getId()));
+				}else{
+					roleIndex += String.valueOf(r.getId());
+				}
+			}
+			
+			model.addAttribute("roleIndex", roleIndex);
 			model.addAttribute("roles", roleService.retrieveList());
+			model.addAttribute("userProfile", user);
 			
 			return "userdetails";
 		}
@@ -174,7 +186,7 @@ public class UserProfileController implements Serializable {
 			user.getEmployee().setUser_id(user.getUser_id());
 		}
 		if (user.getRoles() == null) {
-			user.setRoles(new ArrayList<Role>());
+			user.setRoles(new HashSet<Role>());
 		}
 		String[] roleNames = user.getRoleString().split(";");
 		for (int i = 0 ; i < roleNames.length; i++) {

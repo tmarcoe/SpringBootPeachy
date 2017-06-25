@@ -1,5 +1,8 @@
 package com.peachy.dao;
 
+import java.math.BigInteger;
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import org.hibernate.Criteria;
@@ -106,21 +109,28 @@ public class InvoiceItemDao implements IInvoiceItem {
 	 
 	public long countCoupons(int user_id, String coupon) {
 		Session session = session();
-		long count = 0;
-		String sql = "SELECT COUNT(*) FROM Invoice a, InvoiceItem b WHERE a.user_id = :user_id " +
-					 "AND a.invoice_num = b.invoice_num AND sku_num = :coupon";
+
+		String sql = "SELECT COUNT(*) FROM invoice a, invoice_item b WHERE a.user_id = :user_id " +
+					 "AND a.invoice_num = b.invoice_num AND b.sku_num = :coupon";
 		
-		count = (long) session.createSQLQuery(sql).setInteger("user_id", user_id).setString("coupon", coupon).uniqueResult();
+		BigInteger count =  (BigInteger) session.createSQLQuery(sql).setInteger("user_id", user_id).setString("coupon", coupon).uniqueResult();
 		
-		return count;
+		return count.longValue();
 	}
 	
 	public boolean hasCoupons(int invoice_num) {
 		Session session = session();
-		String hql = "SELECT COUNT(*) FROM InvoiceItem WHERE invoice_num = :invoice_num AND sku_num LIKE CPN%";
+		String hql = "SELECT COUNT(*) FROM InvoiceItem WHERE invoice_num = :invoice_num AND sku_num LIKE 'CPN%'";
 		long count = (long) session.createQuery(hql).setInteger("invoice_num", invoice_num).uniqueResult();
 		
 		return (count > 0);
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<InvoiceItem> getLineItems(Integer invoice_num) {
+		Session session = session();
+		
+		return session.createCriteria(InvoiceItem.class).add(Restrictions.eq("invoice_num", invoice_num)).list();
 	}
 
 }

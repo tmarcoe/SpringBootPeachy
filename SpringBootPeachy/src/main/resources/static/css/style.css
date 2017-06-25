@@ -16,6 +16,7 @@ Define commonly used colors
 	--title-color: #ffffff;
 	--light-text: #ffffff;
 	--light-background: #b7ffb7;
+	--light-shadow: rgba(0,0,0,0.2);
 }
 /* -----------------------
 Base styles
@@ -536,7 +537,7 @@ tfoot.tablefooter td
 #viewsurvey 
 {
 	vertical-align: bottom;
-	box-shadow:  2px 2px 4px #83615c;
+	box-shadow:  0px 8px 16px 0px var(--light-shadow);
 }
 
 #viewledger td
@@ -740,7 +741,7 @@ table.leftside td {
 	vertical-align: text-bottom;
 }
 .userinfo {
-	box-shadow: 2px 2px 4px #83615c;
+	box-shadow: 0px 8px 16px 0px var(--light-shadow);
 	margin-right: 2em;
 	margin-top: .5em;
 }
@@ -749,7 +750,7 @@ table.leftside td {
 }
 .shadow 
 {
-	box-shadow:  2px 2px 4px #83615c;
+	box-shadow:  0px 8px 16px 0px var(--light-shadow);
 }
 table.surveytable td
 {
@@ -782,7 +783,7 @@ div.modal {
 	background: linear-gradient(#d5e6ee, white);
 	/* Standard syntax (must be last) */
     margin: 15% auto; /* 15% from the top and centered */
-	box-shadow: 10px 10px 5px #888888;
+	box-shadow: 0px 8px 16px 0px var(--light-shadow);
     padding: 20px;
     border: 1px solid #888;
     width: 45%; /* Could be more or less, depending on screen size */
@@ -821,7 +822,7 @@ div.modal {
 	text-align: center;
 }
 .divshadow {
-	box-shadow: 10px 10px 5px #888888;
+	box-shadow: 0px 8px 16px 0px var(--light-shadow);
 }
 .pieChart {
 	height: 500px;
@@ -908,7 +909,7 @@ table.leftJustify th{
     position: absolute;
     background-color: var(--coffee-dark);
     min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    box-shadow: 0px 8px 16px 0px var(--light-shadow);
     z-index: 1;
 }
 
@@ -935,7 +936,7 @@ table.leftJustify th{
 	border: 1px solid black;
 }
 .tableshadow {
-	box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+	box-shadow: 0px 8px 16px 0px var(--light-shadow);
 	height: 5px;
 }
 #pbar {

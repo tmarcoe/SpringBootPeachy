@@ -143,7 +143,7 @@ public class Invoice implements  Serializable {
 		this.shipped = shipped;
 	}
 	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "invoice")
+	@OneToMany( fetch=FetchType.EAGER, orphanRemoval=true, mappedBy = "invoice")
 	public Set<InvoiceItem> getItems() {
 		return items;
 	}

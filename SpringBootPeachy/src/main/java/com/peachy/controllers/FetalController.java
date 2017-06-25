@@ -155,7 +155,7 @@ public class FetalController {
 		model.addAttribute("objectList", fetalScripts);
 		model.addAttribute("pagelink", pageLink);
 		
-		return "products";
+		return "fetalList";
 	}
 
 	private int isInteger(String s) {

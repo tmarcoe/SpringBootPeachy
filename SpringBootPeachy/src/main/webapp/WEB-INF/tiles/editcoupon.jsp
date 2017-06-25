@@ -1,7 +1,7 @@
 <%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form"%>
 
 <sf:form method="post"
-	action="${pageContext.request.contextPath}/updatecoupon"
+	action="${pageContext.request.contextPath}/vendor/updatecoupon"
 	commandName="coupon" id="couponForm">
 	<table class="coupontable">
 		<tr>

@@ -2,9 +2,9 @@ package com.peachy.entity;
 
 import java.io.Serializable;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -70,7 +70,7 @@ public class InvoiceItem implements  Serializable {
 		this.sku_num = sku_num;
 	}
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(cascade = CascadeType.DETACH)
 	@JoinColumn(name="INVOICE_NUM", referencedColumnName="INVOICE_NUM", nullable = false, insertable=false, updatable=false)
 	public Invoice getInvoice() {
 		return invoice;

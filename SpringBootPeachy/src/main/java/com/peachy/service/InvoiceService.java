@@ -54,12 +54,7 @@ public class InvoiceService implements IInvoice {
 	}
 
 	public void removeItem(int invoice_num, String sku_num) {
-		invoiceItemDao.delete(invoice_num, sku_num);
-		if (invoiceItemDao.exists(invoice_num) == false) {
-			Invoice invoice = invoiceDao.retrieve(invoice_num);
-			invoiceDao.delete(invoice);
-		}
-		
+		invoiceDao.removeItem(invoice_num, sku_num);
 	}
 	public Invoice totalInvoice(Invoice invoice) {
 		invoice.setTotal(0);

@@ -209,7 +209,7 @@ public class AccountsController implements Serializable {
 		transformer.transform(source, result);
 
 		
-		return "redirect:/vendor/accountingmenu";
+		return "redirect:/vendor/manageaccount";
 	}
 	@RequestMapping(value="/vendor/accountpaging", method=RequestMethod.GET)
 	public String handleAccountsRequest(@ModelAttribute("page") String page, Model model) throws Exception {

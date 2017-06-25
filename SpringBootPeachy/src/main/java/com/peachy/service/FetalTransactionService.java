@@ -28,46 +28,45 @@ import com.peachy.entity.UserProfile;
 import com.peachy.helper.Order;
 import com.peachy.reports.CreatePayStub;
 
-
 @Service
-public class FetalTransactionService extends FetalTransaction{
-	
+public class FetalTransactionService extends FetalTransaction {
+
 	@Autowired
 	private FetalTransactionDao transDao;
-	
+
 	private Session session;
-	
+
 	@Autowired
 	private InvoiceService invoiceService;
-	
+
 	@Autowired
 	private InvoiceItemService invoiceItemService;
-	
+
 	@Autowired
 	InventoryService inventoryService;
-	
+
 	@Autowired
 	EmployeeService employeeService;
-	
+
 	@Autowired
 	TimeSheetService timeSheetService;
-	
+
 	@Autowired
 	PurchaseOrderService purchaseOrderService;
-	
+
 	@Autowired
 	PaymentRegisterService paymentRegisterService;
-	
+
 	@Autowired
 	private FetalConfigurator fc;
-	
+
 	@Autowired
 	FilePath fp;
-	
+
 	public void processPettyCash(PettyCashRegister pettyCash) throws IOException {
 		initTransaction(fp.getConfig() + "fetal.properties");
-		
-		addVariable("transactionAmount", VariableType.DOUBLE , pettyCash.getAmount());
+
+		addVariable("transactionAmount", VariableType.DOUBLE, pettyCash.getAmount());
 		setDescription("Petty Cash: " + pettyCash.getReason());
 		loadRule("pettycash.trans");
 	}
@@ -78,7 +77,6 @@ public class FetalTransactionService extends FetalTransaction{
 		setDescription("Petty Cash Adjustment");
 		loadRule("adjustment.trans");
 	}
-
 
 	public void purchaseInventory(Order order) throws RecognitionException, IOException, RuntimeException {
 		initTransaction(fc.getProperiesFile());
@@ -91,7 +89,6 @@ public class FetalTransactionService extends FetalTransaction{
 		purchaseOrder.setSkuNum(skuNum);
 		purchaseOrder.setPurchaseDate(new Date());
 		purchaseOrderService.create(purchaseOrder);
-		
 
 		setAmount(order.getPrice());
 		setTax(order.getTax());
@@ -103,7 +100,6 @@ public class FetalTransactionService extends FetalTransaction{
 		inventoryService.update(inventory);
 
 	}
-
 
 	public void processPayroll(List<UserProfile> employees, Date startPeriod)
 			throws RecognitionException, IOException, RuntimeException {
@@ -242,35 +238,38 @@ public class FetalTransactionService extends FetalTransaction{
 		loadRule("purchase.trans");
 		invoiceService.merge(header);
 	}
-	
+
 	public void useCoupon(Invoice invoice, Coupons coupon) throws IOException {
 		final String couponValue = "couponValue";
 		initTransaction(fc.getProperiesFile());
 		loadSalesReceipt(invoice.getInvoice_num());
 		addVariable(couponValue, VariableType.DOUBLE, 0);
 		loadCoupon(coupon.getRuleName());
-	
-		if((double)getValue(couponValue) < 0) {
+
+		if ((double) getValue(couponValue) < 0.0) {
 			InvoiceItem item = new InvoiceItem();
 			item.setAmount(1);
 			item.setInvoice_num(invoice.getInvoice_num());
-			item.setPrice((double)getValue(couponValue));
+			item.setPrice((double) getValue(couponValue));
 			item.setProduct_name(coupon.getName());
+			item.setSku_num(coupon.getCoupon_id());
 			invoiceItemService.addItem(item);
 		}
 
 	}
-	
-	public void loadSalesReceipt(int key) {
-		Invoice invoice = invoiceService.retrieve(key);
 
+	public void loadSalesReceipt(int key) {
+		List<InvoiceItem> items = invoiceItemService.getLineItems(key);
+		Invoice invoice = invoiceService.retrieve(key);
 		clearSalesItems();
-		for (InvoiceItem invItem : invoice.getItems()) {
-			SalesItem item = new SalesItem();
-			item.setPrice(invItem.getPrice());
-			item.setTax(invItem.getTax());
-			item.setQty(invItem.getAmount());
-			addSalesItem(invItem.getSku_num(), item);
+		for (InvoiceItem invItem : items) {
+			if (invItem.getSku_num() != null && invItem.getSku_num().startsWith("CPN") == false) {
+				SalesItem item = new SalesItem();
+				item.setPrice(invItem.getPrice());
+				item.setTax(invItem.getTax());
+				item.setQty(invItem.getAmount());
+				addSalesItem(invItem.getSku_num(), item);
+			}
 		}
 		setAddedCharges(invoice.getAdded_charges());
 		setShipCharges(invoice.getShipping_cost());
@@ -278,23 +277,22 @@ public class FetalTransactionService extends FetalTransaction{
 		invoice.setTotal_tax(getTax());
 
 	}
-	
-	public double calculateShippingCharges(){
+
+	public double calculateShippingCharges() {
 		try {
 			initTransaction(fc.getProperiesFile());
 			loadRule("shipping.trans");
 		} catch (IOException | RuntimeException e) {
 			return 0;
 		}
-		
+
 		return (double) getValue("shipCharges");
 	}
-	
-/******************************************************
- * Overridden methods
- ******************************************************/
-	
-	
+
+	/******************************************************
+	 * Overridden methods
+	 ******************************************************/
+
 	@Override
 	public void beginTrans() {
 		session = transDao.beginTrans();
@@ -343,6 +341,7 @@ public class FetalTransactionService extends FetalTransaction{
 
 	@Override
 	public void commitStock(String sku, Long qty) {
+
 		if (sku.startsWith("CPN") == false) {
 			transDao.commitStock(sku, qty, session);
 		}
@@ -362,6 +361,5 @@ public class FetalTransactionService extends FetalTransaction{
 	public Date lastRefreshDate() {
 		return null;
 	}
-
 
 }

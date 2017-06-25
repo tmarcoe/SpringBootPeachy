@@ -11,6 +11,7 @@
 	<div class="container">
 		<ul class="nav">
 			<li><a href="/public/home">Home</a></li>
+			<li><a href="/vendor/manageinventory">Manage Inventory</a></li>
 			<li><a href="/vendor/managesales">Manage Sale Items</a></li>
 			<li><a href="/vendor/orderinventory">Order Inventory</a></li>
 			<li><a href="/vendor/singleitem">Restock single Item</a></li>

@@ -32,6 +32,7 @@ public class InventoryDao implements IInventory {
 		Session session = session();
 		Transaction tx = session.beginTransaction();
 
+		session.save(inventory);
 		tx.commit();
 	}
 
@@ -54,7 +55,8 @@ public class InventoryDao implements IInventory {
 	public void delete(Inventory inventory) {
 		Session session = session();
 		Transaction tx = session.beginTransaction();
-		session.delete(inventory);
+		String hql = "DELETE FROM Inventory WHERE sku_num = :sku_num";
+		session.createQuery(hql).setString("sku_num", inventory.getSku_num()).executeUpdate();
 		tx.commit();
 	}
 
@@ -141,7 +143,7 @@ public class InventoryDao implements IInventory {
 	}
 	@SuppressWarnings("unchecked")
 	public List<Inventory> getReplenishList() {
-		String hql = "from Inventory where amtInStock < minQuantity";
+		String hql = "from Inventory where amt_in_stock < min_quantity";
 		List<Inventory> inv = session().createQuery(hql).list();
 
 		return inv;

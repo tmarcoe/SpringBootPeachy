@@ -5,7 +5,7 @@ package com.peachy.entity;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -58,7 +58,7 @@ public class UserProfile implements Serializable{
 
 	@ManyToMany(cascade = CascadeType.MERGE)
 	@JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
-	private List<Role> roles;
+	private Set<Role> roles;
 	private boolean enabled;
 	private boolean dailySpecials;
 	private Date dateAdded;
@@ -211,10 +211,10 @@ public class UserProfile implements Serializable{
 		this.monthlyMailing = monthlyMailing;
 	}
 	
-	public List<Role> getRoles() {
+	public Set<Role> getRoles() {
 		return roles;
 	}
-	public void setRoles(List<Role> roles) {
+	public void setRoles(Set<Role> roles) {
 		this.roles = roles;
 	}
 	@Column(name="ENABLED")

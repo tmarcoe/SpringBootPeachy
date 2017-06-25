@@ -2,7 +2,9 @@ package com.peachy.dao;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import javax.transaction.Transactional;
 
@@ -14,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.peachy.entity.Invoice;
+import com.peachy.entity.InvoiceItem;
 import com.peachy.interfaces.IInvoice;
 
 @Transactional
@@ -157,6 +160,26 @@ public class InvoiceDao implements IInvoice {
 		
 		return total;
 	}
-
+	
+	public void removeItem(int invoice_num, String sku_num) {
+		Session session = session();
+		Transaction tx = session.beginTransaction();
+		Invoice invoice = session.get(Invoice.class, invoice_num);
+		Set<InvoiceItem> items = invoice.getItems();
+		Iterator<InvoiceItem> it = items.iterator();
+		while(it.hasNext()) {
+			InvoiceItem item = it.next();
+			if (item.getSku_num().compareTo(sku_num) == 0) {
+				it.remove();
+				session.delete(item);
+			}
+		}
+		
+		if (invoice.getItems().size() == 0) {
+			session.delete(invoice);
+		}
+		
+		tx.commit();
+	}
 
 }

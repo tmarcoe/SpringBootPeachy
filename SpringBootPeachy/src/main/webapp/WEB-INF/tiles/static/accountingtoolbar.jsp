@@ -14,6 +14,7 @@
 			<li><a href="/vendor/datepicker" >General Ledger</a></li>
 			<li><a href="#" >Internal Audit</a></li>
 			<li><a href="/vendor/pettycashlist" >Petty Cash</a></li>
+			<li><a href="/vendor/createmap">Create Alias Map</a></li>
 		</ul>
 	</div>
 </div>

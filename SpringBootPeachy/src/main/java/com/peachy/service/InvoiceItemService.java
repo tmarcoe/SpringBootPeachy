@@ -1,5 +1,7 @@
 package com.peachy.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -69,5 +71,9 @@ public class InvoiceItemService implements IInvoiceItem {
 	
 	public boolean hasCoupons(int invoice_num) {
 		return invoiceItemDao.hasCoupons(invoice_num);
+	}
+
+	public List<InvoiceItem> getLineItems(Integer invoice_num) {
+		return invoiceItemDao.getLineItems(invoice_num);
 	}
 }

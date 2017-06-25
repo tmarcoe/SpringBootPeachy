@@ -93,7 +93,7 @@ public class CouponController implements Serializable {
 		couponsService.update(coupon);
 
 		
-		return "redirect:/vender/listcoupons";
+		return "redirect:/vendor/listcoupons";
 	}
 	
 	@RequestMapping("/vendor/deletecoupon")

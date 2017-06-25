@@ -46,19 +46,21 @@
 					</div>
 				</li>
 			</sec:hasRole>
-			<sec:hasRole role="VENDOR">
+			<sec:hasRole role="VENDOR,ADMIN">
 				<li><div class="dropdown">
 					<button class="dropbtn">Admin</button>
 						<div class="dropdown-content">
 							<a href="/vendor/admin" >Ship Product</a>
+							<sec:hasRole role="ADMIN">
+								<a href="/vendor/users">User Profiles</a>
+							</sec:hasRole>
 							<a href="/vendor/surveylist">View Surveys</a>
 							<a href="/vendor/manageinventory">Inventory...</a>
-							<a href="/vendor/users">User Profiles...</a>
 							<a href="/vendor/listcoupons">Manage Coupons...</a>
-							<a href="/vendor/calendaryear?reportType=sales">Reports</a>
+							<a href="/vendor/calendaryear?reportType=sales">Reports...</a>
 							<a href="/vendor/fetallist">Fetal Scripts...</a>
 							<a href="/vendor/manageaccount">Accounting...</a>
-							<a href="/vendor/checkemail">E-mail</a>
+							<a href="/vendor/checkemail">E-mail...</a>
 						</div>
 					</div>
 				</li>

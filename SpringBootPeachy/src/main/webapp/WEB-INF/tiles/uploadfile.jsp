@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <sf:form method="post" enctype="multipart/form-data"
-	commandName="fileUpload" action="${pageContext.request.contextPath}/addinventory" id="ful">
+	commandName="fileUpload" action="${pageContext.request.contextPath}/vendor/addinventory" id="ful">
 	<table>
 		<tr>
 			<td><sf:input type="file" path="file" value="Select Image" /></td>
@@ -10,13 +10,13 @@
 		</tr>
 		<tr>
 			<td><button type="button" onclick="upLoad()">Upload File</button></td>
-			<td><button type="button" onclick="followLink('/manageinventory')">Cancel</button></td>
+			<td><button type="button" onclick="followLink('/vendor/manageinventory')">Cancel</button></td>
 		</tr>
 	</table>
 </sf:form>
 <div class="modal" id="popup">
 	<div class="spinner">
-		<img alt="gif not available" src="<c:url value='/static/images/web/spinner.gif'/>"  width="50" height="50">
+		<img alt="gif not available" src="<c:url value='/images/spinner.gif'/>"  width="50" height="50">
 	</div>
 </div>
 <script type="text/javascript">
