@@ -11,7 +11,6 @@ import javax.transaction.Transactional;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -115,8 +114,9 @@ public class InvoiceDao implements IInvoice {
 	@SuppressWarnings("unchecked")
 	public List<Invoice> getProcessedInvoices() {
 		Session session = session();
+		String hql = "FROM Invoice WHERE processed IS NOT NULL AND shipped IS NULL";
 		
-		return session.createCriteria(Invoice.class).add(Restrictions.isNotNull("processed")).add(Restrictions.isNull("shipped")).list();
+		return session.createQuery(hql).list();
 	}
 	
 	public double getCountByMonth(int month, int year) {

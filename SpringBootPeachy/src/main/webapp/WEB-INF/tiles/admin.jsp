@@ -36,12 +36,16 @@
 						</tr>
 
 					</c:forEach>
+					<tfoot class="tablefooter">
+						<tr>
+							<td colspan="5"><input type="submit" value="Process Orders" /></td>
+						</tr>
+					</tfoot>
 				</table>
-				<input type="submit" value="Process Orders" />
 			</form:form>
 		</c:when>
 		<c:otherwise>
-			<h1>No orders to print</h1>
+			<h1>No orders to Ship</h1>
 		</c:otherwise>
 	</c:choose>
 </div>

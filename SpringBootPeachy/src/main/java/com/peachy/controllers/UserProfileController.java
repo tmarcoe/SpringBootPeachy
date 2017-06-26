@@ -37,7 +37,7 @@ import com.peachy.service.UserProfileService;
 public class UserProfileController implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private final String pageLink = "/vendor/userpaging";
+	private final String pageLink = "/admin/userpaging";
 
 	private static Logger logger = Logger.getLogger(UserProfileController.class
 			.getName());
@@ -63,7 +63,7 @@ public class UserProfileController implements Serializable {
 				dateFormat, false));
 	}
 
-	@RequestMapping("/vendor/users")
+	@RequestMapping("/admin/users")
 	public String showUsers(@ModelAttribute("page") String page, Model model) {
 		if (userList != null) {
 			userList.getSource().clear();
@@ -71,7 +71,7 @@ public class UserProfileController implements Serializable {
 			System.gc();
 		}
 		userList = userProfileService.retrieveList();
-		userList.setPageSize(10);
+		userList.setPageSize(15);
 		userList.setPage(0);
 
 		model.addAttribute("objectList", userList);
@@ -81,7 +81,7 @@ public class UserProfileController implements Serializable {
 
 	}
 
-	@RequestMapping("/vendor/deleteuser")
+	@RequestMapping("/admin/deleteuser")
 	public String deleteUser(@ModelAttribute("deleteKey") String deleteKey,
 			Model model) {
 
@@ -93,12 +93,12 @@ public class UserProfileController implements Serializable {
 			System.gc();
 		}
 
-		return "redirect:/vendor/users";
+		return "redirect:/admin/users";
 	}
 
-	@RequestMapping("/vendor/userdetails")
+	@RequestMapping("/admin/userdetails")
 	public String showUserDetails(
-			@ModelAttribute("detailKey") String detailKey, Model model) {
+			@ModelAttribute("detailKey") int detailKey, Model model) {
 		String roleIndex = "";
 
 		UserProfile userProfile = userProfileService.retrieve(detailKey);
@@ -150,10 +150,10 @@ public class UserProfileController implements Serializable {
 		}
 		userProfileService.partialUpdate(userProfile);
 		
-		return "redirect:/home";
+		return "redirect:/public/home";
 	}
 
-	@RequestMapping("/vendor/adminsaveuser")
+	@RequestMapping("/admin/adminsaveuser")
 	public String adminPartialUpdate(
 			@Valid @ModelAttribute("userProfile") UserProfile user, BindingResult result, Model model)
 			throws IOException, URISyntaxException {
@@ -167,6 +167,14 @@ public class UserProfileController implements Serializable {
 			result.hasFieldErrors("country") || 
 			result.hasFieldErrors("currency") || 
 			result.hasFieldErrors("username")) {
+
+			if (user.getRoles() == null) {
+				user.setRoles(new HashSet<Role>());
+			}
+			String[] roleNames = user.getRoleString().split(";");
+			for (int i = 0 ; i < roleNames.length; i++) {
+				user.getRoles().add(roleService.retrieve(roleNames[i]));
+			}
 			
 			for (Role r: user.getRoles()) {
 				if (roleIndex.length() > 0) {
@@ -201,7 +209,7 @@ public class UserProfileController implements Serializable {
 			System.gc();
 		}
 
-		return "redirect:/vendor/users";
+		return "redirect:/admin/users";
 	}
 	
 	@RequestMapping("/public/createprofile")
@@ -287,7 +295,7 @@ public class UserProfileController implements Serializable {
 		return ("myprofile");
 	}
 
-	@RequestMapping(value = "/vendor/userpaging", method = RequestMethod.GET)
+	@RequestMapping(value = "/admin/userpaging", method = RequestMethod.GET)
 	public String handleUserRequest(@ModelAttribute("page") String page, Model model) throws Exception {
 		int pgNum;
 

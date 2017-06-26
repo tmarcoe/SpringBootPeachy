@@ -11,5 +11,6 @@ public class SpringBootPeachyApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(SpringBootPeachyApplication.class, args);
+		System.out.println("System has started");
 	}
 }

@@ -152,6 +152,7 @@
 					<sf:option value="CNY">China Yuan Renminbi</sf:option>
 					<sf:option value="CZK">Czech Republic Koruna</sf:option>
 					<sf:option value="DKK">Denmark Krone</sf:option>
+					<sf:option value="EUR">Euro Dollar</sf:option>
 					<sf:option value="GBP">United Kingdom Pound</sf:option>
 					<sf:option value="HKD">Hong Kong Dollar</sf:option>
 					<sf:option value="HRK">Croatia Kuna</sf:option>

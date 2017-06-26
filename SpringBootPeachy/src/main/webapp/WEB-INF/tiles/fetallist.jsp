@@ -40,5 +40,9 @@
 				</td>
 			</tr>
 		</c:forEach>
+		<tfoot class="tablefooter">
+			<tr >
+			<td colspan="7"><button type="button" onclick="window.location.href = '/vendor/createtrans'">New Transaction</button><td></tr>
+		</tfoot>
 	</table>
 </sf:form>

@@ -52,7 +52,7 @@
 						<div class="dropdown-content">
 							<a href="/vendor/admin" >Ship Product</a>
 							<sec:hasRole role="ADMIN">
-								<a href="/vendor/users">User Profiles</a>
+								<a href="/admin/users">User Profiles</a>
 							</sec:hasRole>
 							<a href="/vendor/surveylist">View Surveys</a>
 							<a href="/vendor/manageinventory">Inventory...</a>

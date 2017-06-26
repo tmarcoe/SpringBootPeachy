@@ -189,6 +189,114 @@ public class Currency {
 		return symbol;
 	}
 	
+	public String getAsciiSymbol(String currency) {
+		String symbol = "";
+		
+		switch (currency) {
+		case "AUD":
+			symbol = "$";
+			break;
+		case "BGN":
+			symbol = "BGN";
+			break;
+		case "BRL":
+			symbol = "R$";
+			break;
+		case "CAD":
+			symbol = "$";
+			break;
+		case "CHF":
+			symbol = "CHF";
+			break;
+		case "CNY":
+			symbol = "Y";
+			break;
+		case "CZK":
+			symbol = "KC";
+			break;
+		case "DKK":
+			symbol = "KR";
+			break;
+		case "EUR":
+			symbol = "€";
+			break;
+		case "GBP":
+			symbol = "£";
+			break;
+		case "HKD":
+			symbol = "$";
+			break;
+		case "HRK":
+			symbol = "KN";
+			break;
+		case "HUF":
+			symbol = "Ft";
+			break;
+		case "IDR":
+			symbol = "Rp";
+			break;
+		case "ILS":
+			symbol = "IL";
+			break;
+		case "INR":
+			symbol = "INR";
+			break;
+		case "JPY":
+			symbol = "Y";
+			break;
+		case "KRW":
+			symbol = "KR";
+			break;
+		case "MXN":
+			symbol = "$";
+			break;
+		case "MYR":
+			symbol = "RM";
+			break;
+		case "NOK":
+			symbol = "KR";
+			break;
+		case "NZD":
+			symbol = "$";
+			break;
+		case "PHP":
+			symbol = "P";
+			break;
+		case "PLN":
+			symbol = "Zt";
+			break;
+		case "RON":
+			symbol = "lei";
+			break;
+		case "RUB":
+			symbol = "R";
+			break;
+		case "SEK":
+			symbol = "kr";
+			break;
+		case "SGD":
+			symbol = "$";
+			break;
+		case "THB":
+			symbol = "B";
+			break;
+		case "TRY":
+			symbol = "Try";
+			break;
+		case "USD":
+			symbol = "$";
+			break;
+		case "ZAR":
+			symbol = "Z$";
+			break;
+		default:
+			symbol = "$";
+			break;				
+		}
+		
+		return symbol;
+	}
+	
 	public double convert(double amount, String target) throws IOException, URISyntaxException {
 		return amount * getRate(target);
 	}

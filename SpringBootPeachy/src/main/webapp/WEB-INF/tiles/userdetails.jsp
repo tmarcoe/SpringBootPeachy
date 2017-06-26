@@ -2,7 +2,7 @@
 <%@ taglib prefix="sec" uri="/WEB-INF/tld/security.tld"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<sf:form id="details" method="post" action="${pageContext.request.contextPath}/vendor/adminsaveuser" modelAttribute="userProfile">
+<sf:form id="details" method="post" action="${pageContext.request.contextPath}/admin/adminsaveuser" modelAttribute="userProfile">
 	<input type="hidden" value="${roleIndex}" id="selectedRoles" />
 	<table class="signup">
 		<thead>
@@ -205,7 +205,7 @@
 		<tr>
 			<td><button type="button" onclick="formSubmit()" >Submit</button></td>
 			<td><button type="button" onclick="openPopup()" >Employee</button></td>
-			<td><button type="button" onclick="followLink('/vendor/users')">Cancel</button></td>
+			<td><button type="button" onclick="followLink('/admin/users')">Cancel</button></td>
 		</tr>
 		<tr>
 			<td>User Enabled:</td>

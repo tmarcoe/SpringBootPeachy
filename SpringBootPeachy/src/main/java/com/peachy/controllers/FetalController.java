@@ -22,53 +22,44 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.peachy.component.FetalConfigurator;
-import com.peachy.component.FilePath;
 import com.peachy.entity.FetalScripts;
 import com.peachy.service.FetalScriptsService;
-
-
 
 @Controller
 public class FetalController {
 
 	@Autowired
-	private FilePath fp;
-	
-	@Autowired
 	private FetalConfigurator fc;
-	
+
 	@Autowired
 	private FetalScriptsService fetalScriptsService;
-	
+
 	PagedListHolder<FetalScripts> fetalScripts;
 	private final String pageLink = "/vendor/fetalpaging";
 
 	private SimpleDateFormat dateFormat;
+
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
 		dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		dateFormat.setLenient(false);
-		binder.registerCustomEditor(Date.class, new CustomDateEditor(
-				dateFormat, false));
+		binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, false));
 	}
-	@RequestMapping("/fetaladmin")
-	public String fetalAdmin() {
-		
-		return "fetaladmin";
-	}
-	@RequestMapping("/vendor/fetallist") 
+
+
+	@RequestMapping("/vendor/fetallist")
 	public String fetalList(Model model) {
-		
+
 		fetalScripts = fetalScriptsService.retrieveList();
-		
+		fetalScripts.setPage(0);
+		fetalScripts.setPageSize(20);
+
 		model.addAttribute("objectList", fetalScripts);
 		model.addAttribute("pagelink", pageLink);
-		
 
-		
 		return "fetalList";
 	}
-	
+
 	@RequestMapping("/admin/postToProd")
 	public String postToProduction(@ModelAttribute("id") int id, Model model) throws IOException {
 		String destination = "";
@@ -79,8 +70,8 @@ public class FetalController {
 		props.load(reader);
 		FetalScripts fetal = fetalScriptsService.retrieve(id);
 		File moveFile = new File(props.getProperty("quarantinePath") + fetal.getFile_name());
-		
-		switch(fetal.getType()) {
+
+		switch (fetal.getType()) {
 		case "RULE":
 			destination = props.getProperty("transPath");
 			break;
@@ -95,16 +86,15 @@ public class FetalController {
 			break;
 		}
 		moveFile.renameTo(new File(destination + fetal.getFile_name()));
-		
+
 		fetal.setStatus("PRODUCTION");
 		fetalScriptsService.update(fetal);
-		
-		
+
 		return "redirect:/vendor/fetallist";
 	}
-	
+
 	@RequestMapping("/vendor/edittransaction")
-	public String editTransaction(@ModelAttribute("id")int id, Model model) throws IOException {
+	public String editTransaction(@ModelAttribute("id") int id, Model model) throws IOException {
 		URL url = new URL(fc.getProperiesFile());
 		InputStream in = url.openStream();
 		Reader reader = new InputStreamReader(in);
@@ -113,31 +103,52 @@ public class FetalController {
 		FetalScripts fetalScripts = fetalScriptsService.retrieve(id);
 
 		String fetalUrl = "";
-		switch(fetalScripts.getType()) {
-		case "RULE":
-			fetalUrl = props.getProperty("transactionUrl");
-			break;
-		case "COUPON":
-			fetalUrl = props.getProperty("couponUrl");
-			break;
-		case "BLOCK":
-			fetalUrl = props.getProperty("blockUrl");
-			break;
-		default:
-			fetalUrl = props.getProperty("transactionUrl");
-			break;
+		if (fetalScripts.getStatus().compareTo("QUARANTINE") == 0) {
+			fetalUrl = props.getProperty("quarantineUrl");
+		} else {
+			switch (fetalScripts.getType()) {
+			case "RULE":
+				fetalUrl = props.getProperty("transactionUrl");
+				break;
+			case "COUPON":
+				fetalUrl = props.getProperty("couponUrl");
+				break;
+			case "BLOCK":
+				fetalUrl = props.getProperty("blockUrl");
+				break;
+			default:
+				fetalUrl = props.getProperty("transactionUrl");
+				break;
+			}
 		}
-		
-		model.addAttribute("quarantine", fp.getQuarantinePath());
+		model.addAttribute("status", fetalScripts.getStatus());
+		model.addAttribute("quarantine", props.getProperty("quarantinePath"));
 		model.addAttribute("fetalUrl", fetalUrl);
 		model.addAttribute("transFile", fetalScripts.getFile_name());
-		
+
 		return "edittransaction";
 	}
-	
+
+	@RequestMapping("/vendor/createtrans")
+	public String createTransaction(Model model) {
+
+		model.addAttribute("fetalScripts", new FetalScripts());
+
+		return "createtrans";
+	}
+
+	@RequestMapping("/vendor/savetrans")
+	public String saveTransaction(@ModelAttribute("fetalScripts") FetalScripts fetalScripts, Model model) {
+		fetalScripts.setModified(new Date());
+		fetalScriptsService.create(fetalScripts);
+		String retUrl = String.format("redirect:/vendor/edittransaction?id=%d", fetalScripts.getId());
+
+		return retUrl;
+	}
+
 	@RequestMapping(value = "/vendor/fetalpaging", method = RequestMethod.GET)
 	public String fetalPager(@ModelAttribute("page") String page, Model model) throws Exception {
-		
+
 		int pgNum;
 
 		pgNum = isInteger(page);
@@ -150,11 +161,9 @@ public class FetalController {
 			fetalScripts.setPage(pgNum);
 		}
 
-	
-		
 		model.addAttribute("objectList", fetalScripts);
 		model.addAttribute("pagelink", pageLink);
-		
+
 		return "fetalList";
 	}
 
@@ -170,6 +179,5 @@ public class FetalController {
 		// only got here if we didn't return false
 		return retInt;
 	}
-	
 
 }

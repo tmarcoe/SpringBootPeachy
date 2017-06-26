@@ -159,16 +159,18 @@ public class AdminController implements Serializable {
 			String fn = fp.getOutPath() + String.format("%08d", header.getInvoice_num()) + ".pdf";
 			fileNames.add(String.format("%08d", header.getInvoice_num()) + ".pdf");
 			rate = currency.getRate(user.getCurrency());
-			symbol = currency.getSymbol(user.getCurrency());
+			symbol = currency.getAsciiSymbol(user.getCurrency());
 			List<InvoiceItem> invoices = new ArrayList<InvoiceItem>(header.getItems());
 			pdf.createReceipt(fn, rate, symbol, header, invoices, lbl);
-			inventoryService.depleteInventory(invoices);
+			transactionService.processShipping(header);
 			header.setShipped(new Date());
 			invoiceService.merge(header);
 		}
 		csvWriter.close();
 		CompressPaymentFiles.compressFiles(fp.getOutPath(), fileNames);
 		CompressPaymentFiles.deleteFileList(fp.getOutPath(), fileNames);
+		
+		
 		return "admin";
 	}
 

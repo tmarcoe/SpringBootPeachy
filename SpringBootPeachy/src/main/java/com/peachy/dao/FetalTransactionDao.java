@@ -109,7 +109,7 @@ public class FetalTransactionDao {
 	public void commitStock(String sku, Long qty, Session session) {
 		Integer amount = Integer.valueOf(String.valueOf(qty));
 		if (sku.startsWith("CPN") == false ) {
-			String hql = "UPDATE Inventory SET amt_in_stock = (amt_in_stock - :amount), amt_committed = (amt_in_stock + :amount) WHERE sku_num = :sku";
+			String hql = "UPDATE Inventory SET amt_in_stock = (amt_in_stock - :amount), amt_committed = (amt_committed + :amount) WHERE sku_num = :sku";
 			session.createQuery(hql).setInteger("amount", amount).setString("sku", sku).executeUpdate();
 		}
 	}

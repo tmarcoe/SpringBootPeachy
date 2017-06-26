@@ -23,9 +23,9 @@
 	var url = "${pageContext.request.contextPath}/vendor/fetal-data/trans-file?transFile=${transFile}&fetalUrl=${fetalUrl}";
 	var outUrl = "${pageContext.request.contextPath}/vendor/fetal-data/save-file?transFile=${transFile}";
 	var fn = "${transFile}";
-
+	var status = "${status}";
 	var  myCodeMirror;
-	if (fn.startsWith( "newFile" ) == false) {
+	if (status != "NEW") {
 		$.ajax({
 			url: url,
 			type: "GET",
@@ -70,7 +70,7 @@
 			window.history.back();
 		}else{
 			if (confirm("Are you sure you want to discard changes?") == true) {
-				window.history.back();
+				window.location.href = "/vendor/fetallist";
 			}
 		}	
 	}

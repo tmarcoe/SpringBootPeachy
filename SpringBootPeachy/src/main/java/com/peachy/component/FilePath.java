@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class FilePath {
 	private String imageLoc;
-	private String quarantinePath;
 	private String config;
 	private String reportPath;
 	private String outPath;
@@ -20,14 +19,6 @@ public class FilePath {
 
 	public void setImageLoc(String imageLoc) {
 		this.imageLoc = imageLoc;
-	}
-
-	public String getQuarantinePath() {
-		return quarantinePath;
-	}
-
-	public void setQuarantinePath(String quarantinePath) {
-		this.quarantinePath = quarantinePath;
 	}
 
 	public String getConfig() {
@@ -69,5 +60,5 @@ public class FilePath {
 	public void setPayStubPath(String payStubPath) {
 		this.payStubPath = payStubPath;
 	}
-	
+
 }

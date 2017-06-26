@@ -32,7 +32,7 @@ public class SurveyDao implements ISurvey {
 	public void create(Survey survey) {
 		Session session = session();
 		Transaction tx = session.beginTransaction();
-		
+		session.save(survey);
 		tx.commit();
 	}
 

@@ -239,6 +239,13 @@ public class FetalTransactionService extends FetalTransaction {
 		invoiceService.merge(header);
 	}
 
+	public void processShipping (Invoice invoice) throws IOException {
+		initTransaction(fc.getProperiesFile());
+		loadSalesReceipt(invoice.getInvoice_num());
+
+		loadRule("aftershipping.trans");
+	}
+	
 	public void useCoupon(Invoice invoice, Coupons coupon) throws IOException {
 		final String couponValue = "couponValue";
 		initTransaction(fc.getProperiesFile());

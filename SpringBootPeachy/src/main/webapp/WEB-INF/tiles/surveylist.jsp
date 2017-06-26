@@ -30,7 +30,7 @@
 		</c:forEach>
 		<tr>
 			<td colspan="5"><button type="button"
-					onclick="window.history.back()">OK</button></td>
+					onclick="followLink('/public/home')">OK</button></td>
 		</tr>
 	</table>
 
