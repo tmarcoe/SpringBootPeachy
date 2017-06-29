@@ -4,7 +4,7 @@
 
 <sql:setDataSource var="ds" driver = "com.mysql.jdbc.Driver"
          url = "jdbc:mysql://localhost/donzalma_peachys"
-         user = "root"  password = "In_heaven3"/>
+         user = "donzalma_admin"  password = "In_heaven3"/>
 
 	<table class="tableview" id="viewsurvey">
 		<tr>

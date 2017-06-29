@@ -4,7 +4,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql"%>
 <%@ taglib prefix="sec" uri="/WEB-INF/tld/security.tld"%>
-<sql:setDataSource var="ds" driver="com.mysql.jdbc.Driver" url="jdbc:mysql://localhost/donzalma_peachys" user="root" password="In_heaven3" />
+<sql:setDataSource var="ds" driver="com.mysql.jdbc.Driver" url="jdbc:mysql://localhost/donzalma_peachys" user="donzalma_admin" password="In_heaven3" />
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -98,7 +98,7 @@
 				<td>Welcome back</td>
 				<c:if test="${invoiceNum != null}">
 					<sql:query var="inv" dataSource="${ds}">
-					SELECT amount FROM invoice_item WHERE invoice_num = ${invoiceNum}
+					SELECT amount FROM invoice_item WHERE invoice_num = ${invoiceNum} AND sku_num NOT LIKE 'CPN%'
 				</sql:query>
 					<c:forEach var="row" items="${inv.rows}">
 						<c:set var="total" value="${total + row.amount}" />

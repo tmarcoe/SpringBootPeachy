@@ -15,6 +15,7 @@ import com.ftl.helper.SalesItem;
 import com.ftl.helper.VariableType;
 import com.peachy.component.FetalConfigurator;
 import com.peachy.component.FilePath;
+import com.peachy.component.PayStubReportSettings;
 import com.peachy.dao.FetalTransactionDao;
 import com.peachy.entity.Coupons;
 import com.peachy.entity.Employee;
@@ -30,6 +31,9 @@ import com.peachy.reports.CreatePayStub;
 
 @Service
 public class FetalTransactionService extends FetalTransaction {
+	
+	@Autowired
+	PayStubReportSettings pStub;
 
 	@Autowired
 	private FetalTransactionDao transDao;
@@ -186,7 +190,7 @@ public class FetalTransactionService extends FetalTransaction {
 				ttlRetirement += paymentRegister.getRetirement();
 				ttlGarnishments += paymentRegister.getGarnishment();
 				ttlOther += paymentRegister.getOther();
-				CreatePayStub payStub = new CreatePayStub();
+				CreatePayStub payStub = new CreatePayStub(pStub);
 				SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
 				String filePath = fp.getPayStubPath();
 				String fileName = String.format("%s%s-%08d.pdf", filePath, df.format(startPeriod), user.getUser_id());
@@ -270,7 +274,7 @@ public class FetalTransactionService extends FetalTransaction {
 		Invoice invoice = invoiceService.retrieve(key);
 		clearSalesItems();
 		for (InvoiceItem invItem : items) {
-			if (invItem.getSku_num() != null && invItem.getSku_num().startsWith("CPN") == false) {
+			if (invItem.getSku_num() != null) {
 				SalesItem item = new SalesItem();
 				item.setPrice(invItem.getPrice());
 				item.setTax(invItem.getTax());
@@ -341,7 +345,7 @@ public class FetalTransactionService extends FetalTransaction {
 
 	@Override
 	public void depleteStock(String sku, Long qty) {
-		if (sku.startsWith("CPN") == false) {
+		if (sku != null && sku.startsWith("CPN") == false) {
 			transDao.depleteStock(sku, qty, session);
 		}
 	}
@@ -349,7 +353,7 @@ public class FetalTransactionService extends FetalTransaction {
 	@Override
 	public void commitStock(String sku, Long qty) {
 
-		if (sku.startsWith("CPN") == false) {
+		if (sku != null && sku.startsWith("CPN") == false) {
 			transDao.commitStock(sku, qty, session);
 		}
 	}

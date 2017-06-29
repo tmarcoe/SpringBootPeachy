@@ -11,7 +11,7 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
-import com.peachy.component.PDFTableSettings;
+import com.peachy.component.PayStubReportSettings;
 import com.peachy.entity.Employee;
 import com.peachy.entity.PaymentRegister;
 import com.peachy.entity.TimeSheet;
@@ -20,9 +20,11 @@ import com.peachy.entity.TimeSheet;
 public class CreatePayStub extends PDFReports{
 	private double rate;
 	private String currencySymbol;
-	private PDFTableSettings tSSettings;
+
+	private PayStubReportSettings payStub;
 	
-	
+
+
 	public double getRate() {
 		return rate;
 	}
@@ -40,11 +42,12 @@ public class CreatePayStub extends PDFReports{
 	}
 
 	
-	public CreatePayStub() {
-		setVerticalMargin(tSSettings.getVerticalMargin());
-		setHorizantleMargin(tSSettings.getHorizantleMargin());
-		setLineHeight(tSSettings.getLineHeight());
-		setPadding(tSSettings.getPadding());
+	public CreatePayStub(PayStubReportSettings payStub) {
+		this.payStub = payStub;
+		setVerticalMargin(payStub.getVerticalMargin());
+		setHorizantleMargin(payStub.getHorizantleMargin());
+		setLineHeight(payStub.getLineHeight());
+		setPadding(payStub.getPadding());
 	}
 
 	
@@ -69,12 +72,12 @@ public class CreatePayStub extends PDFReports{
 	@Override
 	public void insertHeader(PDPageContentStream content, PDPage page, Object...vararg) throws IOException {
 
-		findCenter(tSSettings.getHeading(), PDType1Font.TIMES_BOLD_ITALIC, tSSettings.getHeadingSize(), page);
+		findCenter(payStub.getHeading(), PDType1Font.TIMES_BOLD_ITALIC, payStub.getHeadingSize(), page);
 		PDFCoordinates.yPos = 750;
 		content.beginText();
 		content.newLineAtOffset(PDFCoordinates.xPos, PDFCoordinates.yPos);
-		content.setFont(PDType1Font.TIMES_ROMAN, tSSettings.getHeadingSize());
-		content.showText(tSSettings.getHeading());
+		content.setFont(PDType1Font.TIMES_ROMAN, payStub.getHeadingSize());
+		content.showText(payStub.getHeading());
 		content.endText();
 		
 		SimpleDateFormat df = new SimpleDateFormat("yyy-MM-dd");
@@ -91,7 +94,7 @@ public class CreatePayStub extends PDFReports{
 	}
 	
 	public float insertContent(PDPageContentStream content, PDPage page, List<?> items) throws IOException {
-		PDFCoordinates.xPos = tSSettings.getHorizantleMargin();
+		PDFCoordinates.xPos = payStub.getHorizantleMargin();
 		PDFCoordinates.yPos = 650;
 		float nextY = insertTable(content, page, items);
 		
@@ -103,7 +106,7 @@ public class CreatePayStub extends PDFReports{
 		Employee employee = (Employee) varargs[1];
 		PaymentRegister pr = (PaymentRegister) varargs[0];
 		float startY = (float) varargs[2];
-		float fontSize = tSSettings.getContentSize();
+		float fontSize = payStub.getContentSize();
 		final float colOffset = 10;
 		float[] column = {getHorizantleMargin() + 1, getHorizantleMargin() + 161, getHorizantleMargin() + 241, getHorizantleMargin() + 411};
 		startY -= getLineHeight();
@@ -454,50 +457,50 @@ public class CreatePayStub extends PDFReports{
 }
 	public float insertTable(PDPageContentStream content, PDPage page, List<?> items) throws IOException{
 		float texty;
-		float fontSize = tSSettings.getContentSize();
-		float columnNameSize = tSSettings.getColumnNameSize();
-		float y = (getVerticalMargin() - 100);
+		float fontSize = payStub.getContentSize();
+		float columnNameSize = payStub.getColumnNameSize();
+		float y = (payStub.getVerticalMargin() - 100);
 
 		// final float tableWidth = 900.0f;
 		final int rows = items.size();
-		final float tableHeight = getLineHeight() * rows;
+		final float tableHeight = payStub.getLineHeight() * rows;
 		final float cellMargin = 1f;
 
-		float textx = getHorizantleMargin() + getPadding();
+		float textx = payStub.getHorizantleMargin() + getPadding();
 		texty = y - 5;
 		
 		float totalWidth = 0;
-		for (int i = 0; i < tSSettings.getColWidths().length; i++) {
-			totalWidth += tSSettings.getColWidths()[i];
+		for (int i = 0; i < payStub.getColWidths().length; i++) {
+			totalWidth += payStub.getColWidths()[i];
 		}
-		totalWidth += getHorizantleMargin();
+		totalWidth += payStub.getHorizantleMargin();
 		
-		for (int i = 0; i < tSSettings.getColNames().length; i++) {
+		for (int i = 0; i < payStub.getColNames().length; i++) {
 			content.beginText();
 			content.setFont(PDType1Font.TIMES_BOLD, columnNameSize);
 			content.newLineAtOffset(textx, y + (getLineHeight() / 2));
-			content.showText(tSSettings.getColNames()[i]);
+			content.showText(payStub.getColNames()[i]);
 			content.endText();
-			textx += tSSettings.getColWidths()[i];
+			textx += payStub.getColWidths()[i];
 
 		}
 		// draw the rows
 		float nexty = y;
 		for (int i = 0; i <= rows; i++) {
-			content.moveTo(getHorizantleMargin(), nexty);
+			content.moveTo(payStub.getHorizantleMargin(), nexty);
 			content.lineTo(totalWidth, nexty);
 			content.stroke();
 			nexty -= getLineHeight();
 		}
 		
 		// draw the columns
-		float nextx = getHorizantleMargin();
-		for (int i = 0; i <= tSSettings.getColNames().length; i++) {
+		float nextx = payStub.getHorizantleMargin();
+		for (int i = 0; i <= payStub.getColNames().length; i++) {
 			content.moveTo(nextx, y);
 			content.lineTo(nextx, y - tableHeight);
 			content.stroke();
-			if (i < tSSettings.getColNames().length) {
-				nextx += tSSettings.getColWidths()[i]; // colWidth;
+			if (i < payStub.getColNames().length) {
+				nextx += payStub.getColWidths()[i]; // colWidth;
 			}
 		}
 
@@ -521,7 +524,7 @@ public class CreatePayStub extends PDFReports{
 			content.newLineAtOffset(textx + getPadding(), texty);
 			content.showText(String.valueOf(((TimeSheet) item).getAccountNum()));
 			content.endText();
-			textx += tSSettings.getColWidths()[offset];
+			textx += payStub.getColWidths()[offset];
 			offset++;
 			
 			
@@ -530,7 +533,7 @@ public class CreatePayStub extends PDFReports{
 			content.newLineAtOffset(textx + getPadding(), texty);
 			content.showText(String.format("%.2f", ((TimeSheet) item).getSunday()));
 			content.endText();
-			textx += tSSettings.getColWidths()[offset];
+			textx += payStub.getColWidths()[offset];
 			accountTotal += ((TimeSheet) item).getSunday();
 			totalSu += ((TimeSheet) item).getSunday();
 			offset++;
@@ -540,7 +543,7 @@ public class CreatePayStub extends PDFReports{
 			content.newLineAtOffset(textx + getPadding(), texty);
 			content.showText(String.format("%.2f",((TimeSheet) item).getMonday()));
 			content.endText();
-			textx += tSSettings.getColWidths()[offset];			
+			textx += payStub.getColWidths()[offset];			
 			accountTotal += ((TimeSheet)item).getMonday();
 			totalMo += ((TimeSheet) item).getMonday();
 			offset++;
@@ -550,7 +553,7 @@ public class CreatePayStub extends PDFReports{
 			content.newLineAtOffset(textx + getPadding(), texty);
 			content.showText(String.format("%.2f", ((TimeSheet) item).getTuesday()));
 			content.endText();
-			textx += tSSettings.getColWidths()[offset];
+			textx += payStub.getColWidths()[offset];
 			accountTotal += ((TimeSheet) item).getTuesday();
 			totalTu += ((TimeSheet) item).getTuesday();
 			offset++;
@@ -560,7 +563,7 @@ public class CreatePayStub extends PDFReports{
 			content.newLineAtOffset(textx + getPadding(), texty);
 			content.showText(String.format("%.2f", ((TimeSheet) item).getWednesday()));
 			content.endText();
-			textx += tSSettings.getColWidths()[offset];
+			textx += payStub.getColWidths()[offset];
 			accountTotal += ((TimeSheet) item).getWednesday();
 			totalWe += ((TimeSheet) item).getWednesday();
 			offset++;
@@ -570,7 +573,7 @@ public class CreatePayStub extends PDFReports{
 			content.newLineAtOffset(textx + getPadding(), texty);
 			content.showText(String.format("%.2f", ((TimeSheet) item).getThursday()));
 			content.endText();
-			textx += tSSettings.getColWidths()[offset];
+			textx += payStub.getColWidths()[offset];
 			accountTotal += ((TimeSheet) item).getThursday();
 			totalTh += ((TimeSheet) item).getThursday();
 			offset++;
@@ -580,7 +583,7 @@ public class CreatePayStub extends PDFReports{
 			content.newLineAtOffset(textx + getPadding(), texty);
 			content.showText(String.format("%.2f", ((TimeSheet) item).getFriday()));
 			content.endText();
-			textx += tSSettings.getColWidths()[offset];
+			textx += payStub.getColWidths()[offset];
 			accountTotal += ((TimeSheet) item).getFriday();
 			totalFr += ((TimeSheet) item).getFriday();
 			offset++;
@@ -590,7 +593,7 @@ public class CreatePayStub extends PDFReports{
 			content.newLineAtOffset(textx + getPadding(), texty);
 			content.showText(String.format("%.2f", ((TimeSheet) item).getSaturday()));
 			content.endText();
-			textx += tSSettings.getColWidths()[offset];
+			textx += payStub.getColWidths()[offset];
 			accountTotal += ((TimeSheet) item).getSaturday();
 			totalSa += ((TimeSheet) item).getSaturday();
 
@@ -600,17 +603,17 @@ public class CreatePayStub extends PDFReports{
 			content.showText(String.format("%.2f", accountTotal));
 			content.endText();
 	
-			texty -= getLineHeight(); // row height
+			texty -= payStub.getLineHeight(); // row height
 		}
 
 		int offset = 0;
-		textx = getHorizantleMargin();
+		textx = payStub.getHorizantleMargin();
 		content.beginText();
 		content.setFont(PDType1Font.TIMES_ROMAN, fontSize);
 		content.newLineAtOffset(textx + getPadding(), texty);
 		content.showText("Totals ->");
 		content.endText();
-		textx += tSSettings.getColWidths()[offset];
+		textx += payStub.getColWidths()[offset];
 		offset++;
 		
 		content.beginText();
@@ -618,7 +621,7 @@ public class CreatePayStub extends PDFReports{
 		content.newLineAtOffset(textx + getPadding(), texty);
 		content.showText(String.format("%.2f", totalSu));
 		content.endText();
-		textx += tSSettings.getColWidths()[offset];
+		textx += payStub.getColWidths()[offset];
 		offset++;
 		
 		content.beginText();
@@ -626,7 +629,7 @@ public class CreatePayStub extends PDFReports{
 		content.newLineAtOffset(textx + getPadding(), texty);
 		content.showText(String.format("%.2f", totalMo));
 		content.endText();
-		textx += tSSettings.getColWidths()[offset];			
+		textx += payStub.getColWidths()[offset];			
 		offset++;
 
 		content.beginText();
@@ -634,7 +637,7 @@ public class CreatePayStub extends PDFReports{
 		content.newLineAtOffset(textx + getPadding(), texty);
 		content.showText(String.format("%.2f", totalTu));
 		content.endText();
-		textx += tSSettings.getColWidths()[offset];
+		textx += payStub.getColWidths()[offset];
 		offset++;
 		
 		content.beginText();
@@ -642,7 +645,7 @@ public class CreatePayStub extends PDFReports{
 		content.newLineAtOffset(textx + getPadding(), texty);
 		content.showText(String.format("%.2f", totalWe));
 		content.endText();
-		textx += tSSettings.getColWidths()[offset];
+		textx += payStub.getColWidths()[offset];
 		offset++;
 		
 		content.beginText();
@@ -650,7 +653,7 @@ public class CreatePayStub extends PDFReports{
 		content.newLineAtOffset(textx + getPadding(), texty);
 		content.showText(String.format("%.2f", totalTh));
 		content.endText();
-		textx += tSSettings.getColWidths()[offset];		
+		textx += payStub.getColWidths()[offset];		
 		offset++;
 		
 		content.beginText();
@@ -658,7 +661,7 @@ public class CreatePayStub extends PDFReports{
 		content.newLineAtOffset(textx + getPadding(), texty);
 		content.showText(String.format("%.2f", totalFr));
 		content.endText();
-		textx += tSSettings.getColWidths()[offset];
+		textx += payStub.getColWidths()[offset];
 		offset++;
 		
 		content.beginText();
@@ -666,7 +669,7 @@ public class CreatePayStub extends PDFReports{
 		content.newLineAtOffset(textx + getPadding(), texty);
 		content.showText(String.format("%.2f", totalSa));
 		content.endText();
-		textx += tSSettings.getColWidths()[offset];
+		textx += payStub.getColWidths()[offset];
 
 		float grandTotal = totalSu + totalMo + totalTu + totalWe + totalTh + totalFr + totalSa;
 		

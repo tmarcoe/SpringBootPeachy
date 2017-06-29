@@ -61,6 +61,7 @@
 			data: "&transData=" + text,
 			success: function(data) {
 			    alert(fileName + ' was saved to quarantine and is awaiting approval.');
+				myCodeMirror.getDoc().markClean();
 			  }
 
 		});

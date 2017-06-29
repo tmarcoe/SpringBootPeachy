@@ -20,13 +20,13 @@ public class BusinessReportsController {
 		
 		switch (reportType) {
 		case "sales":
-			salesData = "/vendor/data-service/sales";
+			salesData = "/reports/sales";
 			break;
 		case "count":
-			salesData = "/vendor/data-service/customercount";
+			salesData = "/reports/customercount";
 			break;
 		case "profit":
-			salesData = "/vendor/data-service/profitreport";
+			salesData = "/reports/profitreport";
 			break;
 		}
 		

@@ -17,6 +17,9 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
+
 @Entity
 @Table(name="invoice")
 public class Invoice implements  Serializable {
@@ -144,6 +147,7 @@ public class Invoice implements  Serializable {
 	}
 	
 	@OneToMany( fetch=FetchType.EAGER, orphanRemoval=true, mappedBy = "invoice")
+	@NotFound(action=NotFoundAction.IGNORE)
 	public Set<InvoiceItem> getItems() {
 		return items;
 	}

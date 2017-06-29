@@ -70,10 +70,10 @@ public class SurveyDao implements ISurvey {
 		Session session = session();
 		BigInteger bigInteger;
 		List<BigDecimal> answers = new ArrayList<BigDecimal>();
-		String hql1 = "SELECT sum(question3) FROM Survey";
-		String hql2 = "SELECT sum(question5) FROM Survey";
-		String hql3 = "SELECT sum(question7) FROM Survey";
-		String hql4 = "SELECT count(*) FROM Survey";
+		String hql1 = "SELECT sum(question3) FROM survey";
+		String hql2 = "SELECT sum(question5) FROM survey";
+		String hql3 = "SELECT sum(question7) FROM survey";
+		String hql4 = "SELECT count(*) FROM survey";
 
 		answers.add((BigDecimal) session.createSQLQuery(hql1).uniqueResult());
 		answers.add((BigDecimal) session.createSQLQuery(hql2).uniqueResult());

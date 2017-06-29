@@ -13,12 +13,15 @@
 
 <script>
 	var ctx = document.getElementById("myChart");
-	var context = "${pageContext.request.contextPath}";
 	$(document).ready(function() {
-		$.getJSON(context + "/vendor/data-service/surveydata", function(data) {
+		$.getJSON("/reports/surveydata", function(data) {
 			var myChart = new Chart(ctx, data);
+			})
+			.fail(function(jqXHR, textStatus, errorThrown) {
+	        	alert("error " + textStatus + "\n" + "incoming Text " + jqXHR.responseText);
+	   		});
 		});
-	});
+
 
 	function followLink(link) {
 		window.location.href = "${pageContext.request.contextPath}" + link;

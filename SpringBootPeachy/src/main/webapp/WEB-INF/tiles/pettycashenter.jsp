@@ -3,7 +3,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form"%>
 
-<sf:form method="post" action="${pageContext.request.contextPath}/pettycashsave" commandName="pettyCashReg">
+<sf:form method="post" action="${pageContext.request.contextPath}/vendor/pettycashsave" commandName="pettyCashReg">
 	<table>
 		<tr>
 			<td>Payable To</td>

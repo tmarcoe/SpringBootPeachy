@@ -239,7 +239,7 @@ public class TimeSheetController implements Serializable {
 		return "timesheetapproved";
 	}
 
-	@RequestMapping("/employee/payrollperiod")
+	@RequestMapping("/vendor/payrollperiod")
 	public String getPayrollPeriod(Model model) {
 
 		List<String> periods = timeSheetService.getPayrollPeriods();
@@ -253,7 +253,7 @@ public class TimeSheetController implements Serializable {
 			throws RecognitionException, IOException, RuntimeException, ParseException {
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 		Date startPeriod = df.parse(period);
-		List<UserProfile> employees = employeeService.employeeList();
+		List<UserProfile> employees = userProfileService.employeeList();
 
 		transactionService.processPayroll(employees, startPeriod);
 

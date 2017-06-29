@@ -18,91 +18,9 @@ Define commonly used colors
 	--light-background: #b7ffb7;
 	--light-shadow: rgba(0,0,0,0.2);
 }
-/* -----------------------
-Base styles
-------------------------*/
-html, body {
-	height: 100%;
-	margin: 0;
-	padding: 0;
-	color: #333;
-	background-color: #eee;
-	font: 1em/1.2 "Helvetica Neue", Helvetica, Arial, Geneva, sans-serif;
-}
-
-h1, h2, h3, h4, h5, h6 {
-	margin: 0 0 .5em;
-	font-weight: 500;
-	line-height: 1.1;
-}
-
-h1 {
-	font-size: 2.25em;
-} /* 36px */
-h2 {
-	font-size: 1.75em;
-} /* 28px */
-h3 {
-	font-size: 1.375em;
-} /* 22px */
-h4 {
-	font-size: 1.125em;
-} /* 18px */
-h5 {
-	font-size: 1em;
-} /* 16px */
-h6 {
-	font-size: .875em;
-} /* 14px */
-p {
-	margin: 0 0 1.5em;
-	line-height: 1.5;
-}
-
-blockquote {
-	padding: 1em 2em;
-	margin: 0 0 2em;
-	border-left: 5px solid #eee;
-}
-
-hr {
-	height: 0;
-	margin-top: 1em;
-	margin-bottom: 2em;
-	border: 0;
-	border-top: 1px solid #000000;
-}
-a.button {
-    -webkit-appearance: button;
-    -moz-appearance: button;
-    appearance: button;
-
-    text-decoration: none;
-    font-size: 12px;
-    color: initial;
-}
-a:link {
-	color: royalblue;
-}
-
-a:visited {
-	color: #fdb14a;
-}
-
-a:focus {
-	color: black;
-}
-
-a:hover {
-	color: green;
-}
-
-a:active {
-	color: red;
-}
 
 /* -----------------------
-Layout styles
+Special fonts
 ------------------------*/
 @font-face{
     font-family: "Pacifico";
@@ -152,6 +70,94 @@ Layout styles
 	font-family: "Metamorphous";	
 	src: url('ttfonts/Metamorphous/Metamorphous-Regular.ttf');
 }
+
+
+/* -----------------------
+Base styles
+------------------------*/
+html, body {
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	color: #333;
+	background-color: #eee;
+	font: 1em/1.2 "Helvetica Neue", Helvetica, Arial, Geneva, sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	margin: 0 0 .5em;
+	font-weight: 500;
+	line-height: 1.1;
+}
+
+h1 {
+	font-size: 2.25em;
+} /* 36px */
+h2 {
+	font-size: 1.75em;
+} /* 28px */
+h3 {
+	font-size: 1.375em;
+} /* 22px */
+h4 {
+	font-size: 1.125em;
+} /* 18px */
+h5 {
+	font-size: 1em;
+} /* 16px */
+h6 {
+	font-size: .875em;
+} /* 14px */
+p {
+	margin: 0 0 1.5em;
+	line-height: 1.5;
+}
+
+blockquote {
+	padding: 1em 2em;
+	margin: 0 0 2em;
+	border-left: 5px solid #eee;
+}
+strong {
+	font-style: italic;
+	color: red;
+}
+hr {
+	height: 0;
+	margin-top: 1em;
+	margin-bottom: 2em;
+	border: 0;
+	border-top: 1px solid #000000;
+}
+a.button {
+    -webkit-appearance: button;
+    -moz-appearance: button;
+    appearance: button;
+
+    text-decoration: none;
+    font-size: 12px;
+    color: initial;
+}
+a:link {
+	color: royalblue;
+}
+
+a:visited {
+	color: #fdb14a;
+}
+
+a:focus {
+	color: black;
+}
+
+a:hover {
+	color: green;
+}
+
+a:active {
+	color: red;
+}
+
 .container {
 	max-width: 100em;
 	margin: 0;
@@ -401,10 +407,23 @@ table.inventoryDetails td {
 	padding: 20px;
 }
 
-table.dailyspecials td {
+.dailyspecials td th {
 	padding: 0 20px;
 	vertical-align: text-bottom;
 }
+
+.ljsecond th:nth-child(2) {
+	text-align: left;
+}
+
+.rjthird td:nth-child(3) {
+	text-align: right;
+}
+
+.rjthird th:nth-child(3) {
+	text-align: right;
+}
+
 
 .addaccount {
 	font-size: 14px;
@@ -443,6 +462,7 @@ table.dailyspecials td {
 }
 div.pageheading
 {
+	text-align: center;
 	color: var(--coffee-dark);
 }
 table.signup td
@@ -885,7 +905,7 @@ table.leftJustify th{
 	text-align: left;
 }
 .altFont {
-	font-family: JosefinSans-SemiBold;
+	font-family: JosefinSans-Regular;
 }
 .dropbtn {
     background-color: var(--coffee-dark);

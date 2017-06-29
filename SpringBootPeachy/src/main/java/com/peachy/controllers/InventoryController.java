@@ -253,7 +253,7 @@ public class InventoryController implements Serializable {
 		orderList = inventoryService.getReplenishList();
 		orderList.setPageSize(20);
 		model.addAttribute("objectList", orderList);
-		model.addAttribute("pagelink", "/orderpaging");
+		model.addAttribute("pagelink", "/vendor/orderpaging");
 
 		return "orderinventory";
 	}
@@ -274,7 +274,7 @@ public class InventoryController implements Serializable {
 		orderList = inventoryService.getReplenishList();
 		orderList.setPageSize(20);
 		model.addAttribute("objectList", orderList);
-		model.addAttribute("pagelink", "/orderpaging");
+		model.addAttribute("pagelink", "/vendor/orderpaging");
 
 		return "orderinventory";
 	}
@@ -316,7 +316,7 @@ public class InventoryController implements Serializable {
 			orderList.setPage(pgNum);
 		}
 		model.addAttribute("objectList", orderList);
-		model.addAttribute("pagelink", "/orderpaging");
+		model.addAttribute("pagelink", "/vendor/orderpaging");
 
 		return "orderinventory";
 	}

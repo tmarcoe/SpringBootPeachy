@@ -65,8 +65,9 @@ public class CouponsDao implements ICoupons {
 	@Override
 	public void delete(Coupons coupons) {
 		Session session = session();
+		String hql = "DELETE FROM Coupons WHERE coupon_id = :coupon_id";
 		Transaction tx = session.beginTransaction();
-		session.delete(coupons);
+		session.createQuery(hql).setString("coupon_id", coupons.getCoupon_id()).executeUpdate();
 		tx.commit();
 		
 	}

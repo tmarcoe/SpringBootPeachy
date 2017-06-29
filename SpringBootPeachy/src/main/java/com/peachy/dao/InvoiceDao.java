@@ -122,7 +122,7 @@ public class InvoiceDao implements IInvoice {
 	public double getCountByMonth(int month, int year) {
 		Object obj = null;
 		double total = 0.0;
-		String sql = "select sum(total) from Invoice  where month(modified) = :month and year(modified) = :year";
+		String sql = "select sum(total) from invoice  where month(modified) = :month and year(modified) = :year";
 		obj = session().createSQLQuery(sql).setInteger("month", month).setInteger("year", year).uniqueResult();
 		
 		if (obj != null) {
@@ -139,7 +139,7 @@ public class InvoiceDao implements IInvoice {
 		Session session = session();
 		Object obj = null;
 		BigInteger total = BigInteger.valueOf(0);
-		String sql = "SELECT count(DISTINCT user_id) FROM Invoice  WHERE month(modified) = :month and year(modified) = :year";
+		String sql = "SELECT count(DISTINCT user_id) FROM invoice  WHERE month(modified) = :month and year(modified) = :year";
 		obj = session.createSQLQuery(sql).setInteger("month", month).setInteger("year", year).uniqueResult();
 		
 		if (obj != null) {

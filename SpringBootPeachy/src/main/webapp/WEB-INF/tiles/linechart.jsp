@@ -12,14 +12,18 @@
 <script>
 
 var ctx = document.getElementById("myChart");
-var context = "${pageContext.request.contextPath}";
+
 var sData = "${salesData}";
 var year = "?year=${year}";
 
-$(document).ready(function () { $.getJSON(context + sData + year, function(data) {
+$(document).ready(function () { $.getJSON(sData + year, function(data) {
 		var myChart = new Chart(ctx, data);
-					});
-				});
+		})
+		.fail(function(jqXHR, textStatus, errorThrown) {
+			alert("error " + textStatus + "\n" + "incoming Text " + jqXHR.responseText);
+	    });
+	});
+
 
 function followLink(link) {
 	window.location.href = "${pageContext.request.contextPath}" + link;

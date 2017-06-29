@@ -28,64 +28,70 @@ public class FetalTransactionDao {
 
 	@Autowired
 	SessionFactory sessionFactory;
-	
+
 	private Transaction trans;
-	
+
 	@Autowired
 	CurrencyConfigurator cc;
-	
+
 	Session session() {
 		return sessionFactory.getCurrentSession();
 	}
-	
+
 	public Session beginTrans() {
 		Session session = session();
 		trans = session.beginTransaction();
-		
+
 		return session;
 	}
 
-	public void commitTrans( Session session) {
+	public void commitTrans(Session session) {
 		trans.commit();
 		trans = null;
 	}
-	
+
 	public void credit(Double amount, String account, Session session) {
-		ChartOfAccounts ac = (ChartOfAccounts) session.createCriteria(ChartOfAccounts.class)
-				.add(Restrictions.idEq(account)).uniqueResult();
-		if (ac.isDebitAccount() == false) {
-			ac.setAccountBalance(ac.getAccountBalance() + amount);
-		} else {
-			ac.setAccountBalance(ac.getAccountBalance() - amount);
+		if (amount != 0) {
+			ChartOfAccounts ac = (ChartOfAccounts) session.createCriteria(ChartOfAccounts.class)
+					.add(Restrictions.idEq(account)).uniqueResult();
+			if (ac.isDebitAccount() == false) {
+				ac.setAccountBalance(ac.getAccountBalance() + amount);
+			} else {
+				ac.setAccountBalance(ac.getAccountBalance() - amount);
+			}
+			session.update(ac);
 		}
-		session.update(ac);
 	}
 
 	public void debit(Double amount, String account, Session session) {
-		ChartOfAccounts ac = (ChartOfAccounts) session.createCriteria(ChartOfAccounts.class)
-				.add(Restrictions.idEq(account)).uniqueResult();
-		if (ac.isDebitAccount() == false) {
-			ac.setAccountBalance(ac.getAccountBalance() - amount);
-		} else {
-			ac.setAccountBalance(ac.getAccountBalance() + amount);
+		if (amount != 0) {
+			ChartOfAccounts ac = (ChartOfAccounts) session.createCriteria(ChartOfAccounts.class)
+					.add(Restrictions.idEq(account)).uniqueResult();
+			if (ac.isDebitAccount() == false) {
+				ac.setAccountBalance(ac.getAccountBalance() - amount);
+			} else {
+				ac.setAccountBalance(ac.getAccountBalance() + amount);
+			}
+			session.update(ac);
 		}
-		session.update(ac);
 	}
 
 	public void ledger(char type, Double amount, String account, String description, Session session) {
-		GeneralLedger gl = null;
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(new Date());
-		cal.set(Calendar.HOUR_OF_DAY, 0);
-		cal.set(Calendar.MINUTE, 0);
-		cal.set(Calendar.SECOND, 0);
-		cal.set(Calendar.MILLISECOND, 0);		
-		if (type == 'C') {
-			gl = new GeneralLedger(account, 0, cal.getTime(), description, 0, amount);
-		}else if (type == 'D'){
-			gl = new GeneralLedger(account, 0, cal.getTime(), description, amount, 0);
+		if (amount != 0) {
+			GeneralLedger gl = null;
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(new Date());
+			cal.set(Calendar.HOUR_OF_DAY, 0);
+			cal.set(Calendar.MINUTE, 0);
+			cal.set(Calendar.SECOND, 0);
+			cal.set(Calendar.MILLISECOND, 0);
+			if (type == 'C') {
+				gl = new GeneralLedger(account, 0, cal.getTime(), description, 0, amount);
+			} else if (type == 'D') {
+				gl = new GeneralLedger(account, 0, cal.getTime(), description, amount, 0);
+			}
+			session.save(gl);
 		}
-		session.save(gl);
 	}
 
 	public double getBalance(String account, Session session) {
@@ -108,7 +114,7 @@ public class FetalTransactionDao {
 
 	public void commitStock(String sku, Long qty, Session session) {
 		Integer amount = Integer.valueOf(String.valueOf(qty));
-		if (sku.startsWith("CPN") == false ) {
+		if (sku.startsWith("CPN") == false) {
 			String hql = "UPDATE Inventory SET amt_in_stock = (amt_in_stock - :amount), amt_committed = (amt_committed + :amount) WHERE sku_num = :sku";
 			session.createQuery(hql).setInteger("amount", amount).setString("sku", sku).executeUpdate();
 		}
@@ -116,37 +122,35 @@ public class FetalTransactionDao {
 
 	public double getRate(String Target) {
 		double exchangeRate = 0;
-		
+
 		try {
 			exchangeRate = new Currency(cc).getRate(Target);
 		} catch (IOException | URISyntaxException e) {
-			
+
 		}
-		
+
 		return exchangeRate;
 	}
 
 	public String getBaseCurrency() {
-		
+
 		return cc.getBaseCurrency();
 	}
 
 	public Date lastRefreshDate() {
 		Date refreshDate;
-		
+
 		try {
 			refreshDate = new Currency(cc).getLastUpdate();
 		} catch (JSONException | IOException | ParseException e) {
 			refreshDate = null;
 		}
-		
+
 		return refreshDate;
 	}
-	
+
 	private Inventory retrieveInventory(String sku, Session session) {
-		return  (Inventory) session.createCriteria(Inventory.class)
-				   .add(Restrictions.idEq(sku))
-				   .uniqueResult();
+		return (Inventory) session.createCriteria(Inventory.class).add(Restrictions.idEq(sku)).uniqueResult();
 	}
 
 }

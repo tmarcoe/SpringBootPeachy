@@ -84,7 +84,11 @@ public class TimeSheetService implements ITimeSheet {
 		return timeSheetDao.getPayrollPeriods();
 	}
 	public double totalHours(int userId, Date startPeriod) {
-		return timeSheetDao.totalHours(userId, startPeriod);
+		if (exists(userId, startPeriod) == true) {
+			return timeSheetDao.totalHours(userId, startPeriod);
+		}else{
+			return(0);
+		}
 	}
 	public void closeTimeSheet(int userId, Date startPeriod) {
 		timeSheetDao.closeTimeSheet(userId, startPeriod);
@@ -92,5 +96,9 @@ public class TimeSheetService implements ITimeSheet {
 	
 	public List<TimeSheet> getSubitted(int user_id, Date startPeriod) {
 		return timeSheetDao.getSubmittedTimeSheet(user_id, startPeriod);
+	}
+	
+	public boolean exists(int user_id, Date startPeriod) {
+		return timeSheetDao.exists(user_id, startPeriod);
 	}
 }

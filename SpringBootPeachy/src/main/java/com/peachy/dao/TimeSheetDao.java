@@ -101,7 +101,7 @@ public class TimeSheetDao implements ITimeSheet {
 	@SuppressWarnings("unchecked")
 	public List<String> getPayrollPeriods() {
 		Session session = session();
-		String sql = "SELECT distinct(DATE_FORMAT(startPeriod,'%Y-%m-%d')) FROM TimeSheet WHERE approved IS NOT null and closed IS null";
+		String sql = "SELECT distinct(DATE_FORMAT(start_period,'%Y-%m-%d')) FROM time_sheet WHERE approved IS NOT null and closed IS null";
 		
 		List<String> periods = session.createSQLQuery(sql).list();
 		
@@ -163,6 +163,14 @@ public class TimeSheetDao implements ITimeSheet {
 		double hours = (double) session.createQuery(hql).setInteger("userId", userId).setDate("startPeriod", startPeriod).uniqueResult();
 		
 		return hours;
+	}
+
+	public boolean exists(int user_id, Date startPeriod) {
+		Session session = session();
+		String hql = "SELECT COUNT(*) FROM TimeSheet WHERE userId = :userId AND startPeriod = :startPeriod";
+		long count = (long) session.createQuery(hql).setInteger("userId", user_id).setDate("startPeriod", startPeriod).uniqueResult();
+		
+		return (count > 0);
 	}
 
 }

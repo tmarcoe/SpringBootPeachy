@@ -92,11 +92,9 @@
 		</dependency>
 		<dependency>
 			<groupId>com.ftl</groupId>
-			<artifactId>fetal-9.1</artifactId>
+			<artifactId>fetal</artifactId>
 			<version>9.1</version>
 			<type>jar</type>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/fetal-9.1.jar</systemPath>
 		</dependency>
 		<dependency>
 			<groupId>com.braintreepayments.gateway</groupId>

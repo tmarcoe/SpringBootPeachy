@@ -2,7 +2,7 @@
 
 
 <sf:form method="post"
-	action="${pageContext.request.contextPath}/savecoupon"
+	action="${pageContext.request.contextPath}/vendor/savecoupon"
 	commandName="coupon">
 	<table class="coupontable">
 		<tr>
