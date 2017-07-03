@@ -28,7 +28,7 @@
 	</c:when>
 	<c:otherwise>
 		<h1>No Email</h1>
-		<button type="button" onclick="followLink('/admin');">Back</button>	
+		<button type="button" onclick="followLink('/public/home');">Back</button>	
 	</c:otherwise>
 </c:choose>
 <script type="text/javascript">

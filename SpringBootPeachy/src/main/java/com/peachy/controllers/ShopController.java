@@ -347,6 +347,11 @@ public class ShopController implements Serializable {
 	@RequestMapping(value = "/public/paging", method = RequestMethod.GET)
 	public String handleRequest(@CookieValue(value = "currency", defaultValue = "") String myCurrency,
 									  @ModelAttribute("page") String page, Model model, Principal principal) throws Exception {
+		
+		if (inventoryList == null) {
+			return "redirect:/public/pickcategory";
+		}
+		
 		if ("".compareTo(myCurrency) == 0) {
 			myCurrency = cp.getBaseCurrency();
 		}

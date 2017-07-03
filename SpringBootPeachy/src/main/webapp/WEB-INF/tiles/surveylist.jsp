@@ -28,10 +28,12 @@
 				<td>${item.question7 + 1}</td>
 			</tr>
 		</c:forEach>
+		<tfoot class="tablefooter" >
 		<tr>
 			<td colspan="5"><button type="button"
 					onclick="followLink('/public/home')">OK</button></td>
 		</tr>
+		</tfoot>
 	</table>
 
 <script type="text/javascript">

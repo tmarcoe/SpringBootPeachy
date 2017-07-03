@@ -4,7 +4,7 @@
 <sf:form commandName="datePicker">
 	<fmt:formatDate type="date" pattern="yyyy-MM-dd" value="${datePicker.start}" var="startDt" />
 	<fmt:formatDate type="date" pattern="yyyy-MM-dd" value="${datePicker.end}" var="endDt"/>
-	<table class="tableview" id="viewledger">
+	<table class="tableview tableshadow" id="viewledger">
 		<thead>
 			<tr>
 				<th>Date</th>

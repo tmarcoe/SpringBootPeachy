@@ -808,7 +808,19 @@ div.modal {
     border: 1px solid #888;
     width: 45%; /* Could be more or less, depending on screen size */
 }
-
+.page-centered {
+   position: absolute;
+   top: 50%;
+   margin-top: -150px; /*half of #content height*/
+   left: 0;
+   width: 100%;
+}
+.div-centered {
+   width: 250px;
+   margin-left: auto;
+   margin-right: auto;
+   height: 395px;
+}
 .spinner {
     width: 20px;
     height: 20px;
@@ -967,4 +979,22 @@ table.leftJustify th{
 	width: 0%;
 	height: 5px;
 	background-color: #ff0000;
+}
+.login-table {
+	box-shadow: 0px 8px 16px 0px var(--light-shadow);	
+}
+.login-table td{
+	padding: .5em;
+	width: 100%;
+
+}
+.login-label {
+	font-family: JosefinSans-Regular;
+	align: center;
+	width: 100%;
+	background-color: var(--coffee-dark);
+	/*box-shadow: 0px 0px 16px 0px var(--coffee-dark);*/
+	color: white;
+	text-align: center;
+	padding: 1em;
 }

@@ -214,10 +214,8 @@ public class UserProfileController implements Serializable {
 	
 	@RequestMapping("/public/createprofile")
 	public String createProfile(HttpServletRequest request, 
-			@Valid @ModelAttribute("userProfile") UserProfile user, BindingResult result,
-			Model model)
+			@Valid @ModelAttribute("userProfile") UserProfile user, BindingResult result, Model model)
 			throws Exception {
-		
 		
 		if (result.hasErrors()) {
 			return "signup";
@@ -242,7 +240,7 @@ public class UserProfileController implements Serializable {
 		logger.info("'" + user.getUsername() + "' has just signed up.");
 		
 		
-		String baseUrl = String.format("%s://%s:%d/public/verify?userID=",request.getScheme(), request.getServerName(), request.getServerPort());
+		String baseUrl = String.format("%s://%s:%d/public/verify?puKey=",request.getScheme(), request.getServerName(), request.getServerPort());
 		ProcessEmail pe = new ProcessEmail(fp);
 		pe.sendLoginLink(user, baseUrl);
 

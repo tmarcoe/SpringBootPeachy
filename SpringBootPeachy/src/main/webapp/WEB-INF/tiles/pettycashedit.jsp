@@ -8,7 +8,7 @@
 	<fmt:formatDate value="${pettyCashReg.transactionDate}" pattern="yyyy-MM-dd" />
 </h3>
 
-<sf:form method="post" action="${pageContext.request.contextPath}/pettycashupdate" commandName="pettyCashReg">
+<sf:form method="post" action="${pageContext.request.contextPath}/vendor/pettycashupdate" commandName="pettyCashReg">
 	<table>
 		<tr>
 			<td>Payable To</td>

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.peachy.entity.UserProfile;
+import com.peachy.helper.DataEncryption;
 import com.peachy.service.UserProfileService;
 
 
@@ -60,9 +61,9 @@ public class LoginController implements Serializable {
 	}
 
 	@RequestMapping("/public/verify")
-	public String verifyEmail(@ModelAttribute("userID") int userID, @ModelAttribute("h") String h, Model model) {
-		
-		UserProfile user = userProfileService.retrieve(userID);
+	public String verifyEmail(@ModelAttribute("puKey") String userID, @ModelAttribute("prKey") String h, Model model) throws Exception {
+		String dec = DataEncryption.decode(userID);
+		UserProfile user = userProfileService.retrieve(Integer.parseInt(dec));
 		if (user == null) {
 			logger.error("User ID " + userID + " failed to load.");
 			return "error";

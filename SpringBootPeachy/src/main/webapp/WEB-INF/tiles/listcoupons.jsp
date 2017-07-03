@@ -1,7 +1,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<table class="tableview tableshadow" id="viewcoupons">
+<table class="tableview tableshadow tableborder" id="viewcoupons">
 	<tr>
+		<th>Coupon ID</th>
 		<th>Coupon Name</th>
 		<th>Coupon Description</th>
 		<th>Active?</th>
@@ -11,6 +12,7 @@
 	</tr>
 	<c:forEach var="item" items="${objectList.pageList}">
 		<tr>
+			<td>${item.coupon_id}</td>
 			<td>${item.name}</td>
 			<td>${item.description}</td>
 			<td>${item.active}</td>
@@ -19,10 +21,10 @@
 			<td><button type="button" onclick="rowRemoved('${item.coupon_id}')">Delete</button></td>
 		</tr>
 	</c:forEach>
-	<tfoot class="viewcouponfoot">
+	<tfoot class="tablefooter">
 		<tr>
 			<td><button type="button" onclick="followLink('/vendor/createcoupon')">Create Coupon</button></td>
-			<td colspan="5"><button type="button" onclick="followLink('/public/home')">Back</button></td>
+			<td colspan="6"><button type="button" onclick="followLink('/public/home')">Back</button></td>
 		</tr>
 	</tfoot>
 </table>

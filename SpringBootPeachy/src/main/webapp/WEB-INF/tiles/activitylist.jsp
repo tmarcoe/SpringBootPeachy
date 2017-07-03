@@ -19,13 +19,13 @@
 				<td>${item.name}</td>
 				<td>${item.hoursBilled}</td>
 				<td>${item.maxHours}</td>
-				<td><button type="button" onclick="followLink('/editactivity?accountNum=${item.accountNum}')">Edit</button></td>
+				<td><button type="button" onclick="followLink('/vendor/editactivity?accountNum=${item.accountNum}')">Edit</button></td>
 				<td><button type="button" onclick="rowRemoved('${item.accountNum}')">Delete</button></td>
 			</tr>
 		</c:forEach>
 		<tr>
-			<td><button type="button" onclick="followLink('/createactivity')">Add</button></td>
-			<td colspan="5"><button type="button" onclick="followLink('/timereporting')">Cancel</button></td>
+			<td><button type="button" onclick="followLink('/vendor/createactivity')">Add</button></td>
+			<td colspan="5"><button type="button" onclick="followLink('/public/home')">Cancel</button></td>
 		</tr>
 	</tbody>
 </table>
@@ -33,7 +33,7 @@
 
 function rowRemoved(accountNum) {
 	    if (confirm("Are you sure you want to remove Account #" + accountNum + " from Approved Activities?") == true) {
-	   		window.location.href = "${pageContext.request.contextPath}/deleteactivity?accountNum=" + accountNum;		    
+	   		window.location.href = "${pageContext.request.contextPath}/vendor/deleteactivity?accountNum=" + accountNum;		    
 	   	} 
 }
 

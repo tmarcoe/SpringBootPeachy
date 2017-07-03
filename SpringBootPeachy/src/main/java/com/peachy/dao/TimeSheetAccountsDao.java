@@ -29,7 +29,7 @@ public class TimeSheetAccountsDao implements ITimeSheetAccounts {
 	public void create(TimeSheetAccounts timeSheetAccounts) {
 		Session session = session();
 		Transaction tx = session.beginTransaction();
-		
+		session.save(timeSheetAccounts);
 		tx.commit();
 	}
 
@@ -49,15 +49,16 @@ public class TimeSheetAccountsDao implements ITimeSheetAccounts {
 	public void update(TimeSheetAccounts timeSheetAccounts) {
 		Session session = session();
 		Transaction tx = session.beginTransaction();
-		
+		session.update(timeSheetAccounts);
 		tx.commit();
 	}
 
 	@Override
 	public void delete(TimeSheetAccounts timeSheetAccounts) {
 		Session session = session();
+		String hql = "DELETE FROM TimeSheetAccounts WHERE AccountNum = :AccountNum";
 		Transaction tx = session.beginTransaction();
-		
+		session.createQuery(hql).setString("AccountNum", timeSheetAccounts.getAccountNum()).executeUpdate();
 		tx.commit();
 	}
 

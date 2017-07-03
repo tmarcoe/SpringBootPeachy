@@ -27,6 +27,7 @@ import com.peachy.component.FilePath;
 import com.peachy.entity.Inventory;
 import com.peachy.entity.Returns;
 import com.peachy.entity.UserProfile;
+import com.peachy.helper.DataEncryption;
 import com.peachy.helper.FileUpload;
 
 
@@ -94,14 +95,14 @@ public class ProcessEmail {
 	
 	public void sendLoginLink(UserProfile user, String baseUrl) throws Exception {
 		Email email = new Email();
-		
-		email.setName(user.getFirstname() + " " + user.getLastname());
+		String encodedId = DataEncryption.encode(String.valueOf(user.getUser_id()));
+		email.setName("Peachy's Coffee");
 		email.setFrom(from);
 		email.setPassword(password);
 		email.setSubject("Welcome to Peachy's Coffee");
 		String msg = "<h1>Welcome " + email.getName() + "</h1>" +
 		             "<h3>Please click the link to activate your account</h3>" +
-				     "<a href='" + baseUrl + user.getUser_id() + "&h=" + user.getPassword() + "'>" +
+				     "<a href='" + baseUrl + encodedId + "&prKey=" + user.getPassword() + "'>" +
 				     "Activate your accout</a>";
 
 		email.setTo(user.getUsername());
