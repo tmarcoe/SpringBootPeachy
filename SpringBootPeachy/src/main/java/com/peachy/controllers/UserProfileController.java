@@ -263,10 +263,11 @@ public class UserProfileController implements Serializable {
 		return "changepassword";
 	}
 
-	@RequestMapping("/user/passwordchanged")
-	public String passwordChanged(@Valid 
+	@RequestMapping("/public/passwordchanged")
+	public String passwordChanged(@Valid
+			@ModelAttribute("user_id") int user_id,
 			@ModelAttribute("userProfile") UserProfile user, BindingResult result,
-			Principal principal, Model model) {
+			Model model) {
 		
 		if (result.hasFieldErrors("password")) {
 			return "changepassword";
@@ -274,12 +275,9 @@ public class UserProfileController implements Serializable {
 
 		userProfileService.updatePassword(user);
 
-		user = userProfileService.retrieve(principal.getName());
-
 		logger.info("," + user.getUsername()
 				+ "' has just changed the password.");
 
-		model.addAttribute("userProfile", user);
 		return "redirect:/public/home";
 	}
 

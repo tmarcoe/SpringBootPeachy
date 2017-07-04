@@ -37,6 +37,7 @@ public class ProcessEmail {
 	final private String password = "In_heaven3!";
 
 	private FilePath fp;
+	
 		
 	public ProcessEmail(FilePath fp) {
 		this.fp = fp;
@@ -96,14 +97,15 @@ public class ProcessEmail {
 	public void sendLoginLink(UserProfile user, String baseUrl) throws Exception {
 		Email email = new Email();
 		String encodedId = DataEncryption.encode(String.valueOf(user.getUser_id()));
+				
 		email.setName("Peachy's Coffee");
 		email.setFrom(from);
 		email.setPassword(password);
 		email.setSubject("Welcome to Peachy's Coffee");
-		String msg = "<h1>Welcome " + email.getName() + "</h1>" +
-		             "<h3>Please click the link to activate your account</h3>" +
-				     "<a href='" + baseUrl + encodedId + "&prKey=" + user.getPassword() + "'>" +
-				     "Activate your accout</a>";
+		String msg = 	 "<h1>Welcome " + user.getFirstname() + " " + user.getLastname() + "</h1>" +
+		             	 "<h3>Please click the link to activate your account</h3>" +
+		             	 "<a href='" + baseUrl + encodedId + "&prKey=" + user.getPassword() + "'>" +
+		             	 "Activate your accout</a>";
 
 		email.setTo(user.getUsername());
 		email.setMessage(msg);
@@ -112,6 +114,26 @@ public class ProcessEmail {
 		
 	}
 
+	public void sendPasswordRecovery(UserProfile user, String baseUrl, String token) throws Exception {
+		
+		Email email = new Email();
+		String encodedId = DataEncryption.encode(String.valueOf(user.getUser_id()));
+				
+		email.setName("Peachy's Coffee");
+		email.setFrom(from);
+		email.setPassword(password);
+		email.setSubject("Password Recovery");
+		String msg = 	 "<h1>Click the link to reset your password</h1>" +
+		             	 "<a href='" + baseUrl + encodedId + "&prKey=" + token + "'>" +
+		             	 "Reset Password</a>";
+
+		email.setTo(user.getUsername());
+		email.setMessage(msg);
+		
+		sendMail(email);
+		
+	}
+	
 	public String getDailySpecials(List <Inventory> inventoryList) throws IOException {
 		final String head = "<div " +
 						    "style=\"color: #fff; background: " +

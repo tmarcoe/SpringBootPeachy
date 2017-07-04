@@ -1,7 +1,7 @@
 <%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form"%>
 
 <sf:form id="details" method="post"
-	action="${pageContext.request.contextPath}/user/passwordchanged"
+	action="${pageContext.request.contextPath}/public/passwordchanged"
 	commandName="userProfile">
 	<div class="billing">
 		<table>

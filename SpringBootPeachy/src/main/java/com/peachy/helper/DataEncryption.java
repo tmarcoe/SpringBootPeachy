@@ -6,6 +6,7 @@ import javax.crypto.spec.SecretKeySpec;
 import java.util.Base64;
 import java.util.Base64.Decoder;
 import java.util.Base64.Encoder;
+import java.util.Random;
 
 public class DataEncryption {
 
@@ -69,6 +70,25 @@ public class DataEncryption {
 		final int[] encode = {2,1,3,4,16,5,15,6,14,7,13,8,12,9,11,10};
 		if (en) return (byte) (inp + encode[p]);
 		else return (byte) (inp - encode[p]);
+	}
+	
+	public static String tokenGenerator(int length) {
+		if (length > 128) length = 128;
+		byte[] token = {'\0','\0','\0','\0','\0','\0','\0','\0','\0','\0','\0','\0','\0','\0','\0','\0',
+						'\0','\0','\0','\0','\0','\0','\0','\0','\0','\0','\0','\0','\0','\0','\0','\0',
+						'\0','\0','\0','\0','\0','\0','\0','\0','\0','\0','\0','\0','\0','\0','\0','\0',
+						'\0','\0','\0','\0','\0','\0','\0','\0','\0','\0','\0','\0','\0','\0','\0','\0',
+						'\0','\0','\0','\0','\0','\0','\0','\0','\0','\0','\0','\0','\0','\0','\0','\0',
+						'\0','\0','\0','\0','\0','\0','\0','\0','\0','\0','\0','\0','\0','\0','\0','\0',
+						'\0','\0','\0','\0','\0','\0','\0','\0','\0','\0','\0','\0','\0','\0','\0','\0',
+						'\0','\0','\0','\0','\0','\0','\0','\0','\0','\0','\0','\0','\0','\0','\0','\0'}; 
+		Random rand = new Random();
+		
+		for(int i=0; i < length; i++) {
+			token[i] = (byte) (rand.nextInt(50) + 40);
+		}
+		
+		return token.toString();
 	}
 
 }

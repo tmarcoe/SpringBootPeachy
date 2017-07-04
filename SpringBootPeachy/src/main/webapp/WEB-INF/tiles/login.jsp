@@ -8,7 +8,7 @@
 </script>
 <div class="page-centered">
 	<div class="div-centered">
-		
+
 
 		<c:if test="${param.error != null}">
 
@@ -43,6 +43,23 @@
 				<tr>
 					<td><button type="button" onclick="followLink('/public/signup')" style="width: 100%;">Sign Up</button></td>
 				</tr>
+				<tr>
+					<td class="centerHeading"><a href="#" onclick="pwRecovery()">Forgot My Password</a></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>
+<div class="modal" id="popup">
+
+	<div class="modal-content small-modal" id="extraInfo">
+		<h3>Enter your Email</h3>
+		<form action="/public/passwordrecovery">
+			<table>
+				<tr>
+					<td><input name="username" /></td>
+					<td><button>Recover Password</button></td>
+				</tr>
 			</table>
 		</form>
 	</div>
@@ -56,5 +73,9 @@
 
 	function followLink(link) {
 		window.location.href = "${pageContext.request.contextPath}" + link;
+	}
+	function pwRecovery() {
+		var mode = document.getElementById("popup");
+		mode.style.display = "block";
 	}
 </script>

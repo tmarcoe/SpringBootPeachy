@@ -154,9 +154,10 @@ public class UserProfileDao implements IUserProfileDao {
 
 	public void updatePassword(UserProfile user) {
 		Session session = session();
-		String hqlUpdate = "update UserProfile as u set password = :password where user_id = :user_id";
+		String hqlUpdate = "UPDATE UserProfile SET password = :password WHERE user_id = :user_id";
 		Transaction tx = session.beginTransaction();
-		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+		String encode = bCryptPasswordEncoder.encode(user.getPassword());
+		user.setPassword(encode);
 		session.createQuery(hqlUpdate)
 				.setString("password", user.getPassword())
 				.setInteger("user_id", user.getUser_id()).executeUpdate();

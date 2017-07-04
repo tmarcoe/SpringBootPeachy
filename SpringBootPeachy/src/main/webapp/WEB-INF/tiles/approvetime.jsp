@@ -80,7 +80,7 @@
 </c:choose>
 <button type="button" onclick="openPopup()">Other Periods</button>
 <div class="modal" id="prevPeriod">
-	<div class="modal-content">
+	<div class="modal-content medium-modal">
 		<table>
 			<tr>
 				<td>Enter the starting Period:</td>

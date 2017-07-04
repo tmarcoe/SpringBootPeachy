@@ -66,8 +66,7 @@
 		<put-attribute name="heading_title" value="Shop"></put-attribute>
 		<put-attribute name="title" value="Coffee - Shop"></put-attribute>
 		<put-attribute name="content" value="/WEB-INF/tiles/products.jsp"></put-attribute>
-		<put-attribute name="footer"
-			value="/WEB-INF/tiles/static/pageinator.jsp"></put-attribute>
+		<put-attribute name="footer" value="/WEB-INF/tiles/static/pageinator.jsp"></put-attribute>
 	</definition>
 	<definition name="productdetails" extends="peachy.base">
 		<put-attribute name="heading_title" value="Product Details"></put-attribute>
@@ -118,8 +117,7 @@
 		<put-attribute name="heading_title" value="Restock Single Item"></put-attribute>
 		<put-attribute name="title" value="Restock Single Item"></put-attribute>
 		<put-attribute name="content" value="/WEB-INF/tiles/singleitem.jsp"></put-attribute>
-	<put-attribute name="toolbar"
-		value="/WEB-INF/tiles/static/inventorytoolbar.jsp"></put-attribute>
+	<put-attribute name="toolbar" value="/WEB-INF/tiles/static/inventorytoolbar.jsp"></put-attribute>
 	</definition>
 	<definition name="uploadfile" extends="peachy.base">
 		<put-attribute name="heading_title" value="Upload Product Image"></put-attribute>
@@ -240,8 +238,7 @@
 		<put-attribute name="content" value="/WEB-INF/tiles/picksubcategory.jsp"></put-attribute>
 	</definition>
 	<definition name="pcinfo" extends="peachy.base">
-		<put-attribute name="heading_title"
-			value="Please Enter Your Payment Information"></put-attribute>
+		<put-attribute name="heading_title" value="Please Enter Your Payment Information"></put-attribute>
 		<put-attribute name="title" value="Payment Information"></put-attribute>
 		<put-attribute name="content" value="/WEB-INF/tiles/pcinfo.jsp"></put-attribute>
 	</definition>
@@ -254,10 +251,8 @@
 		<put-attribute name="heading_title" value="Get Email"></put-attribute>
 		<put-attribute name="title" value="Email"></put-attribute>
 		<put-attribute name="content" value="/WEB-INF/tiles/checkemail.jsp"></put-attribute>
-		<put-attribute name="footer"
-			value="/WEB-INF/tiles/static/pageinator.jsp"></put-attribute>
-		<put-attribute name="toolbar"
-			value="/WEB-INF/tiles/static/emailtoolbar.jsp"></put-attribute>
+		<put-attribute name="footer" value="/WEB-INF/tiles/static/pageinator.jsp"></put-attribute>
+		<put-attribute name="toolbar" value="/WEB-INF/tiles/static/emailtoolbar.jsp"></put-attribute>
 	</definition>
 	<definition name="nointernet" extends="peachy.base">
 		<put-attribute name="heading_title" value="No Internet"></put-attribute>
@@ -268,8 +263,7 @@
 		<put-attribute name="heading_title" value="Purchase History"></put-attribute>
 		<put-attribute name="title" value="History"></put-attribute>
 		<put-attribute name="content" value="/WEB-INF/tiles/shoppinghistory.jsp"></put-attribute>
-		<put-attribute name="footer"
-			value="/WEB-INF/tiles/static/pageinator.jsp"></put-attribute>
+		<put-attribute name="footer" value="/WEB-INF/tiles/static/pageinator.jsp"></put-attribute>
 	</definition>
 	<definition name="createcoupon" extends="peachy.base">
 		<put-attribute name="heading_title" value="Create Coupon"></put-attribute>
@@ -280,8 +274,7 @@
 		<put-attribute name="heading_title" value="Coupon List"></put-attribute>
 		<put-attribute name="title" value="Coupon List"></put-attribute>
 		<put-attribute name="content" value="/WEB-INF/tiles/listcoupons.jsp"></put-attribute>
-		<put-attribute name="footer"
-			value="/WEB-INF/tiles/static/pageinator.jsp"></put-attribute>
+		<put-attribute name="footer" value="/WEB-INF/tiles/static/pageinator.jsp"></put-attribute>
 	</definition>
 	<definition name="editcoupon" extends="peachy.base">
 		<put-attribute name="heading_title" value="Edit Coupon"></put-attribute>
@@ -329,8 +322,7 @@
 		<put-attribute name="heading_title" value="List of Surveys"></put-attribute>
 		<put-attribute name="title" value="Survey List"></put-attribute>
 		<put-attribute name="content" value="/WEB-INF/tiles/surveylist.jsp"></put-attribute>
-		<put-attribute name="footer"
-			value="/WEB-INF/tiles/static/pageinator.jsp"></put-attribute>
+		<put-attribute name="footer" value="/WEB-INF/tiles/static/pageinator.jsp"></put-attribute>
 	</definition>
 	<definition name="audit" extends="peachy.base">
 		<put-attribute name="heading_title" value="Audit Results"></put-attribute>
@@ -376,8 +368,7 @@
 	<definition name="timesheetapproved" extends="peachy.base">
 		<put-attribute name="heading_title" value="Approved"></put-attribute>
 		<put-attribute name="title" value="Approved"></put-attribute>
-		<put-attribute name="content"
-			value="/WEB-INF/tiles/timesheetapproved.jsp"></put-attribute>
+		<put-attribute name="content" value="/WEB-INF/tiles/timesheetapproved.jsp"></put-attribute>
 	</definition>
 	<definition name="payrolldone" extends="peachy.base">
 		<put-attribute name="heading_title" value="PayRoll Complete"></put-attribute>
@@ -408,8 +399,7 @@
 		<put-attribute name="heading_title" value="Valid Activies"></put-attribute>
 		<put-attribute name="title" value="Valid Activies"></put-attribute>
 		<put-attribute name="content" value="/WEB-INF/tiles/activitylist.jsp"></put-attribute>
-		<put-attribute name="footer"
-			value="/WEB-INF/tiles/static/pageinator.jsp"></put-attribute>
+		<put-attribute name="footer" value="/WEB-INF/tiles/static/pageinator.jsp"></put-attribute>
 	</definition>
 	<definition name="editactivity" extends="peachy.base">
 		<put-attribute name="heading_title" value="Create Activity"></put-attribute>
@@ -425,15 +415,13 @@
 		<put-attribute name="heading_title" value="Sales Report"></put-attribute>
 		<put-attribute name="title" value="Sales Report"></put-attribute>
 		<put-attribute name="content" value="/WEB-INF/tiles/linechart.jsp"></put-attribute>
-		<put-attribute name="toolbar"
-			value="/WEB-INF/tiles/static/reporttoolbar.jsp"></put-attribute>
+		<put-attribute name="toolbar" value="/WEB-INF/tiles/static/reporttoolbar.jsp"></put-attribute>
 	</definition>
 	<definition name="gender" extends="peachy.base">
 		<put-attribute name="heading_title" value="Breakdown by Gender"></put-attribute>
 		<put-attribute name="title" value="Breakdown by Gender"></put-attribute>
 		<put-attribute name="content" value="/WEB-INF/tiles/piechart.jsp"></put-attribute>
-		<put-attribute name="toolbar"
-			value="/WEB-INF/tiles/static/reporttoolbar.jsp"></put-attribute>
+		<put-attribute name="toolbar" value="/WEB-INF/tiles/static/reporttoolbar.jsp"></put-attribute>
 	</definition>
 	<definition name="viewsurveyreport" extends="peachy.base">
 		<put-attribute name="heading_title" value="Satisfaction Surveys"></put-attribute>
@@ -544,5 +532,21 @@
 		<put-attribute name="heading_title" value="Fetal Transaction Definition"></put-attribute>
 		<put-attribute name="title" value="Fetal Transactions Definition"></put-attribute>
 		<put-attribute name="content" value="/WEB-INF/tiles/createtrans.jsp"></put-attribute>
+	</definition>
+	<definition name="nosuchuser" extends="peachy.base">
+		<put-attribute name="heading_title" value="No Such User"></put-attribute>
+		<put-attribute name="title" value="No Such User"></put-attribute>
+		<put-attribute name="content" value="/WEB-INF/tiles/nosuchuser.jsp"></put-attribute>
+	</definition>
+	<definition name="passwordrecovery" extends="peachy.base">
+		<put-attribute name="heading_title" value="Password Recovery"></put-attribute>
+		<put-attribute name="title" value="Password Recovery"></put-attribute>
+		<put-attribute name="content" value="/WEB-INF/tiles/passwordrecovery.jsp"></put-attribute>
+	</definition>
+	<definition name="resetpassword" extends="peachy.base">
+		<put-attribute name="heading_title" value="Reset Password"></put-attribute>
+		<put-attribute name="title" value="Reset Password"></put-attribute>
+		<put-attribute name="content" value="/WEB-INF/tiles/changepassword.jsp"></put-attribute>
+		<put-attribute name="includes" value="/WEB-INF/tiles/signupscript.jsp"></put-attribute>
 	</definition>
 </tiles-definitions>

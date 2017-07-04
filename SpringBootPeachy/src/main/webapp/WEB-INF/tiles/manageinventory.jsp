@@ -40,7 +40,7 @@
 
 </sf:form>
 <div class="modal" id="newSearch">
-	<div class="modal-content">
+	<div class="modal-content small-modal">
 		<table>
 			<tr>
 				<td>Enter Search</td>

@@ -220,7 +220,7 @@
 
 	<!-- Popup to create an employee from a standard user profile -->
 	<div class="modal" id="newEmployee">
-		<div class="modal-content">
+		<div class="modal-content medium-modal">
 			<table>
 				<tr>
 					<td>Start Date</td>

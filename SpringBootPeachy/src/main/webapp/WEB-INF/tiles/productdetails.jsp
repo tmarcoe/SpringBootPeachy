@@ -55,7 +55,7 @@
 </sf:form>
 <div class="modal" id="popup">
 
-	<div class="modal-content" id="extraInfo">
+	<div class="modal-content medium-modal" id="extraInfo">
 		<h3 class="titleText">Options</h3>
 	</div>
 </div>

@@ -794,6 +794,7 @@ div.modal {
     overflow: auto; /* Enable scroll if needed */
 }
 .modal-content {
+	text-align: center;
 	background: -webkit-linear-gradient(#d5e6ee, white);
 	/* For Safari 5.1 to 6.0 */
 	background: -o-linear-gradient(#d5e6ee, white);
@@ -806,7 +807,16 @@ div.modal {
 	box-shadow: 0px 8px 16px 0px var(--light-shadow);
     padding: 20px;
     border: 1px solid #888;
-    width: 45%; /* Could be more or less, depending on screen size */
+
+}
+.small-modal {
+	width: 20%; /* Could be more or less, depending on screen size */
+}
+.medium-modal {
+	width: 45%;
+}
+.large-modal {
+	width: 70%
 }
 .page-centered {
    position: absolute;
