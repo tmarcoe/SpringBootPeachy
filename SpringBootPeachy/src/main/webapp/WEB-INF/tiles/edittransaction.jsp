@@ -12,6 +12,7 @@
 		<ul class="nav">
 			<li><a href="#" onclick="writeFile('${transFile}')" >Save</a></li>
 			<li><a href="#" onclick="cancel()">Exit</a></li>
+			<li class="lightText">File: ${transFile}</li>
 		</ul>
 	</div>
 </div>

@@ -113,7 +113,7 @@ public class UserProfileDao implements IUserProfileDao {
 				.setString("city", user.getCity())
 				.setString("region", user.getRegion())
 				.setString("postalCode", user.getPostalCode())
-				.setString("country", user.getCity())
+				.setString("country", user.getCountry())
 				.setString("currency", user.getCurrency())
 				.setInteger("user_id", user.getUser_id()).executeUpdate();
 

@@ -34,6 +34,11 @@ public class FetalTransactionDao {
 	@Autowired
 	CurrencyConfigurator cc;
 
+	
+	public Transaction getTrans() {
+		return trans;
+	}
+
 	Session session() {
 		return sessionFactory.getCurrentSession();
 	}

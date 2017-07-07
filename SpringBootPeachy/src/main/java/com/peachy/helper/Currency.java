@@ -89,7 +89,7 @@ public class Currency {
 			symbol = "$";
 			break;
 		case "BGN":
-			symbol = "BGN";
+			symbol = "лв";
 			break;
 		case "BRL":
 			symbol = "R$";
@@ -101,10 +101,10 @@ public class Currency {
 			symbol = "CHF";
 			break;
 		case "CNY":
-			symbol = "Y";
+			symbol = "&#165;";
 			break;
 		case "CZK":
-			symbol = "KC";
+			symbol = "Kč";
 			break;
 		case "DKK":
 			symbol = "KR";
@@ -128,7 +128,7 @@ public class Currency {
 			symbol = "Rp";
 			break;
 		case "ILS":
-			symbol = "IL";
+			symbol = "₪";
 			break;
 		case "INR":
 			symbol = "&#8377;";
@@ -155,7 +155,7 @@ public class Currency {
 			symbol = "&#8369;";
 			break;
 		case "PLN":
-			symbol = "Zt";
+			symbol = "zł";
 			break;
 		case "RON":
 			symbol = "lei";
@@ -170,7 +170,7 @@ public class Currency {
 			symbol = "$";
 			break;
 		case "THB":
-			symbol = "B";
+			symbol = "฿";
 			break;
 		case "TRY":
 			symbol = "&#8378;";
@@ -179,7 +179,7 @@ public class Currency {
 			symbol = "$";
 			break;
 		case "ZAR":
-			symbol = "Z$";
+			symbol = "R";
 			break;
 		default:
 			symbol = "$";

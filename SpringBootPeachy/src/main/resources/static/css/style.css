@@ -998,6 +998,10 @@ table.leftJustify th{
 	width: 100%;
 
 }
+.lightText {
+	color: white;
+	font-style: oblique;
+}
 .login-label {
 	font-family: JosefinSans-Regular;
 	align: center;
