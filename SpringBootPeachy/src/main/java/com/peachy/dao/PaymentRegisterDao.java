@@ -30,12 +30,14 @@ public class PaymentRegisterDao implements IPaymentRegister {
 		Transaction tx = session.beginTransaction();
 		session.save(paymentRegister);
 		tx.commit();
+		session.disconnect();
 	}
 
 	@Override
 	public PaymentRegister retrieve(int entryId) {
 		Session session = session();
-		return (PaymentRegister) session.createCriteria(PaymentRegister.class).add(Restrictions.idEq(entryId)).uniqueResult();
+		PaymentRegister pr = (PaymentRegister) session.createCriteria(PaymentRegister.class).add(Restrictions.idEq(entryId)).uniqueResult();
+		return pr;
 	}
 
 	@Override
@@ -44,6 +46,7 @@ public class PaymentRegisterDao implements IPaymentRegister {
 		Transaction tx = session.beginTransaction();
 		session.update(paymentRegister);
 		tx.commit();
+		session.disconnect();
 	}
 
 	@Override
@@ -52,6 +55,7 @@ public class PaymentRegisterDao implements IPaymentRegister {
 		Transaction tx = session.beginTransaction();
 		session.delete(paymentRegister);
 		tx.commit();
+		session.disconnect();
 	}
 
 }

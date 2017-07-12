@@ -31,18 +31,25 @@ public class PettyCashRegisterDao implements IPettyCashRegister {
 		Transaction tx = session.beginTransaction();
 		session.save(pettyCashRegister);
 		tx.commit();
+		session.disconnect();
 	}
 
 	@Override
 	public PettyCashRegister retrieve(int registerId) {
 		Session session = session();
-		return (PettyCashRegister) session.createCriteria(PettyCashRegister.class).add(Restrictions.idEq(registerId)).uniqueResult();
+		PettyCashRegister pcr = (PettyCashRegister) session.createCriteria(PettyCashRegister.class).add(Restrictions.idEq(registerId)).uniqueResult();
+		session.disconnect();
+		
+		return pcr;
 	}
 	
 	@SuppressWarnings("unchecked")
 	public List<PettyCashRegister> retrieveList() {
 		Session session = session();
-		return session.createCriteria(PettyCashRegister.class).list();
+		List<PettyCashRegister> pcrList = session.createCriteria(PettyCashRegister.class).list();
+		session.disconnect();
+
+		return pcrList;
 	}
 
 	@Override
@@ -51,6 +58,7 @@ public class PettyCashRegisterDao implements IPettyCashRegister {
 		Transaction tx = session.beginTransaction();
 		session.update(pettyCashRegister);
 		tx.commit();
+		session.disconnect();
 	}
 
 	@Override
@@ -59,6 +67,7 @@ public class PettyCashRegisterDao implements IPettyCashRegister {
 		Transaction tx = session.beginTransaction();
 		session.delete(pettyCashRegister);
 		tx.commit();
+		session.disconnect();
 	}
 
 }

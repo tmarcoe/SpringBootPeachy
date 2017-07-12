@@ -36,18 +36,25 @@ public class UserProfileDao implements IUserProfileDao {
 		Transaction tx = session.beginTransaction();
 		session.save(userProfile);
 		tx.commit();
+		session.disconnect();
 	}
 
 	@Override
 	public UserProfile retrieve(int user_id) {
 		Session session = session();
-		return (UserProfile) session.createCriteria(UserProfile.class).add(Restrictions.idEq(user_id)).uniqueResult();
+		UserProfile user = (UserProfile) session.createCriteria(UserProfile.class).add(Restrictions.idEq(user_id)).uniqueResult();
+		session.disconnect();
+	
+		return user;
 	}
 
 	@Override
 	public UserProfile retrieve(String username) {
 		Session session = session();
-		return (UserProfile) session.createCriteria(UserProfile.class).add(Restrictions.eq("username", username)).uniqueResult();
+		UserProfile user = (UserProfile) session.createCriteria(UserProfile.class).add(Restrictions.eq("username", username)).uniqueResult();
+		session.disconnect();
+		
+		return user;
 	}
 	
 	@Override
@@ -56,6 +63,7 @@ public class UserProfileDao implements IUserProfileDao {
 		Transaction tx = session.beginTransaction();
 		session.update(userProfile);
 		tx.commit();
+		session.disconnect();
 	}
 
 	@Override
@@ -64,6 +72,7 @@ public class UserProfileDao implements IUserProfileDao {
 		Transaction tx = session.beginTransaction();
 		session.delete(userProfile);
 		tx.commit();
+		session.disconnect();
 	}
 
 	@Override
@@ -73,12 +82,16 @@ public class UserProfileDao implements IUserProfileDao {
 		UserProfile user = (UserProfile) session.createCriteria(UserProfile.class).add(Restrictions.eqOrIsNull("username", username)).uniqueResult();
 		session.delete(user);
 		tx.commit();
+		session.disconnect();
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<UserProfile> retrieveList() {
 		Session session = session();
-		return session.createCriteria(UserProfile.class).list();
+		List<UserProfile> userList = session.createCriteria(UserProfile.class).list();
+		session.disconnect();
+		
+		return userList;
 	}
 
 
@@ -86,6 +99,8 @@ public class UserProfileDao implements IUserProfileDao {
 		Session session = session();
 		String hql = "SELECT COUNT(*) FROM UserProfile WHERE username = :username";
 		long count = (long) session.createQuery(hql).setString("username", username).uniqueResult();
+		session.disconnect();
+		
 		return (count > 0);
 	}
 
@@ -96,7 +111,7 @@ public class UserProfileDao implements IUserProfileDao {
 		updateContactInfo(user, session);
 		updateMisc(user, session);
 		tx.commit();
-		session().disconnect();
+		session.disconnect();
 
 	}
 
@@ -162,14 +177,17 @@ public class UserProfileDao implements IUserProfileDao {
 				.setString("password", user.getPassword())
 				.setInteger("user_id", user.getUser_id()).executeUpdate();
 		tx.commit();
+		session.disconnect();
 
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<UserProfile> getDailySpecialUsers() {
 		Session session = session();
-		
-		return session.createCriteria(UserProfile.class).add(Restrictions.eq("dailySpecials",true)).list();
+		List<UserProfile> userList = session.createCriteria(UserProfile.class).add(Restrictions.eq("dailySpecials",true)).list();
+		session.disconnect();
+	
+		return userList;
 	}
 	
 	public void merge(UserProfile userProfile) {
@@ -177,12 +195,14 @@ public class UserProfileDao implements IUserProfileDao {
 		Transaction tx = session.beginTransaction();
 		session.merge(userProfile);
 		tx.commit();
+		session.disconnect();
 	}
 	@SuppressWarnings("unchecked")
 	public List<BigInteger> getGenderBreakdown() {
+		Session session = session();
 		String sql = "select count(male_female) from user_profile group by male_female";
-		List<BigInteger> counts = session().createSQLQuery(sql).list();
-		session().disconnect();
+		List<BigInteger> counts = session.createSQLQuery(sql).list();
+		session.disconnect();
 		
 		return counts;
 	}
@@ -191,14 +211,18 @@ public class UserProfileDao implements IUserProfileDao {
 	public List<UserProfile> selectEmployees() {
 		Session session = session();
 		String hql = "FROM UserProfile u WHERE EXISTS (SELECT 1 FROM Employee e WHERE startDate IS NOT null AND u.user_id = e.user_id)";
+		List<UserProfile> userList = session.createQuery(hql).list();
+		session.disconnect();
 		
-		return session.createQuery(hql).list();
+		return userList;
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<UserProfile> getMonthlyNewsLetterUsers() {
+		Session session = session();
 		String hql = "from UserProfile where monthlyMailing = true";
-		List<UserProfile> userList = session().createQuery(hql).list();
+		List<UserProfile> userList = session.createQuery(hql).list();
+		session.disconnect();
 
 		return userList;
 	}

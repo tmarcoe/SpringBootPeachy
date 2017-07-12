@@ -34,19 +34,25 @@ public class SurveyDao implements ISurvey {
 		Transaction tx = session.beginTransaction();
 		session.save(survey);
 		tx.commit();
+		session.disconnect();
 	}
 
 	@Override
 	public Survey retrieve(int key) {
 		Session session = session();
-		return (Survey) session.createCriteria(Survey.class).add(Restrictions.idEq(key)).uniqueResult();
+		Survey s = (Survey) session.createCriteria(Survey.class).add(Restrictions.idEq(key)).uniqueResult();
+		session.disconnect();
+		
+		return s;
 	}
 	
 	@SuppressWarnings("unchecked")
 	public List<Survey> retrieveList() {
-		
 		Session session = session();
-		return session.createCriteria(Survey.class).list();
+		List<Survey> sList = session.createCriteria(Survey.class).list();
+		session.disconnect();
+		
+		return sList;
 	}
 
 	@Override
@@ -55,6 +61,7 @@ public class SurveyDao implements ISurvey {
 		Transaction tx = session.beginTransaction();
 		session.update(survey);
 		tx.commit();
+		session.disconnect();
 	}
 
 	@Override
@@ -63,6 +70,7 @@ public class SurveyDao implements ISurvey {
 		Transaction tx = session.beginTransaction();
 		session.delete(survey);
 		tx.commit();
+		session.disconnect();
 	}
 
 
@@ -80,6 +88,7 @@ public class SurveyDao implements ISurvey {
 		answers.add((BigDecimal) session.createSQLQuery(hql3).uniqueResult());
 		bigInteger = (BigInteger) session.createSQLQuery(hql4).uniqueResult();
 		answers.add((BigDecimal) BigDecimal.valueOf(bigInteger.longValue()));
+		session.disconnect();
 		
 		return answers;
 	}

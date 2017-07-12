@@ -35,14 +35,17 @@ public class InvoiceDao implements IInvoice {
 		Transaction tx = session.beginTransaction();
 		session.save(header);
 		tx.commit();
+		session.disconnect();
 	}
 
 	@Override
 	public Invoice retrieve(int invoice_num) {
 		Session session = session();
 		String hql = "FROM Invoice WHERE invoice_num = :invoice_num";
+		Invoice inv = (Invoice) session.createQuery(hql).setInteger("invoice_num", invoice_num).uniqueResult();
+		session.disconnect();
 		
-		return (Invoice) session.createQuery(hql).setInteger("invoice_num", invoice_num).uniqueResult();
+		return inv;
 	}
 
 	@Override
@@ -51,6 +54,7 @@ public class InvoiceDao implements IInvoice {
 		Transaction tx = session.beginTransaction();
 		session.update(header);
 		tx.commit();
+		session.disconnect();
 	}
 
 	@Override
@@ -59,6 +63,7 @@ public class InvoiceDao implements IInvoice {
 		Transaction tx = session.beginTransaction();
 		session.delete(header);
 		tx.commit();
+		session.disconnect();
 	}
 
 	@Override
@@ -67,6 +72,7 @@ public class InvoiceDao implements IInvoice {
 		Transaction tx = session.beginTransaction();
 		session.merge(header);
 		tx.commit();
+		session.disconnect();
 	}
 
 	public Invoice getOpenOrder(int userID) {
@@ -88,6 +94,7 @@ public class InvoiceDao implements IInvoice {
 		session.createQuery(itms).setInteger("invoice_num", invoice_num).executeUpdate();
 		session.createQuery(hdr).setInteger("invoice_num", invoice_num).executeUpdate();
 		tx.commit();
+		session.disconnect();
 	}
 	
 	public long purgeCoupons(int invoice_num) {
@@ -98,6 +105,7 @@ public class InvoiceDao implements IInvoice {
 		tx.commit();
 		hql = "SELECT COUNT(*) FROM InvoiceItem WHERE invoice_num = :invoice_num";
 		long count = (long) session.createQuery(hql).setInteger("invoice_num", invoice_num).uniqueResult();
+		session.disconnect();
 		
 		return count;
 	}
@@ -106,17 +114,20 @@ public class InvoiceDao implements IInvoice {
 	public List<Invoice> getHistory(int user_id) {
 		Session session = session();
 		String hql = "From Invoice WHERE user_id = :user_id";
-		session.createQuery(hql).setInteger("user_id", user_id).list();
+		List<Invoice> invList = session.createQuery(hql).setInteger("user_id", user_id).list();
+		session.disconnect();
 		
-		return session.createQuery(hql).setInteger("user_id", user_id).list();
+		return invList;
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<Invoice> getProcessedInvoices() {
 		Session session = session();
 		String hql = "FROM Invoice WHERE processed IS NOT NULL AND shipped IS NULL";
+		List<Invoice> invList = session.createQuery(hql).list();
+		session.disconnect();
 		
-		return session.createQuery(hql).list();
+		return invList;
 	}
 	
 	public double getCountByMonth(int month, int year) {
@@ -147,16 +158,19 @@ public class InvoiceDao implements IInvoice {
 		}else{
 			total = BigInteger.valueOf(0);
 		}
+		session.disconnect();
 		
 		return total;
 	}
 	
 	public BigDecimal getMonthlyTotal(int month, int year) {
+		Session session = session();
 		BigDecimal total;
 		String sql = "SELECT SUM(amount) FROM invoice_item i, invoice h " +
 					 "WHERE i.invoice_num = h.invoice_num AND MONTH(h.processed) = " + 
 					 ":month AND YEAR(h.processed) = :year AND sku_num NOT LIKE 'CPN%'";
-		total = (BigDecimal) session().createSQLQuery(sql).setInteger("month", month).setInteger("year", year).uniqueResult();
+		total = (BigDecimal) session.createSQLQuery(sql).setInteger("month", month).setInteger("year", year).uniqueResult();
+		session.disconnect();
 		
 		return total;
 	}
@@ -180,6 +194,7 @@ public class InvoiceDao implements IInvoice {
 		}
 		
 		tx.commit();
+		session.disconnect();
 	}
 
 }

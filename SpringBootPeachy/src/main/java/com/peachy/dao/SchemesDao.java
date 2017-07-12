@@ -31,19 +31,26 @@ public class SchemesDao implements ISchemes {
 		Transaction tx = session.beginTransaction();
 		session.save(schemes);
 		tx.commit();
+		session.disconnect();
 	}
 
 	@Override
 	public Schemes retrieve(int entry_id) {
 		Session session = session();
-		return (Schemes) session.createCriteria(Schemes.class).add(Restrictions.idEq(entry_id)).uniqueResult();
+		Schemes s = (Schemes) session.createCriteria(Schemes.class).add(Restrictions.idEq(entry_id)).uniqueResult();
+		session.disconnect();
+
+		return s;
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Schemes> retrieveScheme(String scheme) {
 		Session session = session();
-		return session.createCriteria(Schemes.class).add(Restrictions.eq("scheme", scheme)).list();
+		List<Schemes> sList = session.createCriteria(Schemes.class).add(Restrictions.eq("scheme", scheme)).list();
+		session.disconnect();
+
+		return sList;
 	}
 
 	@Override
@@ -52,6 +59,7 @@ public class SchemesDao implements ISchemes {
 		Transaction tx = session.beginTransaction();
 		session.update(schemes);
 		tx.commit();
+		session.disconnect();
 
 	}
 
@@ -61,6 +69,7 @@ public class SchemesDao implements ISchemes {
 		Transaction tx = session.beginTransaction();
 		session.delete(schemes);
 		tx.commit();
+		session.disconnect();
 
 	}
 
@@ -68,7 +77,10 @@ public class SchemesDao implements ISchemes {
 	public List<String> retrieveAllSchemes() {
 		Session session = session();
 		String hql = "SELECT DISTINCT scheme FROM Schemes";
-		return session.createQuery(hql).list();
+		List<String> sList = session.createQuery(hql).list();
+		session.disconnect();	
+		
+		return sList;
 	}
 
 	public void delete(String scheme) {
@@ -77,6 +89,7 @@ public class SchemesDao implements ISchemes {
 		Transaction tx = session.beginTransaction();
 		session.createQuery(hql).setString("scheme", scheme).executeUpdate();
 		tx.commit();
+		session.disconnect();
 	}
 
 	public boolean idExists(String scheme, String id) {
@@ -85,6 +98,7 @@ public class SchemesDao implements ISchemes {
 		String hql = "SELECT COUNT(*) FROM Schemes WHERE scheme = :scheme AND id = :id";
 		
 		count = (long) session.createQuery(hql).setString("scheme", scheme).setString("id", id).uniqueResult();
+		session.disconnect();
 		
 		return (count > 0);
 	}

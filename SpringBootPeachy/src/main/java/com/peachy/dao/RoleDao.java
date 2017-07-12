@@ -31,6 +31,7 @@ public class RoleDao implements IRoleDao {
 		Transaction tx = session.beginTransaction();
 		session.save(role);
 		tx.commit();
+		session.disconnect();
 	}
 
 	@Override
@@ -39,12 +40,16 @@ public class RoleDao implements IRoleDao {
 		Transaction tx = session.beginTransaction();
 		session.update(role);
 		tx.commit();
+		session.disconnect();
 	}
 
 	@Override
 	public Role retrieve(int id) {
 		Session session = session();
-		return (Role) session.createCriteria(Role.class).add(Restrictions.idEq(id)).uniqueResult();
+		Role r = (Role) session.createCriteria(Role.class).add(Restrictions.idEq(id)).uniqueResult();
+		session.disconnect();
+		
+		return r;
 	}
 	
 	@Override
@@ -59,14 +64,17 @@ public class RoleDao implements IRoleDao {
 		Transaction tx = session.beginTransaction();
 		session.delete(role);
 		tx.commit();
+		session.disconnect();
 		return null;
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<Role> retrieveList() {
 		Session session = session();
+		List<Role> roleList = session.createCriteria(Role.class).list();
+		session.disconnect();
 		
-		return session.createCriteria(Role.class).list();
+		return roleList;
 	}
 
 }

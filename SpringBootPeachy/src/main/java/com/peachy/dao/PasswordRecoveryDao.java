@@ -29,12 +29,16 @@ public class PasswordRecoveryDao implements IPasswordRecovery {
 		Transaction tx = session.beginTransaction();
 		session.save(pr);
 		tx.commit();
+		session.disconnect();
 	}
 
 	@Override
 	public PasswordRecovery retrieve(String token) {
 		Session session = session();
-		return (PasswordRecovery) session.createCriteria(PasswordRecovery.class).add(Restrictions.idEq(token)).uniqueResult();
+		PasswordRecovery pr = (PasswordRecovery) session.createCriteria(PasswordRecovery.class).add(Restrictions.idEq(token)).uniqueResult();
+		session.disconnect();
+		
+		return pr;
 	}
 
 	@Override
@@ -43,7 +47,7 @@ public class PasswordRecoveryDao implements IPasswordRecovery {
 		Transaction tx = session.beginTransaction();
 		session.update(pr);
 		tx.commit();
-
+		session.disconnect();
 	}
 
 	@Override
@@ -53,7 +57,7 @@ public class PasswordRecoveryDao implements IPasswordRecovery {
 		Transaction tx = session.beginTransaction();
 		session.createQuery(hql).setString("token", pr.getToken()).executeUpdate();
 		tx.commit();
-
+		session.disconnect();
 	}
 
 }

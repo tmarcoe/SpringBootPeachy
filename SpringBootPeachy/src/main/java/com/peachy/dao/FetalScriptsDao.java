@@ -31,24 +31,33 @@ public class FetalScriptsDao implements IFetalScripts {
 		Transaction tx = session.beginTransaction();
 		session.save(fetalScripts);
 		tx.commit();
+		session.disconnect();
 	}
 
 	@Override
 	public FetalScripts retrieve(int id) {
 		Session session = session();
-		return (FetalScripts) session.createCriteria(FetalScripts.class).add(Restrictions.idEq(id)).uniqueResult();
+		FetalScripts fs = (FetalScripts) session.createCriteria(FetalScripts.class).add(Restrictions.idEq(id)).uniqueResult();
+		session.disconnect();
+		
+		return fs;
 	}
 
 	public FetalScripts retrieve(String file_name) {
 		Session session = session();
+		FetalScripts fs = (FetalScripts) session.createCriteria(FetalScripts.class).add(Restrictions.eq("file_name", file_name)).uniqueResult();
+		session.disconnect();
 		
-		return (FetalScripts) session.createCriteria(FetalScripts.class).add(Restrictions.eq("file_name", file_name)).uniqueResult();
+		return fs;
 	}
 	
 	@SuppressWarnings("unchecked")
 	public List<FetalScripts> retrieveList() {
 		Session session = session();
-		return session.createCriteria(FetalScripts.class).list();
+		List<FetalScripts> scripts = session.createCriteria(FetalScripts.class).list();
+		session.disconnect();
+		
+		return scripts;
 	}
 	
 	@Override
@@ -57,6 +66,7 @@ public class FetalScriptsDao implements IFetalScripts {
 		Transaction tx = session.beginTransaction();
 		session.update(fetalScripts);
 		tx.commit();
+		session.disconnect();
 	}
 
 	@Override
@@ -65,6 +75,7 @@ public class FetalScriptsDao implements IFetalScripts {
 		Transaction tx = session.beginTransaction();
 		session.delete(fetalScripts);
 		tx.commit();
+		session.disconnect();
 	}
 
 }

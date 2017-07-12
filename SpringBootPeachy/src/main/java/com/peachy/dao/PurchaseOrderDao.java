@@ -36,13 +36,16 @@ public class PurchaseOrderDao implements IPurchaseOrder {
 		Transaction tx = session.beginTransaction();
 		session.save(purchaseOrder);
 		tx.commit();
+		session.disconnect();
 	}
 
 	@Override
 	public PurchaseOrder retrieve(int orderId) {
 		Session session = session();
+		PurchaseOrder po = (PurchaseOrder) session.createCriteria(PurchaseOrder.class).add(Restrictions.idEq(orderId)).uniqueResult();
+		session.disconnect();
 		
-		return (PurchaseOrder) session.createCriteria(PurchaseOrder.class).add(Restrictions.idEq(orderId)).uniqueResult();
+		return po;
 	}
 
 	@Override
@@ -51,7 +54,7 @@ public class PurchaseOrderDao implements IPurchaseOrder {
 		Transaction tx = session.beginTransaction();
 		session.update(purchaseOrder);
 		tx.commit();
-
+		session.disconnect();
 	}
 
 	@Override
@@ -60,13 +63,15 @@ public class PurchaseOrderDao implements IPurchaseOrder {
 		Transaction tx = session.beginTransaction();
 		session.delete(purchaseOrder);
 		tx.commit();
-
+		session.disconnect();
 	}
+	
 	public ProfitDataRecord getCostDataByMonth(int month, int year) {
+		Session session = session();
 		Object[] obj;
 		ProfitDataRecord totals = new ProfitDataRecord();
 		String sql = "SELECT SUM(price), SUM(qty) FROM PurchaseOrder WHERE MONTH(purchaseDate) = :month AND YEAR(purchaseDate) = :year";
-		obj = (Object[]) session().createSQLQuery(sql).setInteger("month", month).setInteger("year", year).uniqueResult();
+		obj = (Object[]) session.createSQLQuery(sql).setInteger("month", month).setInteger("year", year).uniqueResult();
 		
 		if (obj[0] == null) {
 			totals.setCost(BigDecimal.valueOf(0));
@@ -75,6 +80,7 @@ public class PurchaseOrderDao implements IPurchaseOrder {
 			totals.setCost((BigDecimal) obj[0]);
 			totals.setAmount((BigDecimal) obj[1]);
 		}
+		session.disconnect();
 		
 		return totals;
 	}

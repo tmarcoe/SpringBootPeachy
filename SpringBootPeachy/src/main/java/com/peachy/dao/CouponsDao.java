@@ -31,26 +31,34 @@ public class CouponsDao implements ICoupons {
 		Transaction tx = session.beginTransaction();
 		session.save(coupons);
 		tx.commit();
+		
+		session.disconnect();
 	}
 
 	@Override
 	public Coupons retrieve(String coupon_id) {
 		Session session = session();
+		Coupons cp = (Coupons) session.createCriteria(Coupons.class).add(Restrictions.idEq(coupon_id)).uniqueResult();
+		session.disconnect();
 		
-		return (Coupons) session.createCriteria(Coupons.class).add(Restrictions.idEq(coupon_id)).uniqueResult();
+		return cp;
 	}
 	
 	public Coupons retrieveByName(String name) {
 		Session session = session();
+		Coupons cp = (Coupons) session.createCriteria(Coupons.class).add(Restrictions.eq("name", name)).uniqueResult();
+		session.disconnect();
 		
-		return (Coupons) session.createCriteria(Coupons.class).add(Restrictions.eq("name", name)).uniqueResult();
+		return cp;
 	}
 	
 	@SuppressWarnings("unchecked")
 	public List<Coupons> retrieveList() {
 		Session session = session();
+		List<Coupons> cpList = session.createCriteria(Coupons.class).list();
+		session.disconnect();
 		
-		return session.createCriteria(Coupons.class).list();
+		return cpList;
 	}
 
 	@Override
@@ -59,6 +67,7 @@ public class CouponsDao implements ICoupons {
 		Transaction tx = session.beginTransaction();
 		session.update(coupons);
 		tx.commit();
+		session.disconnect();
 		
 	}
 
@@ -69,6 +78,7 @@ public class CouponsDao implements ICoupons {
 		Transaction tx = session.beginTransaction();
 		session.createQuery(hql).setString("coupon_id", coupons.getCoupon_id()).executeUpdate();
 		tx.commit();
+		session.disconnect();
 		
 	}
 

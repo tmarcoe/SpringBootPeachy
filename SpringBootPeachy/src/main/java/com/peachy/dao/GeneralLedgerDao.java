@@ -32,12 +32,15 @@ public class GeneralLedgerDao implements IGeneralLedger {
 		Transaction tx = session.beginTransaction();
 		session.save(generalLedger);
 		tx.commit();
+		session.disconnect();
 	}
 
 	@Override
 	public GeneralLedger retrieve(int entry_num) {
 		Session session = session();
-		return (GeneralLedger) session.createCriteria(GeneralLedger.class).add(Restrictions.idEq(entry_num)).uniqueResult();
+		GeneralLedger gl = (GeneralLedger) session.createCriteria(GeneralLedger.class).add(Restrictions.idEq(entry_num)).uniqueResult();
+		session.disconnect();
+		return gl;
 	}
 
 	@Override
@@ -46,6 +49,7 @@ public class GeneralLedgerDao implements IGeneralLedger {
 		Transaction tx = session.beginTransaction();
 		session.update(generalLedger);
 		tx.commit();
+		session.disconnect();
 	}
 
 	@Override
@@ -54,13 +58,16 @@ public class GeneralLedgerDao implements IGeneralLedger {
 		Transaction tx = session.beginTransaction();
 		session.delete(generalLedger);
 		tx.commit();
+		session.disconnect();
 	}
 	
 	@SuppressWarnings("unchecked")
 	public List<GeneralLedger> getList(Date Begin, Date End) {
 		Session session = session();
+		List<GeneralLedger> glList = session.createCriteria(GeneralLedger.class).add(Restrictions.between("entryDate", Begin, End)).list();
+		session.disconnect();
 		
-		return session.createCriteria(GeneralLedger.class).add(Restrictions.between("entryDate", Begin, End)).list();
+		return glList;
 	}
 
 }

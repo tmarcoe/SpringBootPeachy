@@ -33,34 +33,36 @@ public class InvoiceItemDao implements IInvoiceItem {
 		Transaction tx = session.beginTransaction();
 		session.save(item);
 		tx.commit();
+		session.disconnect();
 	}
 
 	@Override
 	public InvoiceItem retrieve(int item_id) {
 		Session session = session();
 		Criteria crit = session.createCriteria(InvoiceItem.class).add(Restrictions.idEq(item_id));
-		return (InvoiceItem) crit.uniqueResult();
+		InvoiceItem inv = (InvoiceItem) crit.uniqueResult();
+		session.disconnect();
+		return inv;
 	}
 
 	@Override
 	public InvoiceItem retrieve(int invoice_num, String sku_num) {
 		Session session = session();
 		String hql = "FROM InvoiceItem WHERE invoice_num = :invoice_num AND sku_num = :sku_num";
-		
-		return (InvoiceItem) session.createQuery(hql)
-									.setInteger("invoice_num", invoice_num)
-									.setString("sku_num", sku_num)
-									.uniqueResult();
+		InvoiceItem inv = (InvoiceItem) session.createQuery(hql).setInteger("invoice_num", invoice_num)
+											   .setString("sku_num", sku_num).uniqueResult();
+		session.disconnect();
+
+		return inv;
 	}
 
 	@Override
 	public boolean exists(int invoice_num, String sku_num) {
 		Session session = session();
 		String hql = "SELECT COUNT(*) FROM InvoiceItem WHERE invoice_num = :invoice_num AND sku_num = :sku_num";
-		long count = (long) session.createQuery(hql)
-				.setInteger("invoice_num",invoice_num)
-				.setString("sku_num", sku_num)
-				.uniqueResult();
+		long count = (long) session.createQuery(hql).setInteger("invoice_num",invoice_num)
+													.setString("sku_num", sku_num).uniqueResult();
+		session.disconnect();
 		return (count > 0);
 	}
 
@@ -70,7 +72,7 @@ public class InvoiceItemDao implements IInvoiceItem {
 		Transaction tx = session.beginTransaction();
 		session.update(item);
 		tx.commit();
-
+		session.disconnect();
 	}
 
 	@Override
@@ -79,7 +81,7 @@ public class InvoiceItemDao implements IInvoiceItem {
 		Transaction tx = session.beginTransaction();
 		session.delete(item);
 		tx.commit();
-
+		session.disconnect();
 	}
 
 	public void delete(int invoice_num, String sku_num) {
@@ -88,6 +90,7 @@ public class InvoiceItemDao implements IInvoiceItem {
 		Transaction tx = session.beginTransaction();
 		session.createQuery(hql).setInteger("invoice_num", invoice_num).setString("sku_num", sku_num).executeUpdate();
 		tx.commit();
+		session.disconnect();
 	}
 
 	public void merge(InvoiceItem item) {
@@ -95,6 +98,7 @@ public class InvoiceItemDao implements IInvoiceItem {
 		Transaction tx = session.beginTransaction();
 		session.merge(item);
 		tx.commit();
+		session.disconnect();
 	}
 
 	public boolean exists(int invoice_num) {
@@ -104,6 +108,7 @@ public class InvoiceItemDao implements IInvoiceItem {
 		String hql = "SELECT COUNT(*) FROM InvoiceItem WHERE invoice_num = :invoice_num";
 		count = (long) session.createQuery(hql).setInteger("invoice_num", invoice_num).uniqueResult();
 		
+		session.disconnect();
 		return (count > 0);
 	}
 	 
@@ -115,6 +120,7 @@ public class InvoiceItemDao implements IInvoiceItem {
 		
 		BigInteger count =  (BigInteger) session.createSQLQuery(sql).setInteger("user_id", user_id).setString("coupon", coupon).uniqueResult();
 		
+		session.disconnect();
 		return count.longValue();
 	}
 	
@@ -123,14 +129,16 @@ public class InvoiceItemDao implements IInvoiceItem {
 		String hql = "SELECT COUNT(*) FROM InvoiceItem WHERE invoice_num = :invoice_num AND sku_num LIKE 'CPN%'";
 		long count = (long) session.createQuery(hql).setInteger("invoice_num", invoice_num).uniqueResult();
 		
+		session.disconnect();
 		return (count > 0);
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<InvoiceItem> getLineItems(Integer invoice_num) {
 		Session session = session();
-		
-		return session.createCriteria(InvoiceItem.class).add(Restrictions.eq("invoice_num", invoice_num)).list();
+		List<InvoiceItem> invList = session.createCriteria(InvoiceItem.class).add(Restrictions.eq("invoice_num", invoice_num)).list();
+		session.disconnect();
+		return invList;
 	}
 
 }

@@ -32,12 +32,16 @@ public class EmployeeDao implements IEmployee {
 		Transaction tx = session.beginTransaction();
 		session.save(employee);
 		tx.commit();
+		session.disconnect();
 	}
 
 	@Override
 	public Employee retrieve(int user_id) {
 		Session session = session();
-		return (Employee) session.createCriteria(Employee.class).add(Restrictions.idEq(user_id)).uniqueResult();
+		Employee emp = (Employee) session.createCriteria(Employee.class).add(Restrictions.idEq(user_id)).uniqueResult();
+		session.disconnect();
+		
+		return emp;
 	}
 
 	@Override
@@ -46,6 +50,7 @@ public class EmployeeDao implements IEmployee {
 		Transaction tx = session.beginTransaction();
 		session.update(employee);
 		tx.commit();
+		session.disconnect();
 	}
 
 	@Override
@@ -54,12 +59,16 @@ public class EmployeeDao implements IEmployee {
 		Transaction tx = session.beginTransaction();
 		session.delete(employee);
 		tx.commit();
+		session.disconnect();
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<UserProfile> employeeList() {
 		Session session = session();
-		return session.createCriteria(Employee.class).add(Restrictions.isNull("endDate")).list();
+		List<UserProfile> empList = session.createCriteria(Employee.class).add(Restrictions.isNull("endDate")).list();
+		session.disconnect();
+		
+		return empList;
 	}
 
 }

@@ -39,7 +39,9 @@ public class InventoryDao implements IInventory {
 	@Override
 	public Inventory retrieve(String sku_num) {
 		Session session = session();
-		return (Inventory) session.createCriteria(Inventory.class).add(Restrictions.idEq(sku_num)).uniqueResult();
+		Inventory inv = (Inventory) session.createCriteria(Inventory.class).add(Restrictions.idEq(sku_num)).uniqueResult();
+		session.disconnect();;
+		return 	inv;
 	}
 
 	@Override
@@ -48,7 +50,7 @@ public class InventoryDao implements IInventory {
 		Transaction tx = session.beginTransaction();
 		session.update(inventory);
 		tx.commit();
-
+		session.disconnect();;
 	}
 
 	@Override
@@ -58,76 +60,93 @@ public class InventoryDao implements IInventory {
 		String hql = "DELETE FROM Inventory WHERE sku_num = :sku_num";
 		session.createQuery(hql).setString("sku_num", inventory.getSku_num()).executeUpdate();
 		tx.commit();
+		session.disconnect();;
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<Inventory> listSaleItems() {
 		Session session = session();
 		String hql = "FROM Inventory WHERE on_sale is true";
-		return session.createQuery(hql).setMaxResults(3).list();
+		List<Inventory> invList = session.createQuery(hql).setMaxResults(3).list();
+		
+		return invList;
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<Inventory> searchProducts(String searchStr) {
+		Session session = session();
 		String hql = "FROM Inventory WHERE lower(product_name) LIKE lower(\'%" + searchStr
 				+ "%\') OR lower(description) LIKE lower(\'%" + searchStr + "%\') "
 				+ "OR lower(category) LIKE lower(\'%" + searchStr + "%\') "
 				+ "OR lower(subcategory) LIKE lower(\'%" + searchStr + "%\') ";
-		List<Inventory> searchList = session().createQuery(hql).list();
-		session().disconnect();
+		List<Inventory> searchList = session.createQuery(hql).list();
+		session.disconnect();;
 
 		return searchList;
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<Inventory> listProducts() {
-		Criteria crit = session().createCriteria(Inventory.class);
+		Session session = session();
+		Criteria crit = session.createCriteria(Inventory.class);
 		List<Inventory> inv = crit.list();
-		session().disconnect();
+		session.disconnect();;
 
 		return inv;
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<Inventory> listProducts(String category) {
-		Criteria crit = session().createCriteria(Inventory.class);
+		Session session = session();
+		Criteria crit = session.createCriteria(Inventory.class);
 		crit.add(Restrictions.eq("category", category));
 		List<Inventory> inv = crit.list();
-		session().disconnect();
+		session.disconnect();;
 
 		return inv;
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<Inventory> listProducts(String category, String subCategory) {
-		Criteria crit = session().createCriteria(Inventory.class);
+		Session session = session();
+		Criteria crit = session.createCriteria(Inventory.class);
 		crit.add(Restrictions.eq("category", category));
 		crit.add(Restrictions.eq("subcategory", subCategory));
 		List<Inventory> inv = crit.list();
-
+		session.disconnect();;
+		
 		return inv;
 	}
 	@SuppressWarnings("unchecked")
 	public List<Inventory> listAllProducts() {
 		Session session = session();
-		return session.createCriteria(Inventory.class).list();
+		List<Inventory> invList = session.createCriteria(Inventory.class).list();
+		session.disconnect();
+		
+		return invList;
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<Inventory> getCategory() {
+		Session session = session();
 		String hql = "select DISTINCT category, sku_num, product_name, subcategory, amt_in_stock, amt_committed,"
 				+ " min_quantity, sale_price, discount_price, tax_amt, weight, on_sale, image, description FROM Inventory GROUP BY category";
-		List<Inventory> cat = session().createQuery(hql).list();
+		List<Inventory> cat = session.createQuery(hql).list();
+		session.disconnect();
+		
 		return cat;
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<Inventory> getSubCategory(String category) {
+		Session session = session();
 		String hql = "select DISTINCT subcategory, sku_num, product_name, category, amt_in_stock, amt_committed,"
 				+ " min_quantity, sale_price, discount_price, tax_amt, weight, on_sale, image, description"
 				+ "  FROM Inventory where category = :category GROUP BY subcategory";
 
-		List<Inventory> subCat = session().createQuery(hql).setString("category", category).list();
+		List<Inventory> subCat = session.createQuery(hql).setString("category", category).list();
+		session.disconnect();
+		
 		return subCat;
 	}
 
@@ -140,12 +159,15 @@ public class InventoryDao implements IInventory {
 									.setString("sku_num", item.getSku_num()).executeUpdate();
 		}
 		tx.commit();
+		session.disconnect();
 	}
 	@SuppressWarnings("unchecked")
 	public List<Inventory> getReplenishList() {
+		Session session = session();
 		String hql = "from Inventory where amt_in_stock < min_quantity";
-		List<Inventory> inv = session().createQuery(hql).list();
+		List<Inventory> inv = session.createQuery(hql).list();
 
+		session.disconnect();
 		return inv;
 	}
 

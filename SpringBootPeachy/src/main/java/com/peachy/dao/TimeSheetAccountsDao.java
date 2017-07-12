@@ -31,17 +31,24 @@ public class TimeSheetAccountsDao implements ITimeSheetAccounts {
 		Transaction tx = session.beginTransaction();
 		session.save(timeSheetAccounts);
 		tx.commit();
+		session.disconnect();
 	}
 
 	@Override
 	public TimeSheetAccounts retrieve(int entry_id) {
 		Session session = session();
-		return (TimeSheetAccounts) session.createCriteria(TimeSheetAccounts.class).add(Restrictions.idEq(entry_id)).uniqueResult();
+		TimeSheetAccounts tsa = (TimeSheetAccounts) session.createCriteria(TimeSheetAccounts.class).add(Restrictions.idEq(entry_id)).uniqueResult();
+		session.disconnect();
+
+		return tsa;
 	}
 	
 	public TimeSheetAccounts retrieve(String accountNum) {
 		Session session = session();
-		return (TimeSheetAccounts) session.createCriteria(TimeSheetAccounts.class).add(Restrictions.eq("AccountNum", accountNum)).uniqueResult();
+		TimeSheetAccounts tsa = (TimeSheetAccounts) session.createCriteria(TimeSheetAccounts.class).add(Restrictions.eq("AccountNum", accountNum)).uniqueResult();
+		session.disconnect();
+
+		return tsa;
 	}
 	
 
@@ -51,6 +58,7 @@ public class TimeSheetAccountsDao implements ITimeSheetAccounts {
 		Transaction tx = session.beginTransaction();
 		session.update(timeSheetAccounts);
 		tx.commit();
+		session.disconnect();
 	}
 
 	@Override
@@ -60,13 +68,17 @@ public class TimeSheetAccountsDao implements ITimeSheetAccounts {
 		Transaction tx = session.beginTransaction();
 		session.createQuery(hql).setString("AccountNum", timeSheetAccounts.getAccountNum()).executeUpdate();
 		tx.commit();
-	}
+		session.disconnect();
+}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<TimeSheetAccounts> retrieveRawList() {
 		Session session = session();
-		return session.createCriteria(TimeSheetAccounts.class).list();
+		List<TimeSheetAccounts> tsaList = session.createCriteria(TimeSheetAccounts.class).list();
+		session.disconnect();
+
+		return tsaList;
 	}
 
 }

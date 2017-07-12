@@ -32,6 +32,7 @@ public class TimeSheetDao implements ITimeSheet {
 		Transaction tx = session.beginTransaction();
 		session.save(timesheet);
 		tx.commit();
+		session.disconnect();
 		
 		return true;
 	}
@@ -39,23 +40,30 @@ public class TimeSheetDao implements ITimeSheet {
 	@Override
 	public TimeSheet retrieve(int entry_id) {
 		Session session = session();
-		return (TimeSheet) session.createCriteria(TimeSheet.class).add(Restrictions.idEq(entry_id)).uniqueResult();
+		TimeSheet ts = (TimeSheet) session.createCriteria(TimeSheet.class).add(Restrictions.idEq(entry_id)).uniqueResult();
+		
+		return ts;
 	}
 	
 	public TimeSheet retrieve(int userId, Date startPeriod, String accountNum) {
+		Session session = session();
 		String hql = "FROM TimeSheet WHERE user_id = :userId AND startPeriod = :startPeriod AND accountNum = :accountNum";
-		TimeSheet timeSheet = (TimeSheet) session().createQuery(hql).setInteger("userId", userId)
+		TimeSheet timeSheet = (TimeSheet) session.createQuery(hql).setInteger("userId", userId)
 												   .setDate("startPeriod", startPeriod)
 												   .setString("accountNum", accountNum)
 												   .uniqueResult();
+		session.disconnect();
 
 		return timeSheet;
 	}
 	
 	public boolean exits(int userId, Date startPeriod, String accountNum) {
+		Session session = session();
 		String hql = "SELECT COUNT(*) FROM TimeSheet WHERE user_id = :userId AND startPeriod = :startPeriod AND accountNum = :accountNum";
-		long count = (long) session().createQuery(hql).setInteger("userId", userId)
-				.setDate("startPeriod", startPeriod).setString("accountNum", accountNum).uniqueResult();
+		long count = (long) session.createQuery(hql).setInteger("userId", userId)
+													.setDate("startPeriod", startPeriod).setString("accountNum", accountNum).uniqueResult();
+
+		session.disconnect();
 
 		return (count > 0);
 	}
@@ -66,6 +74,7 @@ public class TimeSheetDao implements ITimeSheet {
 		Transaction tx = session.beginTransaction();
 		session.update(timesheet);
 		tx.commit();
+		session.disconnect();
 	}
 
 	@Override
@@ -74,6 +83,7 @@ public class TimeSheetDao implements ITimeSheet {
 		Transaction tx = session.beginTransaction();
 		session.delete(timesheet);
 		tx.commit();
+		session.disconnect();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -84,6 +94,7 @@ public class TimeSheetDao implements ITimeSheet {
 		List<TimeSheet> timeSheets = session.createQuery(hql)
 											  .setInteger("userId", userId)
 											  .setDate("startPeriod", startPeriod).list();
+		session.disconnect();
 
 		return timeSheets;
 	}
@@ -93,8 +104,9 @@ public class TimeSheetDao implements ITimeSheet {
 		String hql = "FROM TimeSheet WHERE user_id = :userId AND startPeriod = :startPeriod AND closed != null";
 		@SuppressWarnings("unchecked")
 		List<TimeSheet> timeSheets = session.createQuery(hql).setInteger("userId", userId)
-				.setDate("startPeriod", startPeriod).list();
-		
+											.setDate("startPeriod", startPeriod).list();
+		session.disconnect();
+
 		return timeSheets;
 	}
 	
@@ -102,9 +114,9 @@ public class TimeSheetDao implements ITimeSheet {
 	public List<String> getPayrollPeriods() {
 		Session session = session();
 		String sql = "SELECT distinct(DATE_FORMAT(start_period,'%Y-%m-%d')) FROM time_sheet WHERE approved IS NOT null and closed IS null";
-		
 		List<String> periods = session.createSQLQuery(sql).list();
-		
+		session.disconnect();
+
 		return periods;
 	}
 
@@ -112,9 +124,9 @@ public class TimeSheetDao implements ITimeSheet {
 	public List<TimeSheet> getApprovedTimeSheets(int userId, Date startPeriod) {
 		Session session = session();
 		String hql = "FROM TimeSheet WHERE user_id = :userId AND startPeriod = :startPeriod AND approved != null AND closed = null";
-
 		List<TimeSheet> timeSheets = session.createQuery(hql).setInteger("userId", userId)
-				.setDate("startPeriod", startPeriod).list();
+											.setDate("startPeriod", startPeriod).list();
+		session.disconnect();
 
 		return timeSheets;
 	}
@@ -122,11 +134,10 @@ public class TimeSheetDao implements ITimeSheet {
 	public List<TimeSheet> getSubmittedTimeSheet(int userId, Date startPeriod) {
 		Session session = session();
 		String hql = "FROM TimeSheet WHERE user_id = :userId AND startPeriod = :startPeriod AND submitted != null AND approved = null";
-		
-
 		@SuppressWarnings("unchecked")
 		List<TimeSheet> timeSheets = session.createQuery(hql).setInteger("userId", userId)
-				.setDate("startPeriod", startPeriod).list();
+											.setDate("startPeriod", startPeriod).list();
+		session.disconnect();
 
 		return timeSheets;
 	}
@@ -137,6 +148,7 @@ public class TimeSheetDao implements ITimeSheet {
 		Transaction tx = session.beginTransaction();
 		session.createQuery(hql).setInteger("userId", userId).setDate("startPeriod", startPeriod).executeUpdate();
 		tx.commit();
+		session.disconnect();
 	}
 
 	public void approveTimeSheet(int userId, Date startPeriod) {
@@ -145,7 +157,7 @@ public class TimeSheetDao implements ITimeSheet {
 		Transaction tx = session.beginTransaction();
 		session().createQuery(hql).setInteger("userId", userId).setDate("startPeriod", startPeriod).executeUpdate();
 		tx.commit();
-
+		session.disconnect();
 	}
 
 	public void submit(int userId, Date startPeriod) {
@@ -154,6 +166,7 @@ public class TimeSheetDao implements ITimeSheet {
 		Transaction tx = session.beginTransaction();
 		session().createQuery(hql).setInteger("userId", userId).setDate("startPeriod", startPeriod).executeUpdate();
 		tx.commit();
+		session.disconnect();
 	}
 
 	public double totalHours(int userId, Date startPeriod) {
@@ -161,6 +174,7 @@ public class TimeSheetDao implements ITimeSheet {
 		String hql = "SELECT (SUM(sunday)+SUM(monday)+SUM(tuesday)+SUM(wednesday)+SUM(thursday)+SUM(friday)+SUM(saturday)) " + 
 					 "FROM TimeSheet WHERE userId = :userId AND startPeriod = :startPeriod";
 		double hours = (double) session.createQuery(hql).setInteger("userId", userId).setDate("startPeriod", startPeriod).uniqueResult();
+		session.disconnect();
 		
 		return hours;
 	}
@@ -169,7 +183,8 @@ public class TimeSheetDao implements ITimeSheet {
 		Session session = session();
 		String hql = "SELECT COUNT(*) FROM TimeSheet WHERE userId = :userId AND startPeriod = :startPeriod";
 		long count = (long) session.createQuery(hql).setInteger("userId", user_id).setDate("startPeriod", startPeriod).uniqueResult();
-		
+		session.disconnect();
+	
 		return (count > 0);
 	}
 
