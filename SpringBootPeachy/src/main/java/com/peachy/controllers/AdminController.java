@@ -215,7 +215,15 @@ public class AdminController implements Serializable {
 		
 		return "vendoradmin";
 	}
-
+	
+	@RequestMapping("/admin/shutdown")
+	public String shutdown() {
+		
+		System.exit(0);
+		
+		return "";
+	}
+	
 	/*********************************************************************************************************************
 	 * Pageination Handlers
 	 * 
@@ -258,7 +266,7 @@ public class AdminController implements Serializable {
 			return -1;
 		} catch (NullPointerException e) {
 			return -1;
-		}
+		}		
 		// only got here if we didn't return false
 		return retInt;
 	}

@@ -53,6 +53,7 @@
 							<a href="/vendor/admin" >Ship Product</a>
 							<sec:hasRole role="ADMIN">
 								<a href="/admin/users">User Profiles</a>
+								<a href="/admin/shutdown">Shutdown</a>
 							</sec:hasRole>
 							<a href="/vendor/surveylist">View Surveys</a>
 							<a href="/vendor/manageinventory">Inventory...</a>
