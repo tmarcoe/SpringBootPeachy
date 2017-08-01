@@ -182,6 +182,12 @@
 	</div>
 
 	<tiles:insertAttribute name="footer" />
-
+<script>
+	function shutdown() {
+		if (confirm("This will shutdown the entire system. Do you wish to proceed?") == true) {
+			window.location.href = "/admin/shutdown";
+		}
+	}
+</script>
 </body>
 </html>
