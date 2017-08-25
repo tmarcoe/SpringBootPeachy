@@ -1,15 +1,19 @@
 package com.peachy.controllers;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URL;
+import java.nio.channels.FileChannel;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Properties;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.beans.support.PagedListHolder;
@@ -27,7 +31,8 @@ import com.peachy.service.FetalScriptsService;
 
 @Controller
 public class FetalController {
-
+	private static Logger logger = Logger.getLogger(ErrorHandler.class.getName());
+	
 	@Autowired
 	private FetalConfigurator fc;
 
@@ -69,8 +74,6 @@ public class FetalController {
 		Properties props = new Properties();
 		props.load(reader);
 		FetalScripts fetal = fetalScriptsService.retrieve(id);
-		File moveFile = new File(props.getProperty("quarantinePath") + fetal.getFile_name());
-
 		switch (fetal.getType()) {
 		case "RULE":
 			destination = props.getProperty("transPath");
@@ -85,10 +88,16 @@ public class FetalController {
 			destination = props.getProperty("transPath");
 			break;
 		}
-		moveFile.renameTo(new File(destination + fetal.getFile_name()));
-
-		fetal.setStatus("PRODUCTION");
-		fetalScriptsService.update(fetal);
+		try {
+			File src = new File(props.getProperty("quarantinePath") + fetal.getFile_name());
+			File dst = new File(destination + fetal.getFile_name());
+			moveFile(src, dst);
+			fetal.setStatus("PRODUCTION");
+			fetalScriptsService.update(fetal);
+		}catch (IOException e) {
+			logger.error(String.format("Failed to move '%s' from '%s' to '%s' Reason: %s\n", 
+					fetal.getFile_name(), props.getProperty("quarantinePath"), destination, e.getMessage()));
+		}
 
 		return "redirect:/vendor/fetallist";
 	}
@@ -178,6 +187,37 @@ public class FetalController {
 		}
 		// only got here if we didn't return false
 		return retInt;
+	}
+	@SuppressWarnings("resource")
+	private void copyFile(File sourceFile, File destFile) throws IOException {
+	    if(!destFile.exists()) {
+	        destFile.createNewFile();
+	    }
+
+	    FileChannel source = null;
+	    FileChannel destination = null;
+	    try {
+	        source = new FileInputStream(sourceFile).getChannel();
+	        destination = new FileOutputStream(destFile).getChannel();
+
+	        // previous code: destination.transferFrom(source, 0, source.size());
+	        // to avoid infinite loops, should be:
+	        long count = 0;
+	        long size = source.size();              
+	        while((count += destination.transferFrom(source, count, size-count))<size);
+	    }
+	    finally {
+	        if(source != null) {
+	            source.close();
+	        }
+	        if(destination != null) {
+	            destination.close();
+	        }
+	    }
+	}
+	private void moveFile(File sourceFile, File destFile) throws IOException {
+		copyFile(sourceFile, destFile);
+		sourceFile.delete();
 	}
 
 }

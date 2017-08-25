@@ -4,17 +4,16 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import org.antlr.v4.runtime.RecognitionException;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.ftl.helper.FetalTransaction;
-import com.ftl.helper.SalesItem;
 import com.ftl.helper.VariableType;
-import com.peachy.component.FetalConfigurator;
-import com.peachy.component.FilePath;
 import com.peachy.component.PayStubReportSettings;
 import com.peachy.dao.FetalTransactionDao;
 import com.peachy.entity.Coupons;
@@ -27,6 +26,7 @@ import com.peachy.entity.PettyCashRegister;
 import com.peachy.entity.PurchaseOrder;
 import com.peachy.entity.UserProfile;
 import com.peachy.helper.Order;
+import com.peachy.helper.Receipt;
 import com.peachy.reports.CreatePayStub;
 
 @Service
@@ -47,43 +47,46 @@ public class FetalTransactionService extends FetalTransaction {
 	private InvoiceItemService invoiceItemService;
 
 	@Autowired
-	InventoryService inventoryService;
+	private InventoryService inventoryService;
 
 	@Autowired
-	EmployeeService employeeService;
+	private EmployeeService employeeService;
 
 	@Autowired
-	TimeSheetService timeSheetService;
+	private TimeSheetService timeSheetService;
 
 	@Autowired
-	PurchaseOrderService purchaseOrderService;
+	private PurchaseOrderService purchaseOrderService;
 
 	@Autowired
-	PaymentRegisterService paymentRegisterService;
+	private PaymentRegisterService paymentRegisterService;
 
-	@Autowired
-	private FetalConfigurator fc;
 
-	@Autowired
-	FilePath fp;
-
+	@Value("${fetal.properiesFile}")
+	private String filePath;
+	
+	@Value("${filePath.payStubPath}")
+	private String payStubPath;
+	
 	public void processPettyCash(PettyCashRegister pettyCash) throws IOException {
-		initTransaction(fp.getConfig() + "fetal.properties");
+		initTransaction(filePath);
 
-		addVariable("transactionAmount", VariableType.DOUBLE, pettyCash.getAmount());
+		publish("transactionAmount", VariableType.DECIMAL, pettyCash.getAmount());
 		setDescription("Petty Cash: " + pettyCash.getReason());
 		loadRule("pettycash.trans");
+		closeFetal();
 	}
 
 	public void processAdjustment(double adjAmount) throws IOException {
-		initTransaction(fp.getConfig() + "fetal.properties");
-		addVariable("adjustment", VariableType.DOUBLE, adjAmount);
+		initTransaction(filePath);
+		publish("adjustment", VariableType.DECIMAL, adjAmount);
 		setDescription("Petty Cash Adjustment");
 		loadRule("adjustment.trans");
+		closeFetal();
 	}
 
 	public void purchaseInventory(Order order) throws RecognitionException, IOException, RuntimeException {
-		initTransaction(fc.getProperiesFile());
+		initTransaction(filePath);
 
 		PurchaseOrder purchaseOrder = new PurchaseOrder();
 		purchaseOrder.setPrice(order.getPrice());
@@ -94,20 +97,19 @@ public class FetalTransactionService extends FetalTransaction {
 		purchaseOrder.setPurchaseDate(new Date());
 		purchaseOrderService.create(purchaseOrder);
 
-		setAmount(order.getPrice());
-		setTax(order.getTax());
 		setDescription("Purchase of inventory (SKU #" + order.getInventory().getSku_num() + ")");
+		Inventory inventory = order.getInventory();
+		publish("order", VariableType.OBJECT, order);
 		loadRule("inventory.trans");
 
-		Inventory inventory = order.getInventory();
 		inventory.setAmt_in_stock(inventory.getAmt_in_stock() + order.getAmount());
 		inventoryService.update(inventory);
-
+		closeFetal();
 	}
 
 	public void processPayroll(List<UserProfile> employees, Date startPeriod)
 			throws RecognitionException, IOException, RuntimeException {
-		initTransaction(fp.getConfig() + "fetal.properties");
+		initTransaction(filePath);
 
 		double ttGrossWage = 0.0;
 		double ttlFederalTax = 0.0;
@@ -126,7 +128,7 @@ public class FetalTransactionService extends FetalTransaction {
 				double hoursWorked = timeSheetService.totalHours(user.getUser_id(), startPeriod);
 				if (hoursWorked == 0)
 					continue;
-				addVariable("hoursWorked", VariableType.DOUBLE, hoursWorked);
+				publish("hoursWorked", VariableType.DECIMAL, hoursWorked);
 				double hourlyRate = employee.getHourlyRate();
 				if (employee.isSalary() == true) {
 					grossWage = hourlyRate * 40;
@@ -134,30 +136,10 @@ public class FetalTransactionService extends FetalTransaction {
 					grossWage = hourlyRate * hoursWorked;
 				}
 				String employeeName = user.getFirstname() + " " + user.getLastname();
-				addVariable("employeeName", VariableType.STRING, employeeName);
-				addVariable("grossWage", VariableType.DOUBLE, grossWage);
+				publish("employeeName", VariableType.STRING, employeeName);
+				publish("grossWage", VariableType.DECIMAL, grossWage);
 
-				addVariable("fTaxPrcnt", VariableType.DOUBLE, (employee.getfTaxPrcnt() / 100));
-				addVariable("sTaxPrcnt", VariableType.DOUBLE, (employee.getsTaxPrcnt() / 100));
-				addVariable("fUnPrcnt", VariableType.DOUBLE, (employee.getfUnPrcnt() / 100));
-				addVariable("sUnPrcnt", VariableType.DOUBLE, (employee.getsUnPrcnt() / 100));
-				addVariable("medPrcnt", VariableType.DOUBLE, (employee.getMedPrcnt() / 100));
-				addVariable("ssiPrcnt", VariableType.DOUBLE, (employee.getSsiPrcnt() / 100));
-				addVariable("retirePrcnt", VariableType.DOUBLE, (employee.getRetirePrcnt() / 100));
-				addVariable("garnishment", VariableType.DOUBLE, employee.getGarnishment());
-				addVariable("other", VariableType.DOUBLE, employee.getOther());
-
-				addVariable("fTaxYtd", VariableType.DOUBLE, employee.getfTaxYtd());
-				addVariable("sTaxYtd", VariableType.DOUBLE, employee.getsTaxYtd());
-				addVariable("fUnYtd", VariableType.DOUBLE, employee.getfUnYtd());
-				addVariable("sUnYtd", VariableType.DOUBLE, employee.getsUnYtd());
-				addVariable("medYtd", VariableType.DOUBLE, employee.getMedYtd());
-				addVariable("ssiYtd", VariableType.DOUBLE, employee.getSsiYtd());
-				addVariable("retireYtd", VariableType.DOUBLE, employee.getRetireYtd());
-				addVariable("garnishmentYtd", VariableType.DOUBLE, employee.getGarnishmentYtd());
-				addVariable("otherYtd", VariableType.DOUBLE, employee.getOtherYtd());
-				addVariable("wagesYtd", VariableType.DOUBLE, employee.getWagesYtd());
-
+				publish("employee", VariableType.DAO, employee);
 				loadRule("payment.trans");
 
 				PaymentRegister paymentRegister = new PaymentRegister();
@@ -192,20 +174,8 @@ public class FetalTransactionService extends FetalTransaction {
 				ttlOther += paymentRegister.getOther();
 				CreatePayStub payStub = new CreatePayStub(pStub);
 				SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
-				String filePath = fp.getPayStubPath();
-				String fileName = String.format("%s%s-%08d.pdf", filePath, df.format(startPeriod), user.getUser_id());
+				String fileName = String.format("%s%s-%08d.pdf", payStubPath, df.format(startPeriod), user.getUser_id());
 				paymentRegisterService.create(paymentRegister);
-
-				employee.setfTaxYtd((double) getValue("fTaxYtd"));
-				employee.setsTaxYtd((double) getValue("sTaxYtd"));
-				employee.setfUnYtd((double) getValue("fUnYtd"));
-				employee.setsUnYtd((double) getValue("sUnYtd"));
-				employee.setMedYtd((double) getValue("medYtd"));
-				employee.setSsiYtd((double) getValue("ssiYtd"));
-				employee.setRetireYtd((double) getValue("retireYtd"));
-				employee.setGarnishmentYtd((double) getValue("garnishmentYtd"));
-				employee.setOtherYtd((double) getValue("otherYtd"));
-				employee.setWagesYtd((double) getValue("wagesYtd"));
 
 				employeeService.update(employee);
 
@@ -215,46 +185,56 @@ public class FetalTransactionService extends FetalTransaction {
 
 				timeSheetService.closeTimeSheet(employee.getUser_id(), paymentRegister.getStartPeriod());
 			}
+			closeFetal();
 		}
 
 		clearVariables();
-		addVariable("startingPeriod", VariableType.DATE, startPeriod);
-		addVariable("ttGrossWage", VariableType.DOUBLE, ttGrossWage);
-		addVariable("ttlFederalTax", VariableType.DOUBLE, ttlFederalTax);
-		addVariable("ttlStateTax", VariableType.DOUBLE, ttlStateTax);
-		addVariable("ttlFederalUnemployment", VariableType.DOUBLE, ttlFederalUnemployment);
-		addVariable("ttlStateUmemployment", VariableType.DOUBLE, ttlStateUmemployment);
-		addVariable("ttlMedical", VariableType.DOUBLE, ttlMedical);
-		addVariable("ttlSsInsurance", VariableType.DOUBLE, ttlSsInsurance);
-		addVariable("ttlRetirement", VariableType.DOUBLE, ttlRetirement);
-		addVariable("ttlGarnishments", VariableType.DOUBLE, ttlGarnishments);
-		addVariable("ttlOther", VariableType.DOUBLE, ttlOther);
+		publish("startingPeriod", VariableType.DATE, startPeriod);
+		publish("ttGrossWage", VariableType.DECIMAL, ttGrossWage);
+		publish("ttlFederalTax", VariableType.DECIMAL, ttlFederalTax);
+		publish("ttlStateTax", VariableType.DECIMAL, ttlStateTax);
+		publish("ttlFederalUnemployment", VariableType.DECIMAL, ttlFederalUnemployment);
+		publish("ttlStateUmemployment", VariableType.DECIMAL, ttlStateUmemployment);
+		publish("ttlMedical", VariableType.DECIMAL, ttlMedical);
+		publish("ttlSsInsurance", VariableType.DECIMAL, ttlSsInsurance);
+		publish("ttlRetirement", VariableType.DECIMAL, ttlRetirement);
+		publish("ttlGarnishments", VariableType.DECIMAL, ttlGarnishments);
+		publish("ttlOther", VariableType.DECIMAL, ttlOther);
 
 		loadRule("payroll.trans");
+		closeFetal();
 	}
 
-	public void processSales(Invoice header) throws IOException, RuntimeException {
-		initTransaction(fc.getProperiesFile());
-		header.setProcessed(new Date());
-
+	public void processSales(Invoice invoice) throws IOException, RuntimeException {
+		initTransaction(filePath);
+		invoice.setProcessed(new Date());
+		Receipt receipt = new Receipt();
+		publish("receipt", VariableType.OBJECT, receipt);
+		publish("invoice", VariableType.DAO, invoice);
 		setDescription("Internet Sales");
-		loadSalesReceipt(header.getInvoice_num());
+
 		loadRule("purchase.trans");
-		invoiceService.merge(header);
+		invoiceService.merge(invoice);
+		commitReceipt(invoice.getItems());
+		closeFetal();
 	}
 
 	public void processShipping (Invoice invoice) throws IOException {
-		initTransaction(fc.getProperiesFile());
-		loadSalesReceipt(invoice.getInvoice_num());
+		initTransaction(filePath);
 
 		loadRule("aftershipping.trans");
+		depleteReceipt(invoice.getItems());
+		closeFetal();
 	}
 	
 	public void useCoupon(Invoice invoice, Coupons coupon) throws IOException {
 		final String couponValue = "couponValue";
-		initTransaction(fc.getProperiesFile());
-		loadSalesReceipt(invoice.getInvoice_num());
-		addVariable(couponValue, VariableType.DOUBLE, 0);
+		initTransaction(filePath);
+		
+		publish(couponValue, VariableType.DECIMAL, 0);
+		Receipt receipt = new Receipt();
+		receipt.setInvList(invoice.getItems());
+		publish("receipt", VariableType.OBJECT, receipt);
 		loadCoupon(coupon.getRuleName());
 
 		if ((double) getValue(couponValue) < 0.0) {
@@ -266,40 +246,38 @@ public class FetalTransactionService extends FetalTransaction {
 			item.setSku_num(coupon.getCoupon_id());
 			invoiceItemService.addItem(item);
 		}
-
-	}
-
-	public void loadSalesReceipt(int key) {
-		List<InvoiceItem> items = invoiceItemService.getLineItems(key);
-		Invoice invoice = invoiceService.retrieve(key);
-		clearSalesItems();
-		for (InvoiceItem invItem : items) {
-			if (invItem.getSku_num() != null) {
-				SalesItem item = new SalesItem();
-				item.setPrice(invItem.getPrice());
-				item.setTax(invItem.getTax());
-				item.setQty(invItem.getAmount());
-				addSalesItem(invItem.getSku_num(), item);
-			}
-		}
-		setAddedCharges(invoice.getAdded_charges());
-		setShipCharges(invoice.getShipping_cost());
-		invoice.setTotal(getAmount());
-		invoice.setTotal_tax(getTax());
-
+		closeFetal();
 	}
 
 	public double calculateShippingCharges() {
 		try {
-			initTransaction(fc.getProperiesFile());
+			initTransaction(filePath);
 			loadRule("shipping.trans");
 		} catch (IOException | RuntimeException e) {
 			return 0;
 		}
-
-		return (double) getValue("shipCharges");
+		Double shipCharges = (double) getValue("shipCharges");
+		
+		closeFetal();
+		return shipCharges;
 	}
-
+	
+	public void depleteReceipt(Set<InvoiceItem> invoiceItems) {
+		for (InvoiceItem item : invoiceItems) {
+			transDao.depleteStock(item.getSku_num(), item.getAmount(), session);
+		}
+	}
+	
+	public void commitReceipt(Set<InvoiceItem> invoiceItems) {		
+		for (InvoiceItem item : invoiceItems) {
+			transDao.commitStock(item.getSku_num(), item.getAmount(), session);
+		}
+	}
+	
+	public void addStock(String sku, Long amout) {
+		transDao.addStock(sku, amout, session);
+	}
+	
 	/******************************************************
 	 * Overridden methods
 	 ******************************************************/
@@ -338,38 +316,20 @@ public class FetalTransactionService extends FetalTransaction {
 		return transDao.getBalance(account, session);
 	}
 
+
 	@Override
-	public void addStock(String sku, Long qty) {
-		transDao.addStock(sku, qty, session);
+	public void rollback() {
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
-	public void depleteStock(String sku, Long qty) {
-		if (sku != null && sku.startsWith("CPN") == false) {
-			transDao.depleteStock(sku, qty, session);
-		}
+	public Object lookup(String table, String sql) {
+		return transDao.lookup(table, sql);
 	}
 
 	@Override
-	public void commitStock(String sku, Long qty) {
-
-		if (sku != null && sku.startsWith("CPN") == false) {
-			transDao.commitStock(sku, qty, session);
-		}
-	}
-
-	@Override
-	public double getRate(String Target) {
-		return transDao.getRate(Target);
-	}
-
-	@Override
-	public String getBaseCurrency() {
-		return transDao.getBaseCurrency();
-	}
-
-	@Override
-	public Date lastRefreshDate() {
+	public List<Object> list(String table, String sql) {
 		return null;
 	}
 

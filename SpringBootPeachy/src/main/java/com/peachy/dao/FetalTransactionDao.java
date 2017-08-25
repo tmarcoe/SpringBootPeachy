@@ -106,23 +106,38 @@ public class FetalTransactionDao {
 	}
 
 	public void addStock(String sku, Long qty, Session session) {
+		Session localSession = session();
+		Transaction tx = localSession.beginTransaction();
 		Inventory inv = retrieveInventory(sku, session);
 		inv.setAmt_in_stock(inv.getAmt_in_stock() + Integer.valueOf(String.valueOf(qty)));
 		session.update(inv);
+		tx.commit();
+		localSession.disconnect();
+		
 	}
 
 	public void depleteStock(String sku, Long qty, Session session) {
-		Inventory inv = retrieveInventory(sku, session);
-		inv.setAmt_committed(inv.getAmt_committed() - Integer.valueOf(String.valueOf(qty)));
-		session.update(inv);
+		if (sku.startsWith("CPN") == false) {
+			Session localSession = session();
+			Integer amount = Integer.valueOf(String.valueOf(qty));
+			String hql = "Update Inventory SET amt_committed = (amt_committed - :amount) WHERE sku_num = :sku";
+			Transaction tx = localSession.beginTransaction();
+			localSession.createQuery(hql).setInteger("amount", amount).setString("sku", sku).executeUpdate();
+			tx.commit();
+			localSession.disconnect();
+		}
 	}
 
 	public void commitStock(String sku, Long qty, Session session) {
+		Session localSession = session();
+		Transaction tx = localSession.beginTransaction();
 		Integer amount = Integer.valueOf(String.valueOf(qty));
 		if (sku.startsWith("CPN") == false) {
 			String hql = "UPDATE Inventory SET amt_in_stock = (amt_in_stock - :amount), amt_committed = (amt_committed + :amount) WHERE sku_num = :sku";
 			session.createQuery(hql).setInteger("amount", amount).setString("sku", sku).executeUpdate();
 		}
+		tx.commit();
+		localSession.disconnect();
 	}
 
 	public double getRate(String Target) {
@@ -156,6 +171,15 @@ public class FetalTransactionDao {
 
 	private Inventory retrieveInventory(String sku, Session session) {
 		return (Inventory) session.createCriteria(Inventory.class).add(Restrictions.idEq(sku)).uniqueResult();
+	}
+
+	public Object lookup(String table, String sql) {
+		Session session = session();
+		Object obj = session.createQuery(sql).uniqueResult();
+		
+		session.disconnect();
+		
+		return obj;
 	}
 
 }
