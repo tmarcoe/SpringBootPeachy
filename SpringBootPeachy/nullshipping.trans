@@ -1,4 +1,0 @@
-begin
-  	// Shipping costs
-	decimal shipCharges = 250.00;
-end

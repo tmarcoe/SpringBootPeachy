@@ -91,9 +91,10 @@ public class FetalController {
 		try {
 			File src = new File(props.getProperty("quarantinePath") + fetal.getFile_name());
 			File dst = new File(destination + fetal.getFile_name());
-			moveFile(src, dst);
-			fetal.setStatus("PRODUCTION");
-			fetalScriptsService.update(fetal);
+			if (moveFile(src, dst) ) {
+				fetal.setStatus("PRODUCTION");
+				fetalScriptsService.update(fetal);
+			}
 		}catch (IOException e) {
 			logger.error(String.format("Failed to move '%s' from '%s' to '%s' Reason: %s\n", 
 					fetal.getFile_name(), props.getProperty("quarantinePath"), destination, e.getMessage()));
@@ -215,9 +216,14 @@ public class FetalController {
 	        }
 	    }
 	}
-	private void moveFile(File sourceFile, File destFile) throws IOException {
+	private boolean moveFile(File sourceFile, File destFile) throws IOException {
 		copyFile(sourceFile, destFile);
-		sourceFile.delete();
+		if (!sourceFile.delete()) {
+			logger.error("'" + sourceFile.getName() + "' Failed to delete.");
+			return false;
+		}else{
+			return true;
+		}
 	}
 
 }
