@@ -173,13 +173,24 @@ public class FetalTransactionDao {
 		return (Inventory) session.createCriteria(Inventory.class).add(Restrictions.idEq(sku)).uniqueResult();
 	}
 
-	public Object lookup(String table, String sql) {
+	public Object lookup(String sql) {
 		Session session = session();
 		Object obj = session.createQuery(sql).uniqueResult();
 		
 		session.disconnect();
 		
 		return obj;
+	}
+
+	public void update(String sqlWithArgs) {
+		Session session = session();
+		Transaction tx = session.beginTransaction();
+		session.createQuery(sqlWithArgs).executeUpdate();
+		tx.commit();
+	}
+
+	public void rollback(Session session) {
+		session.getTransaction().rollback();
 	}
 
 }

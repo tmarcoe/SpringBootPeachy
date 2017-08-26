@@ -319,18 +319,26 @@ public class FetalTransactionService extends FetalTransaction {
 
 	@Override
 	public void rollback() {
-		// TODO Auto-generated method stub
+		transDao.rollback(session);
 		
 	}
 
 	@Override
-	public Object lookup(String table, String sql) {
-		return transDao.lookup(table, sql);
+	public Object lookup(String sql,  Object...args) {
+		String sqlWithArgs = String.format(sql, args);
+		
+		return transDao.lookup(sqlWithArgs);
 	}
 
 	@Override
-	public List<Object> list(String table, String sql) {
+	public List<Object> list(String sql, Object...args) {
 		return null;
+	}
+
+	@Override
+	public void update(String sql, Object... args) {
+		String sqlWithArgs = String.format(sql, args);
+		transDao.update(sqlWithArgs);
 	}
 
 }
