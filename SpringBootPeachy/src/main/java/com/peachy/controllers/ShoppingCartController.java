@@ -96,7 +96,7 @@ public class ShoppingCartController implements Serializable {
 		if (header.getProcessed() == null) {
 			invoiceService.purgeCoupons(invoiceNum);
 		}
-		header.setShipping_cost(transactionService.calculateShippingCharges());
+		header.setShipping_cost(transactionService.calculateShippingCharges(header));
 		header = invoiceService.totalInvoice(header);
 		invoiceService.merge(header);
 
@@ -146,7 +146,7 @@ public class ShoppingCartController implements Serializable {
 			invoiceService.purgeCoupons(header.getInvoice_num());
 		}
 
-		header.setShipping_cost(transactionService.calculateShippingCharges());
+		header.setShipping_cost(transactionService.calculateShippingCharges(header));
 		header = invoiceService.totalInvoice(header);
 		invoiceService.merge(header);
 		
@@ -268,7 +268,7 @@ public class ShoppingCartController implements Serializable {
 		if (header.getProcessed() == null) {
 			invoiceService.purgeCoupons(invoiceNum);
 		}
-		header.setShipping_cost(transactionService.calculateShippingCharges());
+		header.setShipping_cost(transactionService.calculateShippingCharges(header));
 		header = invoiceService.totalInvoice(header);
 		
 		String errorMsg = "";

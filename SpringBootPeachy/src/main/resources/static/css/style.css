@@ -1012,3 +1012,7 @@ table.leftJustify th{
 	text-align: center;
 	padding: 1em;
 }
+#lowerImage {
+	padding-right: 5em;
+	padding-top: 4em;
+}

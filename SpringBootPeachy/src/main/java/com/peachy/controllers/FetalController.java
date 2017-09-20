@@ -81,9 +81,6 @@ public class FetalController {
 		case "COUPON":
 			destination = props.getProperty("couponPath");
 			break;
-		case "BLOCK":
-			destination = props.getProperty("blockPath");
-			break;
 		default:
 			destination = props.getProperty("transPath");
 			break;

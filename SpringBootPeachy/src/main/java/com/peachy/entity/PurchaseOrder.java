@@ -15,7 +15,7 @@ public class PurchaseOrder  implements Serializable {
 	@Id @GeneratedValue(strategy = GenerationType.AUTO)
 	private int orderId;
 	
-	private int qty;
+	private long qty;
 	private String skuNum;
 	private double price;
 	private double tax;
@@ -27,10 +27,10 @@ public class PurchaseOrder  implements Serializable {
 	public void setOrderId(int orderId) {
 		this.orderId = orderId;
 	}
-	public int getQty() {
+	public long getQty() {
 		return qty;
 	}
-	public void setQty(int qty) {
+	public void setQty(long qty) {
 		this.qty = qty;
 	}
 	public String getSkuNum() {

@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.peachy.component.FilePath;
+import com.peachy.component.GeneralLedgerReportSettings;
 import com.peachy.entity.GeneralLedger;
 import com.peachy.exceptions.SessionTimedOutException;
 import com.peachy.helper.DatePicker;
@@ -31,6 +32,9 @@ public class LedgerController implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private final String pageLink = "/vendor/ledgerpaging";
 
+	@Autowired
+	private GeneralLedgerReportSettings glSettings;
+	
 	@Autowired
 	private GeneralLedgerService generalLedgerService;
 	
@@ -94,7 +98,7 @@ public class LedgerController implements Serializable {
 		PagedListHolder<GeneralLedger> pagedList = generalLedgerService.getPagedList(picker);
 		ledgerList.setPage(0);
 		ledgerList.setPageSize(20);
-		GeneralLedgerPDF gl = new GeneralLedgerPDF();
+		GeneralLedgerPDF gl = new GeneralLedgerPDF(glSettings);
 		String fileName = df.format(startDt) + "-" + df.format(endDt) + ".pdf";
 		String filePath = fileLocations.getReportPath() + fileName;
 		gl.pdfLedgerReport(filePath, pagedList, startDt, endDt);

@@ -37,18 +37,16 @@ CodeMirror.defineMode("fetal", function(config, parserConfig) {
       "begin": kw("if"), "end" : kw("end"),
       "true": atom, "false": atom, "null": atom,
       "credit" : kw("credit"), "debit": kw("debit"), "ledger": kw("ledger"), 
-      "addStock": kw("addStock"), "depleteStock": kw("depleteStock"),
-      "setTax": kw("setTax"), "setShipCharges": kw("setShipCharges"),
-      "setShipCharges": kw("setShipCharges"), "setAddedCharges": kw("setAddedCharges"),
-      "commitStock": kw("commitStock"), "commitReceipt": kw("commitReceipt"), "depleteReceipt": kw("depleteReceipt"),
-      "getAmount": kw("getAmount"), "getTax": kw("getTax"), "getDescription": kw("getDescription"), 
-      "getItemPrice": kw("getItemPrice"), "getItemTax": kw("getItemTax"), "getItemQty": kw("getItemQty"), 
-      "getTotalItems": kw("getTotalItems"), "getShipCharges": kw("getShipCharges"), "getAddedCharges": kw("getAddedCharges"),
-      "getBalance": kw("getBalance"), "getLowestItem": kw("getLowestItem"), "getHighestItem": kw("getHighestItem"),
-      "getVariableType": kw("getVariableType"), "today": kw("today"), "getDays": kw("getDays"),
-      "dayOfTheWeek": kw("dayOfTheWeek"), "getRate": kw("getRate"), "getBaseCurrency": kw("getBaseCurrency"), 
-      "lastRefreshDate": kw("lastRefreshDate"), "print": kw("print"), "mapFile": kw("mapFile"), "alias": kw("alias"),
-      "boolean": df("qualifier"), "long": df("qualifier"), "double": df("qualifier"), "string": df("qualifier"), "date": df("qualifier")
+      "getDescription": kw("getDescription"), "getBalance": kw("getBalance"), 
+      "getVariableType": kw("getVariableType"), "today": kw("today"), 
+      "getDays": kw("getDays"), "getCalendarDay": kw("getCalendarDay"), "getMonth": kw("getMonth"),
+      "getYear": kw("getYear"), "dayOfTheWeek": kw("dayOfTheWeek"), 
+      "import": kw("import"), "lookup": kw("lookup"), "update": kw("update"), 
+      "depleteStock" : kw("depleteStock"), "commitStock" : kw("commitStock"), "addStock" : kw("addStock"),
+      "print": kw("print"), "mapFile": kw("mapFile"), "alias": kw("alias"),
+      "boolean": df("qualifier"), "number": df("qualifier"), "decimal": df("qualifier"), 
+      "string": df("qualifier"), "date": df("qualifier"), "object": df("qualifier"),
+      "dao" : df("qualifier")
     };
     // Extend the 'normal' keywords with the TypeScript language extensions
 

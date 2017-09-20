@@ -18,7 +18,6 @@ import com.peachy.component.PayStubReportSettings;
 import com.peachy.dao.FetalTransactionDao;
 import com.peachy.entity.Coupons;
 import com.peachy.entity.Employee;
-import com.peachy.entity.Inventory;
 import com.peachy.entity.Invoice;
 import com.peachy.entity.InvoiceItem;
 import com.peachy.entity.PaymentRegister;
@@ -39,15 +38,12 @@ public class FetalTransactionService extends FetalTransaction {
 	private FetalTransactionDao transDao;
 
 	private Session session;
-
+	
 	@Autowired
 	private InvoiceService invoiceService;
-
+	
 	@Autowired
 	private InvoiceItemService invoiceItemService;
-
-	@Autowired
-	private InventoryService inventoryService;
 
 	@Autowired
 	private EmployeeService employeeService;
@@ -98,12 +94,10 @@ public class FetalTransactionService extends FetalTransaction {
 		purchaseOrderService.create(purchaseOrder);
 
 		setDescription("Purchase of inventory (SKU #" + order.getInventory().getSku_num() + ")");
-		Inventory inventory = order.getInventory();
-		publish("order", VariableType.OBJECT, order);
+
+		publish("order", VariableType.OBJECT, purchaseOrder);
 		loadRule("inventory.trans");
 
-		inventory.setAmt_in_stock(inventory.getAmt_in_stock() + order.getAmount());
-		inventoryService.update(inventory);
 		closeFetal();
 	}
 
@@ -209,39 +203,48 @@ public class FetalTransactionService extends FetalTransaction {
 		initTransaction(filePath);
 		invoice.setProcessed(new Date());
 		Receipt receipt = new Receipt();
+		receipt.setItems(invoice.getItems());
 		publish("receipt", VariableType.OBJECT, receipt);
 		publish("invoice", VariableType.DAO, invoice);
 		setDescription("Internet Sales");
-
 		loadRule("purchase.trans");
+		
 		invoiceService.merge(invoice);
-		commitReceipt(invoice.getItems());
+		
 		closeFetal();
 	}
 
 	public void processShipping (Invoice invoice) throws IOException {
 		initTransaction(filePath);
-
+		Receipt receipt = new Receipt();
+		receipt.setItems(invoice.getItems());
+		publish("receipt", VariableType.OBJECT, receipt);
 		loadRule("aftershipping.trans");
-		depleteReceipt(invoice.getItems());
+
 		closeFetal();
 	}
 	
 	public void useCoupon(Invoice invoice, Coupons coupon) throws IOException {
 		final String couponValue = "couponValue";
+		final String couponValid = "couponValid";
+		final String couponTax = "couponTax";
 		initTransaction(filePath);
 		
 		publish(couponValue, VariableType.DECIMAL, 0);
+		publish(couponTax, VariableType.DECIMAL, 0);
+		publish(couponValid, VariableType.BOOLEAN, false);
+		publish("invoice", VariableType.DAO, invoice);
 		Receipt receipt = new Receipt();
-		receipt.setInvList(invoice.getItems());
+		receipt.setItems(invoice.getItems());
 		publish("receipt", VariableType.OBJECT, receipt);
 		loadCoupon(coupon.getRuleName());
 
-		if ((double) getValue(couponValue) < 0.0) {
+		if ((boolean) getValue(couponValid) == true) {
 			InvoiceItem item = new InvoiceItem();
 			item.setAmount(1);
 			item.setInvoice_num(invoice.getInvoice_num());
 			item.setPrice((double) getValue(couponValue));
+			item.setTax((double) getValue(couponTax));
 			item.setProduct_name(coupon.getName());
 			item.setSku_num(coupon.getCoupon_id());
 			invoiceItemService.addItem(item);
@@ -249,13 +252,13 @@ public class FetalTransactionService extends FetalTransaction {
 		closeFetal();
 	}
 
-	public double calculateShippingCharges() {
-		try {
-			initTransaction(filePath);
-			loadRule("shipping.trans");
-		} catch (IOException | RuntimeException e) {
-			return 0;
-		}
+	public double calculateShippingCharges(Invoice invoice) throws IOException {
+		Receipt receipt = new Receipt();
+		receipt.setItems(invoice.getItems());
+		publish("invoice", VariableType.DAO, invoice);
+		publish("receipt", VariableType.OBJECT, receipt);
+		initTransaction(filePath);
+		loadRule("shipping.trans");
 		Double shipCharges = (double) getValue("shipCharges");
 		
 		closeFetal();
@@ -272,10 +275,6 @@ public class FetalTransactionService extends FetalTransaction {
 		for (InvoiceItem item : invoiceItems) {
 			transDao.commitStock(item.getSku_num(), item.getAmount(), session);
 		}
-	}
-	
-	public void addStock(String sku, Long amout) {
-		transDao.addStock(sku, amout, session);
 	}
 	
 	/******************************************************
@@ -325,6 +324,7 @@ public class FetalTransactionService extends FetalTransaction {
 
 	@Override
 	public Object lookup(String sql,  Object...args) {
+		sql = translateFormat(sql);
 		String sqlWithArgs = String.format(sql, args);
 		
 		return transDao.lookup(sqlWithArgs);
@@ -337,8 +337,26 @@ public class FetalTransactionService extends FetalTransaction {
 
 	@Override
 	public void update(String sql, Object... args) {
+		sql = this.translateFormat(sql);
 		String sqlWithArgs = String.format(sql, args);
 		transDao.update(sqlWithArgs);
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public void commitStock(Set<?> items) {
+		this.commitReceipt((Set<InvoiceItem>) items);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void depleteStock(Set<?> items) {
+		depleteReceipt((Set<InvoiceItem>) items);
+	}
+
+	@Override
+	public void addStock(String sku, Long amout) {
+		transDao.addStock(sku, amout, session);
+	}
+		
 }

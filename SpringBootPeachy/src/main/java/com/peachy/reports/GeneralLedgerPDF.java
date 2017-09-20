@@ -18,7 +18,7 @@ import com.peachy.entity.GeneralLedger;
 
 public class GeneralLedgerPDF extends PDFReports {
 	private GeneralLedgerReportSettings gLSettings;
-	public GeneralLedgerPDF() {
+	public GeneralLedgerPDF(GeneralLedgerReportSettings gLSettings) {
 		setVerticalMargin(gLSettings.getVerticalMargin());
 		setHorizantleMargin(gLSettings.getHorizantleMargin());
 		setLineHeight(gLSettings.getLineHeight());

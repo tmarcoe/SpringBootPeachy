@@ -1,20 +1,33 @@
 package com.peachy.helper;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import com.peachy.entity.InvoiceItem;
 
-public class Receipt {
+public class TestReceipt {
 	private Set<InvoiceItem> items;
+	private Long[] amount = {(long) 2,(long) 1,(long) 3,(long) 4,(long) 2,(long) 1,(long) 2,(long) 2, (long) 1,(long) 1};
+	private String[] products = {"0099557009", "09556013", "09955020", "0099557041", "099555019", "099555022", "099556001", "099556002", "099556004", "099556006" };
+	private double[] price = {400.00, 515.00, 600.00, 700.00, 350.00, 460.00, 400.00, 400.00, 375.00, 450.00};
+	private double tax[] = {1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00};
+	
+	
+	public TestReceipt() {
+		items = new HashSet<InvoiceItem>();
+		for (int i=0; i < 10; i++) {
+			items.add(new InvoiceItem());
+		}
+		int idx = 0;
+		for(InvoiceItem item : items) {
+			item.setSku_num(products[idx]);
+			item.setAmount(amount[idx]);
+			item.setPrice(price[idx]);
+			item.setTax(tax[idx]);
+			idx++;
+		}
+	}
 
-	public void setItems(Set <InvoiceItem> invList) {
-		this.items = invList;
-	}
-	
-	public Set<InvoiceItem> getItems() {
-		return items;
-	}
-	
 	public Double getHighestPrice() {
 		Double price = 0.0;
 		
@@ -109,4 +122,14 @@ public class Receipt {
 		
 		return tax;
 	}
+
+	public Set<InvoiceItem> getItems() {
+		return items;
+	}
+
+	public void setItems(Set<InvoiceItem> items) {
+		this.items = items;
+	}
+	
+	
 }

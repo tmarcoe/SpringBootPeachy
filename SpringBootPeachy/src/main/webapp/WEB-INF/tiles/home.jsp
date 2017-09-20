@@ -2,7 +2,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <div class="logos">
-	<img alt="Image not available" src="<c:url value='/images/Cappuccino-1.png'/>" width="400" />
+	<img alt="Image not available" src="<c:url value='/images/Cappuccino-1.png'/>" width="400"  align="right" /><p>
+	<img id="lowerImage" alt="Image not available" src="<c:url value='/images/FetalLogo.png'/>" width="200" align="right" />
 </div>
 <c:choose>
 	<c:when test="${inventory.size() > 0}">
