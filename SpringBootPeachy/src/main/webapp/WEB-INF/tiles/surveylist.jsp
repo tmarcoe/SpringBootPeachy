@@ -3,7 +3,7 @@
 <%@ taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 
 <sql:setDataSource var="ds" driver = "com.mysql.jdbc.Driver"
-         url = "jdbc:mysql://localhost/donzalma_peachys"
+         url = "jdbc:mysql://localhost/donzalma_peachys?useSSL=false"
          user = "donzalma_admin"  password = "In_heaven3"/>
 
 	<table class="tableview" id="viewsurvey">

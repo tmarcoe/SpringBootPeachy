@@ -2,9 +2,9 @@ package com.peachy.dao;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import javax.transaction.Transactional;
 
@@ -12,7 +12,6 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
-import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -152,22 +151,6 @@ public class FetalTransactionDao {
 		return exchangeRate;
 	}
 
-	public String getBaseCurrency() {
-
-		return cc.getBaseCurrency();
-	}
-
-	public Date lastRefreshDate() {
-		Date refreshDate;
-
-		try {
-			refreshDate = new Currency(cc).getLastUpdate();
-		} catch (JSONException | IOException | ParseException e) {
-			refreshDate = null;
-		}
-
-		return refreshDate;
-	}
 
 	private Inventory retrieveInventory(String sku, Session session) {
 		return (Inventory) session.createCriteria(Inventory.class).add(Restrictions.idEq(sku)).uniqueResult();
@@ -191,6 +174,15 @@ public class FetalTransactionDao {
 
 	public void rollback(Session session) {
 		session.getTransaction().rollback();
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Object> list(String sqlWithArgs) {
+		Session session = session();
+		List<Object> l = session.createQuery(sqlWithArgs).list();
+		session.disconnect();
+		
+		return l;
 	}
 
 }

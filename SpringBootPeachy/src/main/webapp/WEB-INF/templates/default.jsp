@@ -4,7 +4,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql"%>
 <%@ taglib prefix="sec" uri="/WEB-INF/tld/security.tld"%>
-<sql:setDataSource var="ds" driver="com.mysql.jdbc.Driver" url="jdbc:mysql://localhost/donzalma_peachys" user="donzalma_admin" password="In_heaven3" />
+<sql:setDataSource var="ds" driver="com.mysql.jdbc.Driver" url="jdbc:mysql://localhost/donzalma_peachys?useSSL=false" user="donzalma_admin" password="In_heaven3" />
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">

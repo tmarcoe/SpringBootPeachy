@@ -57,7 +57,6 @@
 	function writeFile(fileName) {
 		var text = myCodeMirror.getDoc().getValue();
 		$.ajax({
-			url: outUrl,
 			type: "PUT",
 			data: "&transData=" + text,
 			success: function(data) {
